@@ -35,14 +35,16 @@ class TodoListAdapter(
         val view: View = convertView ?: inflater.inflate(R.layout.list_item, parent, false)
 
         val todoText = view.findViewById<TextView>(R.id.todo_text)
+        val deadlineText = view.findViewById<TextView>(R.id.deadline_text)
         val optionsButton = view.findViewById<ImageButton>(R.id.options_button)
         val approveButton = view.findViewById<ImageButton>(R.id.approve_button)
         val cancelButton = view.findViewById<ImageButton>(R.id.cancel_button)
 
         todoText.text = getItem(position)
-        view.setBackgroundColor(todoColors[position]) // Set the view color to the stored color
+        deadlineText.text = "Date Limite : ${todoDeadlines[position]}"
+        view.setBackgroundColor(todoColors[position])
 
-        approveButton.isEnabled = !todoApproved[position] // Disable the button if the todo is approved
+        approveButton.isEnabled = !todoApproved[position]
 
         todoText.setOnClickListener {
             if (approveButton.visibility == View.GONE) {
