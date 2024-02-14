@@ -18,7 +18,9 @@ import androidx.core.content.ContextCompat
 import nl.dionsegijn.konfetti.models.Shape
 import nl.dionsegijn.konfetti.models.Size
 
-class TodoListAdapter(private val todoList: ArrayList<String>, private val todoIds: ArrayList<Int>, private val todoColors: ArrayList<Int>, private val todoApproved: ArrayList<Boolean>, private val dbHelper: TodoDatabaseHelper, context: Context, resource: Int) :
+class
+
+TodoListAdapter(private val todoList: ArrayList<String>, private val todoIds: ArrayList<Int>, private val todoColors: ArrayList<Int>, private val todoApproved: ArrayList<Boolean>, private val dbHelper: TodoDatabaseHelper, context: Context, resource: Int) :
     ArrayAdapter<String>(context, resource, todoList) {
 
     private val inflater: LayoutInflater = LayoutInflater.from(context)
