@@ -1,4 +1,4 @@
-package com.example.todolist
+package fr.iut.mytodolist.android
 
 import android.os.Bundle
 import android.view.LayoutInflater

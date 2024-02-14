@@ -1,8 +1,10 @@
-package com.example.todolist
+package fr.iut.mytodolist.android
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import fr.iut.mytodolist.android.HomeFragment
+import fr.iut.mytodolist.android.SettingsFragment
 
 class MainActivity : AppCompatActivity() {
 
