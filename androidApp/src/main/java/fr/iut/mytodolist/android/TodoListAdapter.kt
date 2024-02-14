@@ -1,4 +1,5 @@
 package fr.iut.mytodolist.android
+
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.ContentValues
@@ -9,7 +10,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
@@ -18,10 +18,16 @@ import androidx.core.content.ContextCompat
 import nl.dionsegijn.konfetti.models.Shape
 import nl.dionsegijn.konfetti.models.Size
 
-class
-
-TodoListAdapter(private val todoList: ArrayList<String>, private val todoIds: ArrayList<Int>, private val todoColors: ArrayList<Int>, private val todoApproved: ArrayList<Boolean>, private val dbHelper: TodoDatabaseHelper, context: Context, resource: Int) :
-    ArrayAdapter<String>(context, resource, todoList) {
+class TodoListAdapter(
+    private val todoList: ArrayList<String>,
+    private val todoIds: ArrayList<Int>,
+    private val todoColors: ArrayList<Int>,
+    private val todoApproved: ArrayList<Boolean>,
+    private val todoDeadlines: ArrayList<String>,
+    private val dbHelper: TodoDatabaseHelper,
+    context: Context,
+    resource: Int
+) : ArrayAdapter<String>(context, resource, todoList) {
 
     private val inflater: LayoutInflater = LayoutInflater.from(context)
 
@@ -34,9 +40,9 @@ TodoListAdapter(private val todoList: ArrayList<String>, private val todoIds: Ar
         val cancelButton = view.findViewById<ImageButton>(R.id.cancel_button)
 
         todoText.text = getItem(position)
-        view.setBackgroundColor(todoColors[position]) // Mettez la couleur de la vue à la couleur stockée
+        view.setBackgroundColor(todoColors[position]) // Set the view color to the stored color
 
-        approveButton.isEnabled = !todoApproved[position] // Désactivez le bouton si le todo est approuvé
+        approveButton.isEnabled = !todoApproved[position] // Disable the button if the todo is approved
 
         todoText.setOnClickListener {
             if (approveButton.visibility == View.GONE) {
@@ -55,7 +61,7 @@ TodoListAdapter(private val todoList: ArrayList<String>, private val todoIds: Ar
             view.setBackgroundColor(color)
             todoColors[position] = color
             todoApproved[position] = true
-            dbHelper.updateItem(todoIds[position], todoList[position], color, if (todoApproved[position]) 1 else 0)
+            dbHelper.updateItem(todoIds[position], todoList[position], color, if (todoApproved[position]) 1 else 0, todoDeadlines[position])
 
             val konfettiView = (context as Activity).findViewById<nl.dionsegijn.konfetti.KonfettiView>(R.id.viewKonfetti)
             konfettiView.build()
@@ -77,7 +83,7 @@ TodoListAdapter(private val todoList: ArrayList<String>, private val todoIds: Ar
             view.setBackgroundColor(color)
             todoColors[position] = color
             todoApproved[position] = false
-            dbHelper.updateItem(todoIds[position], todoList[position], color, if (todoApproved[position]) 1 else 0)
+            dbHelper.updateItem(todoIds[position], todoList[position], color, if (todoApproved[position]) 1 else 0, todoDeadlines[position])
 
             approveButton.isEnabled = true
         }
@@ -95,7 +101,7 @@ TodoListAdapter(private val todoList: ArrayList<String>, private val todoIds: Ar
                             .setPositiveButton("OK") { _, _ ->
                                 val newName = editText.text.toString()
                                 todoList[position] = newName
-                                dbHelper.updateItem(todoIds[position], newName, todoColors[position], if (todoApproved[position]) 1 else 0)
+                                dbHelper.updateItem(todoIds[position], newName, todoColors[position], if (todoApproved[position]) 1 else 0, todoDeadlines[position])
                                 notifyDataSetChanged()
                             }
                             .setNegativeButton("Annuler", null)
@@ -109,7 +115,7 @@ TodoListAdapter(private val todoList: ArrayList<String>, private val todoIds: Ar
                             .setPositiveButton("OK") { _, _ ->
                                 val newContent = editText.text.toString()
                                 todoList[position] = newContent
-                                dbHelper.updateItem(todoIds[position], newContent, todoColors[position], if (todoApproved[position]) 1 else 0)
+                                dbHelper.updateItem(todoIds[position], newContent, todoColors[position], if (todoApproved[position]) 1 else 0, todoDeadlines[position])
                                 notifyDataSetChanged()
                             }
                             .setNegativeButton("Annuler", null)
