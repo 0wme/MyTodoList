@@ -11,7 +11,7 @@ class TodoDatabaseHelper(context: Context) :
 
     companion object {
         private const val DATABASE_NAME = "todolist.db"
-        private const val DATABASE_VERSION = 3 // Augmentez la version de la base de données
+        private const val DATABASE_VERSION = 4 // Augmentez la version de la base de données
     }
 
     override fun onCreate(db: SQLiteDatabase) {
@@ -20,7 +20,8 @@ class TodoDatabaseHelper(context: Context) :
                     "${BaseColumns._ID} INTEGER PRIMARY KEY," +
                     "${TodoContract.TodoEntry.COLUMN_TODO} TEXT," +
                     "${TodoContract.TodoEntry.COLUMN_COLOR} INTEGER," +
-                    "${TodoContract.TodoEntry.COLUMN_APPROVED} INTEGER)" // Créez la nouvelle colonne
+                    "${TodoContract.TodoEntry.COLUMN_APPROVED} INTEGER," +
+                    "${TodoContract.TodoEntry.COLUMN_DEADLINE} TEXT)" // Créez la nouvelle colonne
 
         db.execSQL(SQL_CREATE_ENTRIES)
     }
@@ -35,14 +36,17 @@ class TodoDatabaseHelper(context: Context) :
         onCreate(db)
     }
 
-    fun updateItem(id: Int, newValue: String, newColor: Int, newApproved: Int) {
+    // Mettez à jour la méthode updateItem pour inclure la date limite
+    fun updateItem(id: Int, newValue: String, newColor: Int, newApproved: Int, newDeadline: String) {
         val db = this.writableDatabase
         val contentValues = ContentValues()
         contentValues.put(TodoContract.TodoEntry.COLUMN_TODO, newValue)
-        contentValues.put(TodoContract.TodoEntry.COLUMN_COLOR, newColor) // Mettez à jour la couleur
-        contentValues.put(TodoContract.TodoEntry.COLUMN_APPROVED, newApproved) // Mettez à jour l'état d'approbation
+        contentValues.put(TodoContract.TodoEntry.COLUMN_COLOR, newColor)
+        contentValues.put(TodoContract.TodoEntry.COLUMN_APPROVED, newApproved)
+        contentValues.put(TodoContract.TodoEntry.COLUMN_DEADLINE, newDeadline)
         db.update(TodoContract.TodoEntry.TABLE_NAME, contentValues, "${BaseColumns._ID} = ?", arrayOf(id.toString()))
     }
+
 
     fun deleteItem(id: Int) {
         val db = this.writableDatabase
