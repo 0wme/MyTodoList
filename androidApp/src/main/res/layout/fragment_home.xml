@@ -15,7 +15,7 @@
     android:id="@+id/tabLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?attr/colorPrimary"
+    android:background="@color/black"
     android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
     app:tabTextColor="@color/yellow"
     app:tabSelectedTextColor="@color/yellow"/>
