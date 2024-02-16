@@ -110,6 +110,7 @@ class TodoListAdapter(
                             .show()
                     }
                     R.id.modify -> {
+
                         val editText = EditText(context)
                         AlertDialog.Builder(context)
                             .setTitle("Modifier l'élément")

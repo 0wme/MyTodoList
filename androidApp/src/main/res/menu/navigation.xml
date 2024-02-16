@@ -6,7 +6,7 @@
         android:icon="@drawable/ic_notification"
         android:title="@string/title_notifications" />
     <item
-        android:id="@+id/navigation_home"
+        android:id="@+id/naviguation_todo"
         android:icon="@drawable/ic_home"
         android:title="@string/title_home" />
     <item

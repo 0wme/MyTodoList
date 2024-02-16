@@ -3,15 +3,13 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import fr.iut.mytodolist.android.HomeFragment
-import fr.iut.mytodolist.android.SettingsFragment
 
 class MainActivity : AppCompatActivity() {
 
     private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         var selectedFragment: Fragment? = null
         when (item.itemId) {
-            R.id.navigation_home -> {
+            R.id.naviguation_todo -> {
                 selectedFragment = HomeFragment()
             }
             R.id.navigation_settings -> {
@@ -42,6 +40,6 @@ class MainActivity : AppCompatActivity() {
         transaction.replace(R.id.fragment_container, HomeFragment())
         transaction.commit()
 
-        navView.selectedItemId = R.id.navigation_home
+        navView.selectedItemId = R.id.naviguation_todo
     }
 }

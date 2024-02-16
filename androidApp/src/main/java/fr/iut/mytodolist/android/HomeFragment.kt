@@ -12,9 +12,9 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.ImageButton
-import android.widget.ListView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.viewpager.widget.ViewPager
 
 class HomeFragment : Fragment() {
 
@@ -37,19 +37,8 @@ class HomeFragment : Fragment() {
             ContextCompat.getColorStateList(requireContext(), R.drawable.add_todo_state)
         addButton.imageTintList = colorStateList
 
-        val listView = view.findViewById<ListView>(R.id.todo_list)
-        val todoDeadlines = ArrayList<String>()
-        val adapter = TodoListAdapter(
-            todoList,
-            todoIds,
-            todoColors,
-            todoApproved,
-            todoDeadlines,
-            dbHelper,
-            requireContext(),
-            R.layout.list_item
-        )
-        listView.adapter = adapter
+        val viewPager = view.findViewById<ViewPager>(R.id.viewPager)
+        viewPager.adapter = TodoPagerAdapter(childFragmentManager)
 
         addButton.setOnClickListener {
             val editText = EditText(requireContext())
@@ -62,8 +51,7 @@ class HomeFragment : Fragment() {
                     datePicker.setOnDateSetListener { _, year, month, dayOfMonth ->
                         val deadline = "$year-${month + 1}-$dayOfMonth"
                         todoList.add(0, todo)
-                        todoDeadlines.add(0, deadline) // Ajoutez la date limite à todoDeadlines ici
-                        adapter.notifyDataSetChanged()
+                        viewPager.adapter?.notifyDataSetChanged()
 
                         // Get the data repository in write mode
                         val db = dbHelper.writableDatabase
@@ -123,7 +111,6 @@ class HomeFragment : Fragment() {
                 todoIds.add(id)
                 todoColors.add(color)
                 todoApproved.add(approved)
-                todoDeadlines.add(deadline)
             }
         }
 
