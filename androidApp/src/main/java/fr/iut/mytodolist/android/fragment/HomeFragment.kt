@@ -20,15 +20,12 @@ override fun onCreateView(
 ): View? {
     val view = inflater.inflate(R.layout.fragment_home, container, false)
 
-    // Initialisez le ViewPager et définissez l'adaptateur
     val viewPager = view.findViewById<ViewPager>(R.id.viewPager)
     val pagerAdapter = TodoPagerAdapter(childFragmentManager)
     viewPager.adapter = pagerAdapter
 
-    // Définir la page par défaut
     viewPager.setCurrentItem(1)
 
-    // Liez le TabLayout au ViewPager
     val tabLayout = view.findViewById<TabLayout>(R.id.tabLayout)
     tabLayout.setupWithViewPager(viewPager)
 
