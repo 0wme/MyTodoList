@@ -3,6 +3,9 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import fr.iut.mytodolist.android.fragment.HomeFragment
+import fr.iut.mytodolist.android.fragment.NotificationFragment
+import fr.iut.mytodolist.android.fragment.SettingsFragment
 
 class MainActivity : AppCompatActivity() {
 

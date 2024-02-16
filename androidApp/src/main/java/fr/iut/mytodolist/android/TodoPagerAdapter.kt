@@ -3,6 +3,9 @@ package fr.iut.mytodolist.android
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
+import fr.iut.mytodolist.android.fragment.TodoAFaireFragment
+import fr.iut.mytodolist.android.fragment.TodoRealiseFragment
+import fr.iut.mytodolist.android.fragment.TodoRetardFragment
 
 class TodoPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
 
