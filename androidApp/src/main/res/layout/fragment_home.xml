@@ -25,6 +25,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"/>
 
+    <ImageButton
+    android:id="@+id/addTodoButton"
+    android:layout_width="100dp"
+    android:layout_height="100dp"
+    android:layout_gravity="center|bottom"
+    android:layout_margin="16dp"
+    android:src="@drawable/add_todo"
+    android:tint="@color/button_color"
+    android:background="@android:color/transparent" />
+
 
 
 </FrameLayout>
