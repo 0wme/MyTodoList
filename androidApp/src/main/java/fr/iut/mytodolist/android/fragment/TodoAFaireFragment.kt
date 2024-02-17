@@ -1,5 +1,6 @@
 package fr.iut.mytodolist.android.fragment
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -17,6 +18,7 @@ class TodoAFaireFragment : Fragment() {
 
     private val todoList = mutableListOf<String>()
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -29,23 +31,23 @@ class TodoAFaireFragment : Fragment() {
 
         val addTodoButton = view.findViewById<ImageButton>(R.id.addTodoButton)
         addTodoButton.setOnClickListener {
-            val todoEditText = EditText(it.context)
-            val dialog = AlertDialog.Builder(it.context)
-                .setTitle("Quel est votre To Do ?")
-                .setView(todoEditText)
-                .setPositiveButton("Ajouter") { dialog, _ ->
-                    val todo = todoEditText.text.toString()
-                    if (todo.isNotEmpty()) {
-                        todoList.add(todo)
-                        dialog.dismiss()
-                        (todoRecyclerView.adapter as TodoAdapter).notifyDataSetChanged()
+                    val dialogView = LayoutInflater.from(it.context).inflate(R.layout.dialog_layout, null)
+                    val todoEditText = dialogView.findViewById<EditText>(R.id.dialogEditText)
+                    val dialog = AlertDialog.Builder(it.context, R.style.AlertDialogCustom)
+                    .setView(dialogView)
+                    .setPositiveButton("Ajouter") { dialog, _ ->
+                        val todo = todoEditText.text.toString()
+                        if (todo.isNotEmpty()) {
+                            todoList.add(todo)
+                            dialog.dismiss()
+                            (todoRecyclerView.adapter as TodoAdapter).notifyDataSetChanged()
+                        }
                     }
-                }
-                .setNegativeButton("Annuler") { dialog, _ ->
-                    dialog.cancel()
-                }
-                .create()
-            dialog.show()
+                    .setNegativeButton("Annuler") { dialog, _ ->
+                        dialog.cancel()
+                    }
+                    .create()
+                dialog.show()
         }
 
         return view
