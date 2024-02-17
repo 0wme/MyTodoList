@@ -40,6 +40,7 @@ class TodoAFaireFragment : Fragment() {
                     val todo = todoEditText.text.toString()
                     if (todo.isNotEmpty()) {
                         todoList.add(todo)
+                        adapter.buttonVisibilityList.add(View.GONE) // Add new entry to buttonVisibilityList
                         dialog.dismiss()
                         adapter.notifyDataSetChanged()
                     }

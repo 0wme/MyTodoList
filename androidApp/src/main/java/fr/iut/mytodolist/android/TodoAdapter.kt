@@ -8,7 +8,9 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class TodoAdapter(private val todoList: MutableList<String>) : RecyclerView.Adapter<TodoAdapter.TodoViewHolder>() {
+class TodoAdapter(val todoList: MutableList<String>) : RecyclerView.Adapter<TodoAdapter.TodoViewHolder>() {
+
+    val buttonVisibilityList = MutableList(todoList.size) { View.GONE }
 
     class TodoViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val todoTextView: TextView = view.findViewById(R.id.todoTextView)
@@ -26,11 +28,15 @@ class TodoAdapter(private val todoList: MutableList<String>) : RecyclerView.Adap
         val todo = todoList[position]
         holder.todoTextView.text = todo
 
+        holder.buttonLayout.visibility = buttonVisibilityList[position]
+
         holder.todoTextView.setOnClickListener {
             if (holder.buttonLayout.visibility == View.GONE) {
                 holder.buttonLayout.visibility = View.VISIBLE
+                buttonVisibilityList[position] = View.VISIBLE
             } else {
                 holder.buttonLayout.visibility = View.GONE
+                buttonVisibilityList[position] = View.GONE
             }
             notifyItemChanged(position)
         }
