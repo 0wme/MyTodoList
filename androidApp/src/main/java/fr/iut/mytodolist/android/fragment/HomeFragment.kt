@@ -28,16 +28,6 @@ class HomeFragment : Fragment() {
         val tabLayout = view.findViewById<TabLayout>(R.id.tabLayout)
         tabLayout.setupWithViewPager(viewPager)
 
-        val addTodoButton = view.findViewById<ImageButton>(R.id.addTodoButton)
-        addTodoButton.setOnClickListener {
-        val fragmentManager = fragmentManager
-        fragmentManager?.let {
-            val fragmentTransaction = it.beginTransaction()
-            fragmentTransaction.replace(R.id.fragment_container, AddTodoFragment())
-            fragmentTransaction.addToBackStack(null)
-            fragmentTransaction.commit()
-}
-        }
 
         return view
     }
