@@ -21,21 +21,26 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:visibility="gone"
-        android:id="@+id/buttonLayout">
+        android:id="@+id/buttonLayout"
+        android:gravity="bottom|center_horizontal">
 
         <ImageButton
             android:id="@+id/approveButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:src="@drawable/approve_todo"
-            android:background="@android:color/transparent" />
+            android:background="@android:color/transparent"
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true" />
 
         <ImageButton
             android:id="@+id/cancelButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:src="@drawable/cancel_todo"
-            android:background="@android:color/transparent" />
+            android:background="@android:color/transparent"
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true" />
     </LinearLayout>
 
 </LinearLayout>
