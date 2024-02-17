@@ -21,7 +21,6 @@ class TodoAFaireFragment : Fragment() {
             val fragmentManager = fragmentManager
             fragmentManager?.let {
                 val fragmentTransaction = it.beginTransaction()
-                fragmentTransaction.replace(R.id.fragment_container, AddTodoFragment())
                 fragmentTransaction.addToBackStack(null)
                 fragmentTransaction.commit()
             }
