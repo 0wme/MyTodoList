@@ -5,7 +5,9 @@
     android:orientation="vertical"
     android:padding="8dp"
     android:layout_marginTop="20dp"
-    android:background="@android:color/holo_orange_light">
+    android:layout_marginStart="16dp"
+    android:layout_marginEnd="16dp"
+    android:background="@drawable/rounded_background">
 
     <TextView
         android:id="@+id/todoTextView"
