@@ -47,16 +47,17 @@ class TodoAdapter(private val todoList: MutableList<String>, private val konfett
 
         holder.approveButton.setOnClickListener {
             konfettiView.build()
-                .addColors(Color.BLUE, Color.RED, Color.WHITE)
+                .addColors(Color.BLUE, Color.WHITE, Color.RED)
                 .setDirection(0.0, 359.0)
                 .setSpeed(1f, 5f)
                 .setFadeOutEnabled(true)
                 .setTimeToLive(2000L)
                 .addShapes(Shape.Square, Shape.Circle)
                 .addSizes(Size(12))
-                .setPosition(-1f, -1f)
+                .setPosition(-1f, konfettiView.width + 1f, -1f, -1f)
                 .streamFor(300, 5000L)
         }
+
 
         holder.cancelButton.setOnClickListener {
             // Handle cancel button click here
