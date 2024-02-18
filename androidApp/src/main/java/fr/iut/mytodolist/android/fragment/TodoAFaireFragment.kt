@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import fr.iut.mytodolist.android.R
 import fr.iut.mytodolist.android.TodoAdapter
+import nl.dionsegijn.konfetti.KonfettiView
 
 class TodoAFaireFragment : Fragment() {
 
@@ -27,7 +28,10 @@ class TodoAFaireFragment : Fragment() {
 
         val todoRecyclerView = view.findViewById<RecyclerView>(R.id.todoRecyclerView)
         todoRecyclerView.layoutManager = LinearLayoutManager(context)
-        val adapter = TodoAdapter(todoList)
+
+        val konfettiView = view.findViewById<KonfettiView>(R.id.viewKonfetti)
+
+        val adapter = TodoAdapter(todoList, konfettiView)
         todoRecyclerView.adapter = adapter
 
         val addTodoButton = view.findViewById<ImageButton>(R.id.addTodoButton)
@@ -40,7 +44,7 @@ class TodoAFaireFragment : Fragment() {
                     val todo = todoEditText.text.toString()
                     if (todo.isNotEmpty()) {
                         todoList.add(todo)
-                        adapter.buttonVisibilityList.add(View.GONE) // Add new entry to buttonVisibilityList
+                        adapter.buttonVisibilityList.add(View.GONE)
                         dialog.dismiss()
                         adapter.notifyDataSetChanged()
                     }
