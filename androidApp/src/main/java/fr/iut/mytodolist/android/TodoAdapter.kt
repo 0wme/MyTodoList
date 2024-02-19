@@ -38,17 +38,21 @@ class TodoAdapter(private val todoList: MutableList<String>, private val konfett
         val todo = todoList[position]
         holder.todoTextView.text = todo
 
-        holder.buttonLayout.visibility = buttonVisibilityList[position]
+        if (position < buttonVisibilityList.size) {
+            holder.buttonLayout.visibility = buttonVisibilityList[position]
+        }
 
         holder.todoTextView.setOnClickListener {
-            if (holder.buttonLayout.visibility == View.GONE) {
-                holder.buttonLayout.visibility = View.VISIBLE
-                buttonVisibilityList[position] = View.VISIBLE
-            } else {
-                holder.buttonLayout.visibility = View.GONE
-                buttonVisibilityList[position] = View.GONE
+            if (position < buttonVisibilityList.size) {
+                if (holder.buttonLayout.visibility == View.GONE) {
+                    holder.buttonLayout.visibility = View.VISIBLE
+                    buttonVisibilityList[position] = View.VISIBLE
+                } else {
+                    holder.buttonLayout.visibility = View.GONE
+                    buttonVisibilityList[position] = View.GONE
+                }
+                notifyItemChanged(position)
             }
-            notifyItemChanged(position)
         }
 
         holder.approveButton.setOnClickListener {
@@ -63,13 +67,13 @@ class TodoAdapter(private val todoList: MutableList<String>, private val konfett
                 ?.setPosition(-1f, konfettiView.width + 1f, -1f, -1f)
                 ?.streamFor(300, 5000L)
 
-            // Delay the removal of the task by 2 seconds (2000 milliseconds)
             Handler(Looper.getMainLooper()).postDelayed({
-                removeAt(position)
-                listener?.onTodoApproved(todo)
+                if (position < todoList.size) {
+                    removeAt(position)
+                    listener?.onTodoApproved(todo)
+                }
             }, 5000)
         }
-
 
         holder.cancelButton.setOnClickListener {
             // Handle cancel button click here
@@ -79,8 +83,10 @@ class TodoAdapter(private val todoList: MutableList<String>, private val konfett
     override fun getItemCount() = todoList.size
 
     private fun removeAt(position: Int) {
-        todoList.removeAt(position)
-        buttonVisibilityList.removeAt(position)
-        notifyItemRemoved(position)
+        if (position < todoList.size) {
+            todoList.removeAt(position)
+            buttonVisibilityList.removeAt(position)
+            notifyItemRemoved(position)
+        }
     }
 }
