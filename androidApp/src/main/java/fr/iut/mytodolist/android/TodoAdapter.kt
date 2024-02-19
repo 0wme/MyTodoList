@@ -8,9 +8,9 @@ import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import nl.dionsegijn.konfetti.KonfettiView
 import nl.dionsegijn.konfetti.models.Shape
 import nl.dionsegijn.konfetti.models.Size
-import nl.dionsegijn.konfetti.KonfettiView
 import android.os.Handler
 import android.os.Looper
 
@@ -18,11 +18,14 @@ interface TodoApprovedListener {
     fun onTodoApproved(todo: String)
 }
 
-class TodoAdapter(private val todoList: MutableList<String>, private val konfettiView: KonfettiView? = null, private val listener: TodoApprovedListener? = null) : RecyclerView.Adapter<TodoAdapter.TodoViewHolder>() {
+class TodoAdapter(private val todoList: MutableList<String>,
+                  private val konfettiView: KonfettiView? = null,
+                  private val listener: TodoApprovedListener? = null)
+    : RecyclerView.Adapter<TodoAdapter.TodoViewHolder>() {
 
     val buttonVisibilityList = MutableList(todoList.size) { View.GONE }
-    private val handler = Handler(Looper.getMainLooper())
     private var isApproving = false
+    private val handler = Handler(Looper.getMainLooper())
 
     class TodoViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val todoTextView: TextView = view.findViewById(R.id.todoTextView)
@@ -40,52 +43,38 @@ class TodoAdapter(private val todoList: MutableList<String>, private val konfett
         val todo = todoList[position]
         holder.todoTextView.text = todo
 
-        if (position < buttonVisibilityList.size) {
-            holder.buttonLayout.visibility = buttonVisibilityList[position]
-        }
-
         holder.todoTextView.setOnClickListener {
-            if (isApproving) return@setOnClickListener
-
-            if (position < buttonVisibilityList.size) {
-                if (holder.buttonLayout.visibility == View.GONE) {
-                    holder.buttonLayout.visibility = View.VISIBLE
-                    buttonVisibilityList[position] = View.VISIBLE
-                } else {
-                    holder.buttonLayout.visibility = View.GONE
-                    buttonVisibilityList[position] = View.GONE
-                }
+            if (!isApproving) {
+                val newVisibility = if (buttonVisibilityList[position] == View.GONE) View.VISIBLE else View.GONE
+                buttonVisibilityList[position] = newVisibility
                 notifyItemChanged(position)
             }
         }
 
         holder.approveButton.setOnClickListener {
-            if (isApproving) return@setOnClickListener
+            if (!isApproving) {
+                isApproving = true
 
-            isApproving = true
+                konfettiView?.build()
+                    ?.addColors(Color.BLUE, Color.WHITE, Color.RED)
+                    ?.setDirection(0.0, 359.0)
+                    ?.setSpeed(1f, 5f)
+                    ?.setFadeOutEnabled(true)
+                    ?.setTimeToLive(2000L)
+                    ?.addShapes(Shape.Square, Shape.Circle)
+                    ?.addSizes(Size(12))
+                    ?.setPosition(-1f, konfettiView.width + 1f, -1f, -1f)
+                    ?.streamFor(300, 5000L)
 
-            konfettiView?.build()
-                ?.addColors(Color.BLUE, Color.WHITE, Color.RED)
-                ?.setDirection(0.0, 359.0)
-                ?.setSpeed(1f, 5f)
-                ?.setFadeOutEnabled(true)
-                ?.setTimeToLive(2000L)
-                ?.addShapes(Shape.Square, Shape.Circle)
-                ?.addSizes(Size(12))
-                ?.setPosition(-1f, konfettiView.width + 1f, -1f, -1f)
-                ?.streamFor(300, 5000L)
-
-            handler.postDelayed({
-                synchronized(this) {
-                    if (todoList.contains(todo)) {
-                        val index = todoList.indexOf(todo)
-                        removeAt(index)
-                        listener?.onTodoApproved(todo)
-                    }
+                handler.postDelayed({
+                    removeAt(position)
+                    listener?.onTodoApproved(todo)
                     isApproving = false
-                }
-            }, 5000)
+                }, 5000)
+            }
         }
+
+        holder.buttonLayout.visibility = buttonVisibilityList[position]
 
         holder.cancelButton.setOnClickListener {
             // Handle cancel button click here
@@ -95,13 +84,11 @@ class TodoAdapter(private val todoList: MutableList<String>, private val konfett
     override fun getItemCount() = todoList.size
 
     private fun removeAt(position: Int) {
-        synchronized(this) {
-            if (position < todoList.size) {
-                todoList.removeAt(position)
-                buttonVisibilityList.removeAt(position)
-                notifyItemRemoved(position)
-                handler.removeCallbacksAndMessages(null)
-            }
+        if (position < todoList.size) {
+            todoList.removeAt(position)
+            buttonVisibilityList.removeAt(position)
+            notifyItemRemoved(position)
+            notifyItemRangeChanged(position, todoList.size)
         }
     }
 }
