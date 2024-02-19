@@ -22,6 +22,7 @@ class TodoAdapter(private val todoList: MutableList<String>, private val konfett
 
     val buttonVisibilityList = MutableList(todoList.size) { View.GONE }
     private val handler = Handler(Looper.getMainLooper())
+    private var isApproving = false
 
     class TodoViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val todoTextView: TextView = view.findViewById(R.id.todoTextView)
@@ -57,6 +58,10 @@ class TodoAdapter(private val todoList: MutableList<String>, private val konfett
         }
 
         holder.approveButton.setOnClickListener {
+            if (isApproving) return@setOnClickListener
+
+            isApproving = true
+
             konfettiView?.build()
                 ?.addColors(Color.BLUE, Color.WHITE, Color.RED)
                 ?.setDirection(0.0, 359.0)
@@ -75,6 +80,7 @@ class TodoAdapter(private val todoList: MutableList<String>, private val konfett
                         removeAt(index)
                         listener?.onTodoApproved(todo)
                     }
+                    isApproving = false
                 }
             }, 5000)
         }
