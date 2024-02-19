@@ -12,7 +12,11 @@ import nl.dionsegijn.konfetti.models.Shape
 import nl.dionsegijn.konfetti.models.Size
 import nl.dionsegijn.konfetti.KonfettiView
 
-class TodoAdapter(private val todoList: MutableList<String>, private val konfettiView: KonfettiView) : RecyclerView.Adapter<TodoAdapter.TodoViewHolder>() {
+interface TodoApprovedListener {
+    fun onTodoApproved(todo: String)
+}
+
+class TodoAdapter(private val todoList: MutableList<String>, private val konfettiView: KonfettiView? = null, private val listener: TodoApprovedListener? = null) : RecyclerView.Adapter<TodoAdapter.TodoViewHolder>() {
 
     val buttonVisibilityList = MutableList(todoList.size) { View.GONE }
 
@@ -46,16 +50,18 @@ class TodoAdapter(private val todoList: MutableList<String>, private val konfett
         }
 
         holder.approveButton.setOnClickListener {
-            konfettiView.build()
-                .addColors(Color.BLUE, Color.WHITE, Color.RED)
-                .setDirection(0.0, 359.0)
-                .setSpeed(1f, 5f)
-                .setFadeOutEnabled(true)
-                .setTimeToLive(2000L)
-                .addShapes(Shape.Square, Shape.Circle)
-                .addSizes(Size(12))
-                .setPosition(-1f, konfettiView.width + 1f, -1f, -1f)
-                .streamFor(300, 5000L)
+            konfettiView?.build()
+                ?.addColors(Color.BLUE, Color.WHITE, Color.RED)
+                ?.setDirection(0.0, 359.0)
+                ?.setSpeed(1f, 5f)
+                ?.setFadeOutEnabled(true)
+                ?.setTimeToLive(2000L)
+                ?.addShapes(Shape.Square, Shape.Circle)
+                ?.addSizes(Size(12))
+                ?.setPosition(-1f, konfettiView.width + 1f, -1f, -1f)
+                ?.streamFor(300, 5000L)
+            removeAt(position)
+            listener?.onTodoApproved(todo)
         }
 
 
@@ -65,4 +71,10 @@ class TodoAdapter(private val todoList: MutableList<String>, private val konfett
     }
 
     override fun getItemCount() = todoList.size
+
+    private fun removeAt(position: Int) {
+        todoList.removeAt(position)
+        buttonVisibilityList.removeAt(position)
+        notifyItemRemoved(position)
+    }
 }

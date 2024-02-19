@@ -9,21 +9,26 @@ import android.widget.EditText
 import android.widget.ImageButton
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import fr.iut.mytodolist.android.R
+import fr.iut.mytodolist.android.SharedViewModel
 import fr.iut.mytodolist.android.TodoAdapter
+import fr.iut.mytodolist.android.TodoApprovedListener
 import nl.dionsegijn.konfetti.KonfettiView
 
-class TodoAFaireFragment : Fragment() {
+class TodoAFaireFragment : Fragment(), TodoApprovedListener {
 
     private val todoList = mutableListOf<String>()
+    private lateinit var sharedViewModel: SharedViewModel
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        sharedViewModel = ViewModelProvider(requireActivity()).get(SharedViewModel::class.java)
         val view = inflater.inflate(R.layout.fragment_todo_a_faire, container, false)
 
         val todoRecyclerView = view.findViewById<RecyclerView>(R.id.todoRecyclerView)
@@ -31,7 +36,7 @@ class TodoAFaireFragment : Fragment() {
 
         val konfettiView = view.findViewById<KonfettiView>(R.id.viewKonfetti)
 
-        val adapter = TodoAdapter(todoList, konfettiView)
+        val adapter = TodoAdapter(todoList, konfettiView, this)
         todoRecyclerView.adapter = adapter
 
         val addTodoButton = view.findViewById<ImageButton>(R.id.addTodoButton)
@@ -58,4 +63,11 @@ class TodoAFaireFragment : Fragment() {
 
         return view
     }
+
+override fun onTodoApproved(todo: String) {
+    sharedViewModel.approvedTodoList.value?.let {
+        it.add(todo)
+        sharedViewModel.approvedTodoList.postValue(it)
+    }
+}
 }
