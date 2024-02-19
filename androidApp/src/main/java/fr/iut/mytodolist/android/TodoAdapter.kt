@@ -21,6 +21,7 @@ interface TodoApprovedListener {
 class TodoAdapter(private val todoList: MutableList<String>, private val konfettiView: KonfettiView? = null, private val listener: TodoApprovedListener? = null) : RecyclerView.Adapter<TodoAdapter.TodoViewHolder>() {
 
     val buttonVisibilityList = MutableList(todoList.size) { View.GONE }
+    private val handler = Handler(Looper.getMainLooper())
 
     class TodoViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val todoTextView: TextView = view.findViewById(R.id.todoTextView)
@@ -67,7 +68,7 @@ class TodoAdapter(private val todoList: MutableList<String>, private val konfett
                 ?.setPosition(-1f, konfettiView.width + 1f, -1f, -1f)
                 ?.streamFor(300, 5000L)
 
-            Handler(Looper.getMainLooper()).postDelayed({
+            handler.postDelayed({
                 synchronized(this) {
                     if (todoList.contains(todo)) {
                         val index = todoList.indexOf(todo)
@@ -91,6 +92,7 @@ class TodoAdapter(private val todoList: MutableList<String>, private val konfett
                 todoList.removeAt(position)
                 buttonVisibilityList.removeAt(position)
                 notifyItemRemoved(position)
+                handler.removeCallbacksAndMessages(null)
             }
         }
     }
