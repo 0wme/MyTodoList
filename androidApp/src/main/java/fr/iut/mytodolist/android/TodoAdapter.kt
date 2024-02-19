@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.RecyclerView
 import nl.dionsegijn.konfetti.models.Shape
 import nl.dionsegijn.konfetti.models.Size
 import nl.dionsegijn.konfetti.KonfettiView
+import android.os.Handler
+import android.os.Looper
 
 interface TodoApprovedListener {
     fun onTodoApproved(todo: String)
@@ -60,8 +62,12 @@ class TodoAdapter(private val todoList: MutableList<String>, private val konfett
                 ?.addSizes(Size(12))
                 ?.setPosition(-1f, konfettiView.width + 1f, -1f, -1f)
                 ?.streamFor(300, 5000L)
-            removeAt(position)
-            listener?.onTodoApproved(todo)
+
+            // Delay the removal of the task by 2 seconds (2000 milliseconds)
+            Handler(Looper.getMainLooper()).postDelayed({
+                removeAt(position)
+                listener?.onTodoApproved(todo)
+            }, 5000)
         }
 
 
