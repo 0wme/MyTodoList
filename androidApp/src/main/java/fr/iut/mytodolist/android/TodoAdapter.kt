@@ -45,6 +45,8 @@ class TodoAdapter(private val todoList: MutableList<String>, private val konfett
         }
 
         holder.todoTextView.setOnClickListener {
+            if (isApproving) return@setOnClickListener
+
             if (position < buttonVisibilityList.size) {
                 if (holder.buttonLayout.visibility == View.GONE) {
                     holder.buttonLayout.visibility = View.VISIBLE
