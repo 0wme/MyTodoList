@@ -14,10 +14,6 @@ import nl.dionsegijn.konfetti.models.Size
 import android.os.Handler
 import android.os.Looper
 
-interface TodoApprovedListener {
-    fun onTodoApproved(todo: String)
-}
-
 class TodoAdapter(private val todoList: MutableList<String>,
                   private val konfettiView: KonfettiView? = null,
                   private val listener: TodoApprovedListener? = null)
