@@ -68,9 +68,12 @@ class TodoAdapter(private val todoList: MutableList<String>, private val konfett
                 ?.streamFor(300, 5000L)
 
             Handler(Looper.getMainLooper()).postDelayed({
-                if (position < todoList.size) {
-                    removeAt(position)
-                    listener?.onTodoApproved(todo)
+                synchronized(this) {
+                    if (todoList.contains(todo)) {
+                        val index = todoList.indexOf(todo)
+                        removeAt(index)
+                        listener?.onTodoApproved(todo)
+                    }
                 }
             }, 5000)
         }
@@ -83,10 +86,12 @@ class TodoAdapter(private val todoList: MutableList<String>, private val konfett
     override fun getItemCount() = todoList.size
 
     private fun removeAt(position: Int) {
-        if (position < todoList.size) {
-            todoList.removeAt(position)
-            buttonVisibilityList.removeAt(position)
-            notifyItemRemoved(position)
+        synchronized(this) {
+            if (position < todoList.size) {
+                todoList.removeAt(position)
+                buttonVisibilityList.removeAt(position)
+                notifyItemRemoved(position)
+            }
         }
     }
 }
