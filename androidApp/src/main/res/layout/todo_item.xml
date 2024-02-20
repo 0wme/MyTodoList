@@ -52,6 +52,7 @@
             android:clickable="true"
             android:focusable="true" />
 
+
             <nl.dionsegijn.konfetti.KonfettiView
                 android:id="@+id/viewKonfetti"
                 android:layout_width="match_parent"

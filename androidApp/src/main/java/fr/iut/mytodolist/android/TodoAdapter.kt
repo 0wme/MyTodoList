@@ -13,22 +13,18 @@ import nl.dionsegijn.konfetti.models.Shape
 import nl.dionsegijn.konfetti.models.Size
 import android.os.Handler
 import android.os.Looper
+import fr.iut.mytodolist.android.TodoViewHolder
 
 class TodoAdapter(private val todoList: MutableList<String>,
                   private val konfettiView: KonfettiView? = null,
                   private val listener: TodoApprovedListener? = null)
-    : RecyclerView.Adapter<TodoAdapter.TodoViewHolder>() {
+    : RecyclerView.Adapter<TodoViewHolder>() {
 
     val buttonVisibilityList = MutableList(todoList.size) { View.GONE }
     private var isApproving = false
     private val handler = Handler(Looper.getMainLooper())
 
-    class TodoViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val todoTextView: TextView = view.findViewById(R.id.todoTextView)
-        val buttonLayout: LinearLayout = view.findViewById(R.id.buttonLayout)
-        val approveButton: ImageButton = view.findViewById(R.id.approveButton)
-        val cancelButton: ImageButton = view.findViewById(R.id.cancelButton)
-    }
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TodoViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.todo_item, parent, false)
