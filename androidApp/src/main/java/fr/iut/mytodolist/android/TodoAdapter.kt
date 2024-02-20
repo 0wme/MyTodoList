@@ -32,7 +32,11 @@ class TodoAdapter(private val todoList: MutableList<String>,
     override fun onBindViewHolder(holder: TodoViewHolder, position: Int) {
         val todo = todoList[position]
         holder.todoTextView.text = todo
-        holder.todoDateTimeTextView.text = dateTimeList[position]
+        if (position < dateTimeList.size) {
+            holder.todoDateTimeTextView.text = dateTimeList[position]
+        } else {
+            holder.todoDateTimeTextView.text = ""
+        }
 
         holder.todoTextView.setOnClickListener {
             if (!isApproving) {
@@ -58,7 +62,9 @@ class TodoAdapter(private val todoList: MutableList<String>,
                     ?.streamFor(300, 5000L)
 
                 handler.postDelayed({
-                    removeAt(position)
+                    synchronized(this) {
+                        removeAt(position)
+                    }
                     listener?.onTodoApproved(todo)
                     isApproving = false
                 }, 5000)
@@ -75,12 +81,14 @@ class TodoAdapter(private val todoList: MutableList<String>,
     override fun getItemCount() = todoList.size
 
     private fun removeAt(position: Int) {
-        if (position < todoList.size) {
-            todoList.removeAt(position)
-            dateTimeList.removeAt(position)
-            buttonVisibilityList.removeAt(position)
-            notifyItemRemoved(position)
-            notifyItemRangeChanged(position, todoList.size)
+        synchronized(this) {
+            if (position < todoList.size) {
+                todoList.removeAt(position)
+                dateTimeList.removeAt(position)
+                buttonVisibilityList.removeAt(position)
+                notifyItemRemoved(position)
+                notifyItemRangeChanged(position, todoList.size)
+            }
         }
     }
 }

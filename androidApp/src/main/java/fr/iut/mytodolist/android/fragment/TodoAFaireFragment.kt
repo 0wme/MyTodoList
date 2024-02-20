@@ -28,6 +28,7 @@ class TodoAFaireFragment : Fragment(), TodoApprovedListener {
     private val dateTimeList = mutableListOf<String>()
     private lateinit var sharedViewModel: SharedViewModel
 
+
     @SuppressLint("NotifyDataSetChanged", "SetTextI18n")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -67,24 +68,33 @@ class TodoAFaireFragment : Fragment(), TodoApprovedListener {
                 timePickerDialog.show()
             }
 
-            val dialog = AlertDialog.Builder(it.context, R.style.AlertDialogCustom)
-                .setView(dialogView)
-                .setPositiveButton("Ajouter") { dialog, _ ->
-                    val todo = todoEditText.text.toString()
-                    val dateTime = "${dateButton.text} ${timeButton.text}"
-                    if (todo.isNotEmpty()) {
-                        todoList.add(todo)
-                        dateTimeList.add(dateTime)
-                        adapter.buttonVisibilityList.add(View.GONE)
-                        dialog.dismiss()
-                        adapter.notifyDataSetChanged()
+        val dialog = AlertDialog.Builder(it.context, R.style.AlertDialogCustom)
+            .setView(dialogView)
+            .setPositiveButton("Ajouter") { dialog, _ ->
+                val todo = todoEditText.text.toString()
+                var dateTime = ""
+                if (dateButton.text != "Choisir une date") {
+                    dateTime += dateButton.text
+                }
+                if (timeButton.text != "Choisir une heure") {
+                    if (dateTime.isNotEmpty()) {
+                        dateTime += " "
                     }
+                    dateTime += timeButton.text
                 }
-                .setNegativeButton("Annuler") { dialog, _ ->
-                    dialog.cancel()
+                if (todo.isNotEmpty()) {
+                    todoList.add(todo)
+                    dateTimeList.add(dateTime)
+                    adapter.buttonVisibilityList.add(View.GONE)
+                    dialog.dismiss()
+                    adapter.notifyDataSetChanged()
                 }
-                .create()
-            dialog.show()
+            }
+            .setNegativeButton("Annuler") { dialog, _ ->
+                dialog.cancel()
+            }
+            .create()
+        dialog.show()
         }
 
         return view
