@@ -1,10 +1,13 @@
 package fr.iut.mytodolist.android.fragment
 
 import android.annotation.SuppressLint
+import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import androidx.appcompat.app.AlertDialog
@@ -17,6 +20,7 @@ import fr.iut.mytodolist.android.SharedViewModel
 import fr.iut.mytodolist.android.TodoAdapter
 import fr.iut.mytodolist.android.TodoApprovedListener
 import nl.dionsegijn.konfetti.KonfettiView
+import java.util.*
 
 class TodoAFaireFragment : Fragment(), TodoApprovedListener {
 
@@ -43,6 +47,25 @@ class TodoAFaireFragment : Fragment(), TodoApprovedListener {
         addTodoButton.setOnClickListener {
             val dialogView = LayoutInflater.from(it.context).inflate(R.layout.dialog_layout, null)
             val todoEditText = dialogView.findViewById<EditText>(R.id.dialogEditText)
+            val dateButton = dialogView.findViewById<Button>(R.id.dateButton)
+            val timeButton = dialogView.findViewById<Button>(R.id.timeButton)
+
+            dateButton.setOnClickListener {
+                val calendar = Calendar.getInstance()
+                val datePickerDialog = DatePickerDialog(it.context, { _, year, month, dayOfMonth ->
+                    dateButton.text = "$dayOfMonth/$month/$year"
+                }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH))
+                datePickerDialog.show()
+            }
+
+            timeButton.setOnClickListener {
+                val calendar = Calendar.getInstance()
+                val timePickerDialog = TimePickerDialog(it.context, { _, hourOfDay, minute ->
+                    timeButton.text = "$hourOfDay:$minute"
+                }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true)
+                timePickerDialog.show()
+            }
+
             val dialog = AlertDialog.Builder(it.context, R.style.AlertDialogCustom)
                 .setView(dialogView)
                 .setPositiveButton("Ajouter") { dialog, _ ->
@@ -64,10 +87,10 @@ class TodoAFaireFragment : Fragment(), TodoApprovedListener {
         return view
     }
 
-override fun onTodoApproved(todo: String) {
-    sharedViewModel.approvedTodoList.value?.let {
-        it.add(todo)
-        sharedViewModel.approvedTodoList.postValue(it)
+    override fun onTodoApproved(todo: String) {
+        sharedViewModel.approvedTodoList.value?.let {
+            it.add(todo)
+            sharedViewModel.approvedTodoList.postValue(it)
+        }
     }
-}
 }

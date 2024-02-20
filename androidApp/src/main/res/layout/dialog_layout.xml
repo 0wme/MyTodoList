@@ -24,4 +24,18 @@
         android:textColor="@color/yellow"
         android:layout_marginTop="16dp" />
 
+    <Button
+        android:id="@+id/dateButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Choisir une date"
+        android:layout_marginTop="16dp" />
+
+    <Button
+        android:id="@+id/timeButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Choisir une heure"
+        android:layout_marginTop="16dp" />
+
 </LinearLayout>
