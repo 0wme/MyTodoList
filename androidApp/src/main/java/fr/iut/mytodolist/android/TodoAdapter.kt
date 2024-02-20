@@ -46,30 +46,31 @@ class TodoAdapter(private val todoList: MutableList<String>,
             }
         }
 
-        holder.approveButton.setOnClickListener {
-            if (!isApproving) {
-                isApproving = true
+holder.approveButton.setOnClickListener {
+    if (!isApproving) {
+        isApproving = true
 
-                konfettiView?.build()
-                    ?.addColors(Color.BLUE, Color.WHITE, Color.RED)
-                    ?.setDirection(0.0, 359.0)
-                    ?.setSpeed(1f, 5f)
-                    ?.setFadeOutEnabled(true)
-                    ?.setTimeToLive(2000L)
-                    ?.addShapes(Shape.Square, Shape.Circle)
-                    ?.addSizes(Size(12))
-                    ?.setPosition(-1f, konfettiView.width + 1f, -1f, -1f)
-                    ?.streamFor(300, 5000L)
+        konfettiView?.build()
+            ?.addColors(Color.BLUE, Color.WHITE, Color.RED)
+            ?.setDirection(0.0, 359.0)
+            ?.setSpeed(1f, 5f)
+            ?.setFadeOutEnabled(true)
+            ?.setTimeToLive(2000L)
+            ?.addShapes(Shape.Square, Shape.Circle)
+            ?.addSizes(Size(12))
+            ?.setPosition(-1f, konfettiView.width + 1f, -1f, -1f)
+            ?.streamFor(300, 5000L)
 
-                handler.postDelayed({
-                    synchronized(this) {
-                        removeAt(position)
-                    }
-                    listener?.onTodoApproved(todo)
-                    isApproving = false
-                }, 5000)
+        handler.postDelayed({
+            synchronized(this) {
+                val dateTime = if (position < dateTimeList.size) dateTimeList[position] else ""
+                removeAt(position)
+                listener?.onTodoApproved(todo, dateTime)
+                isApproving = false
             }
-        }
+        }, 5000)
+    }
+}
 
         holder.buttonLayout.visibility = buttonVisibilityList[position]
 

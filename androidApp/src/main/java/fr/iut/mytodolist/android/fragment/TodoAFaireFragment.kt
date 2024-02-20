@@ -100,10 +100,14 @@ class TodoAFaireFragment : Fragment(), TodoApprovedListener {
         return view
     }
 
-    override fun onTodoApproved(todo: String) {
-        sharedViewModel.approvedTodoList.value?.let {
-            it.add(todo)
-            sharedViewModel.approvedTodoList.postValue(it)
-        }
+override fun onTodoApproved(todo: String, dateTime: String) {
+    sharedViewModel.approvedTodoList.value?.let {
+        it.add(todo)
+        sharedViewModel.approvedTodoList.postValue(it)
     }
+    sharedViewModel.approvedDateTimeList.value?.let {
+        it.add(dateTime)
+        sharedViewModel.approvedDateTimeList.postValue(it)
+    }
+}
 }

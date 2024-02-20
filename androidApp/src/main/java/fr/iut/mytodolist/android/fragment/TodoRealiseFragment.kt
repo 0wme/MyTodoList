@@ -24,21 +24,15 @@ class TodoRealiseFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_todo_realise, container, false)
 
         sharedViewModel.approvedTodoList.observe(viewLifecycleOwner) { approvedTodoList ->
-            val approvedTodoRecyclerView =
-                view.findViewById<RecyclerView>(R.id.approvedTodoRecyclerView)
-            approvedTodoRecyclerView.layoutManager = LinearLayoutManager(context)
-            val adapter = TodoAdapter(approvedTodoList, mutableListOf(), null)
-            approvedTodoRecyclerView.adapter = adapter
+            sharedViewModel.approvedDateTimeList.observe(viewLifecycleOwner) { approvedDateTimeList ->
+                val approvedTodoRecyclerView =
+                    view.findViewById<RecyclerView>(R.id.approvedTodoRecyclerView)
+                approvedTodoRecyclerView.layoutManager = LinearLayoutManager(context)
+                val adapter = TodoAdapter(approvedTodoList, approvedDateTimeList, null)
+                approvedTodoRecyclerView.adapter = adapter
+            }
         }
 
         return view
-    }
-
-    fun addApprovedTodo() {
-        val approvedTodoList = sharedViewModel.approvedTodoList.value
-        val approvedTodoRecyclerView = view?.findViewById<RecyclerView>(R.id.approvedTodoRecyclerView)
-        approvedTodoRecyclerView?.layoutManager = LinearLayoutManager(context)
-        val adapter = TodoAdapter(approvedTodoList ?: mutableListOf(), mutableListOf())
-        approvedTodoRecyclerView?.adapter = adapter
     }
 }
