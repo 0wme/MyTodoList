@@ -13,9 +13,9 @@ import nl.dionsegijn.konfetti.models.Shape
 import nl.dionsegijn.konfetti.models.Size
 import android.os.Handler
 import android.os.Looper
-import fr.iut.mytodolist.android.TodoViewHolder
 
 class TodoAdapter(private val todoList: MutableList<String>,
+                  private val dateTimeList: MutableList<String>,
                   private val konfettiView: KonfettiView? = null,
                   private val listener: TodoApprovedListener? = null)
     : RecyclerView.Adapter<TodoViewHolder>() {
@@ -23,8 +23,6 @@ class TodoAdapter(private val todoList: MutableList<String>,
     val buttonVisibilityList = MutableList(todoList.size) { View.GONE }
     private var isApproving = false
     private val handler = Handler(Looper.getMainLooper())
-
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TodoViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.todo_item, parent, false)
@@ -34,6 +32,7 @@ class TodoAdapter(private val todoList: MutableList<String>,
     override fun onBindViewHolder(holder: TodoViewHolder, position: Int) {
         val todo = todoList[position]
         holder.todoTextView.text = todo
+        holder.todoDateTimeTextView.text = dateTimeList[position]
 
         holder.todoTextView.setOnClickListener {
             if (!isApproving) {
@@ -78,6 +77,7 @@ class TodoAdapter(private val todoList: MutableList<String>,
     private fun removeAt(position: Int) {
         if (position < todoList.size) {
             todoList.removeAt(position)
+            dateTimeList.removeAt(position)
             buttonVisibilityList.removeAt(position)
             notifyItemRemoved(position)
             notifyItemRangeChanged(position, todoList.size)

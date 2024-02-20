@@ -25,9 +25,10 @@ import java.util.*
 class TodoAFaireFragment : Fragment(), TodoApprovedListener {
 
     private val todoList = mutableListOf<String>()
+    private val dateTimeList = mutableListOf<String>()
     private lateinit var sharedViewModel: SharedViewModel
 
-    @SuppressLint("NotifyDataSetChanged")
+    @SuppressLint("NotifyDataSetChanged", "SetTextI18n")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -40,7 +41,7 @@ class TodoAFaireFragment : Fragment(), TodoApprovedListener {
 
         val konfettiView = view.findViewById<KonfettiView>(R.id.viewKonfetti)
 
-        val adapter = TodoAdapter(todoList, konfettiView, this)
+        val adapter = TodoAdapter(todoList, dateTimeList, konfettiView, this)
         todoRecyclerView.adapter = adapter
 
         val addTodoButton = view.findViewById<ImageButton>(R.id.addTodoButton)
@@ -70,8 +71,10 @@ class TodoAFaireFragment : Fragment(), TodoApprovedListener {
                 .setView(dialogView)
                 .setPositiveButton("Ajouter") { dialog, _ ->
                     val todo = todoEditText.text.toString()
+                    val dateTime = "${dateButton.text} ${timeButton.text}"
                     if (todo.isNotEmpty()) {
                         todoList.add(todo)
+                        dateTimeList.add(dateTime)
                         adapter.buttonVisibilityList.add(View.GONE)
                         dialog.dismiss()
                         adapter.notifyDataSetChanged()
