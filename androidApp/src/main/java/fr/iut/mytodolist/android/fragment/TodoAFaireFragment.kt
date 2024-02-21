@@ -82,40 +82,40 @@ class TodoAFaireFragment : Fragment(), TodoApprovedListener {
 
             val dialog = AlertDialog.Builder(it.context, R.style.AlertDialogCustom)
                 .setView(dialogView)
-.setPositiveButton("Ajouter") { _, _ ->
-    val todo = todoEditText.text.toString()
-    var dateTime = ""
-    if (dateButton.text != "Choisir une date") {
-        dateTime += dateButton.text
-    }
-    if (timeButton.text != "Choisir une heure") {
-        if (dateTime.isNotEmpty()) {
-            dateTime += " "
-        }
-        dateTime += timeButton.text
-    }
-    if (todo.isNotEmpty()) {
-        todoList.add(todo)
-        dateTimeList.add(dateTime)
-        adapter.buttonVisibilityList.add(View.GONE)
-        adapter.notifyDataSetChanged()
+                .setPositiveButton("Ajouter") { _, _ ->
+                    val todo = todoEditText.text.toString()
+                    var dateTime = ""
+                    if (dateButton.text != "Choisir une date") {
+                        dateTime += dateButton.text
+                    }
+                    if (timeButton.text != "Choisir une heure") {
+                        if (dateTime.isNotEmpty()) {
+                            dateTime += " "
+                        }
+                        dateTime += timeButton.text
+                    }
+                    if (todo.isNotEmpty()) {
+                        todoList.add(todo)
+                        dateTimeList.add(dateTime)
+                        adapter.buttonVisibilityList.add(View.GONE)
+                        adapter.notifyDataSetChanged()
 
-        // Check for permission
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            val alarmManager = context?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-            if (!alarmManager.canScheduleExactAlarms()) {
-                val intent = Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM).apply {
-                    putExtra("android.provider.extra.PACKAGE_NAME", context?.packageName)
+                        // Check for permission
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                            val alarmManager = context?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+                            if (!alarmManager.canScheduleExactAlarms()) {
+                                val intent = Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM).apply {
+                                    putExtra("android.provider.extra.PACKAGE_NAME", context?.packageName)
+                                }
+                                startActivity(intent)
+                            } else {
+                                scheduleAlarm(todo, dateTime, it.context)
+                            }
+                        } else {
+                            scheduleAlarm(todo, dateTime, it.context)
+                        }
+                    }
                 }
-                startActivity(intent)
-            } else {
-                scheduleAlarm(todo, dateTime, it.context)
-            }
-        } else {
-            scheduleAlarm(todo, dateTime, it.context)
-        }
-    }
-}
                 .setNegativeButton("Annuler") { dialog, _ ->
                     dialog.cancel()
                 }
@@ -139,16 +139,42 @@ class TodoAFaireFragment : Fragment(), TodoApprovedListener {
         } else {
             SimpleDateFormat("d/M/yyyy", Locale.getDefault())
         }
-        if (dateTime.isNotEmpty()) {
-            val date = format.parse(dateTime)
-            val alarmTime = date?.time?.minus(TimeUnit.HOURS.toMillis(24))
+if (dateTime.isNotEmpty()) {
+    val date = format.parse(dateTime)
+    val alarmTime = date?.time?.minus(TimeUnit.HOURS.toMillis(24))
 
-            if (alarmTime != null) {
-                alarmManager.setExact(AlarmManager.RTC_WAKEUP, alarmTime, pendingIntent)
-            } else {
-                alarmManager.setExact(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), pendingIntent)
+    if (alarmTime != null) {
+        if (!alarmManager.canScheduleExactAlarms()) {
+            val builder = AlertDialog.Builder(context)
+            builder.setTitle("Permission Required")
+            builder.setMessage("This app needs the ability to schedule exact alarms. Please grant this permission in the app settings.")
+            builder.setPositiveButton("OK") { _, _ ->
+                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                val uri = Uri.fromParts("package", context.packageName, null)
+                intent.data = uri
+                context.startActivity(intent)
             }
+            builder.show()
+        } else {
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, alarmTime, pendingIntent)
         }
+    } else {
+        if (!alarmManager.canScheduleExactAlarms()) {
+            val builder = AlertDialog.Builder(context)
+            builder.setTitle("Permission Required")
+            builder.setMessage("This app needs the ability to schedule exact alarms. Please grant this permission in the app settings.")
+            builder.setPositiveButton("OK") { _, _ ->
+                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                val uri = Uri.fromParts("package", context.packageName, null)
+                intent.data = uri
+                context.startActivity(intent)
+            }
+            builder.show()
+        } else {
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), pendingIntent)
+        }
+    }
+}
     }
 
     override fun onTodoApproved(todo: String, dateTime: String) {
