@@ -28,7 +28,6 @@ class TodoAFaireFragment : Fragment(), TodoApprovedListener {
     private val dateTimeList = mutableListOf<String>()
     private lateinit var sharedViewModel: SharedViewModel
 
-
     @SuppressLint("NotifyDataSetChanged", "SetTextI18n")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -68,46 +67,57 @@ class TodoAFaireFragment : Fragment(), TodoApprovedListener {
                 timePickerDialog.show()
             }
 
-        val dialog = AlertDialog.Builder(it.context, R.style.AlertDialogCustom)
-            .setView(dialogView)
-            .setPositiveButton("Ajouter") { dialog, _ ->
-                val todo = todoEditText.text.toString()
-                var dateTime = ""
-                if (dateButton.text != "Choisir une date") {
-                    dateTime += dateButton.text
-                }
-                if (timeButton.text != "Choisir une heure") {
-                    if (dateTime.isNotEmpty()) {
-                        dateTime += " "
+            val dialog = AlertDialog.Builder(it.context, R.style.AlertDialogCustom)
+                .setView(dialogView)
+                .setPositiveButton("Ajouter") { dialog, _ ->
+                    val todo = todoEditText.text.toString()
+                    var dateTime = ""
+                    if (dateButton.text != "Choisir une date") {
+                        dateTime += dateButton.text
                     }
-                    dateTime += timeButton.text
+                    if (timeButton.text != "Choisir une heure") {
+                        if (dateTime.isNotEmpty()) {
+                            dateTime += " "
+                        }
+                        dateTime += timeButton.text
+                    }
+                    if (todo.isNotEmpty()) {
+                        todoList.add(todo)
+                        dateTimeList.add(dateTime)
+                        adapter.buttonVisibilityList.add(View.GONE)
+                        dialog.dismiss()
+                        adapter.notifyDataSetChanged()
+                    }
                 }
-                if (todo.isNotEmpty()) {
-                    todoList.add(todo)
-                    dateTimeList.add(dateTime)
-                    adapter.buttonVisibilityList.add(View.GONE)
-                    dialog.dismiss()
-                    adapter.notifyDataSetChanged()
+                .setNegativeButton("Annuler") { dialog, _ ->
+                    dialog.cancel()
                 }
-            }
-            .setNegativeButton("Annuler") { dialog, _ ->
-                dialog.cancel()
-            }
-            .create()
-        dialog.show()
+                .create()
+            dialog.show()
         }
 
         return view
     }
 
-override fun onTodoApproved(todo: String, dateTime: String) {
-    sharedViewModel.approvedTodoList.value?.let {
-        it.add(todo)
-        sharedViewModel.approvedTodoList.postValue(it)
+    override fun onTodoApproved(todo: String, dateTime: String) {
+        sharedViewModel.approvedTodoList.value?.let {
+            it.add(todo)
+            sharedViewModel.approvedTodoList.postValue(it)
+        }
+        sharedViewModel.approvedDateTimeList.value?.let {
+            it.add(dateTime)
+            sharedViewModel.approvedDateTimeList.postValue(it)
+        }
     }
-    sharedViewModel.approvedDateTimeList.value?.let {
-        it.add(dateTime)
-        sharedViewModel.approvedDateTimeList.postValue(it)
+
+    override fun onTodoCancelled(todo: String, dateTime: String) {
+        sharedViewModel.cancelledTodoList.value?.let {
+            it.add(todo)
+            sharedViewModel.cancelledTodoList.postValue(it)
+        }
+        sharedViewModel.cancelledDateTimeList.value?.let {
+            it.add(dateTime)
+            sharedViewModel.cancelledDateTimeList.postValue(it)
+        }
     }
-}
 }

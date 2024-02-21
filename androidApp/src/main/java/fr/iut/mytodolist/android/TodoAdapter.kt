@@ -75,7 +75,12 @@ holder.approveButton.setOnClickListener {
         holder.buttonLayout.visibility = buttonVisibilityList[position]
 
         holder.cancelButton.setOnClickListener {
-            // Handle cancel button click here
+            synchronized(this) {
+                val dateTime = if (position < dateTimeList.size) dateTimeList[position] else ""
+                val todo = todoList[position]
+                removeAt(position)
+                listener?.onTodoCancelled(todo, dateTime)
+            }
         }
     }
 
