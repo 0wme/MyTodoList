@@ -54,8 +54,9 @@ class TodoAFaireFragment : Fragment(), TodoApprovedListener {
         val todoList = todos.filter { it.status == "pending" }.toMutableList()
 
         val todoRecyclerView = view.findViewById<RecyclerView>(R.id.todoRecyclerView)
+        val konfettiView = view.findViewById<KonfettiView>(R.id.viewKonfetti)
         todoRecyclerView.layoutManager = LinearLayoutManager(context)
-        val adapter = TodoAdapter(todoList, null, this, requireActivity())
+        val adapter = TodoAdapter(todoList, konfettiView, this, requireActivity())
         todoRecyclerView.adapter = adapter
 
         val addTodoButton = view.findViewById<ImageButton>(R.id.addTodoButton)
