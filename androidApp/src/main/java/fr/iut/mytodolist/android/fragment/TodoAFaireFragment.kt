@@ -1,5 +1,6 @@
 package fr.iut.mytodolist.android.fragment
 
+import TodoDatabaseHelper
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.AlarmManager
@@ -37,8 +38,6 @@ import java.util.concurrent.TimeUnit
 
 class TodoAFaireFragment : Fragment(), TodoApprovedListener {
 
-    private val todoList = mutableListOf<String>()
-    private val dateTimeList = mutableListOf<String>()
     private lateinit var sharedViewModel: SharedViewModel
 
     @SuppressLint("NotifyDataSetChanged", "SetTextI18n", "ScheduleExactAlarm")
@@ -49,12 +48,15 @@ class TodoAFaireFragment : Fragment(), TodoApprovedListener {
         sharedViewModel = ViewModelProvider(requireActivity()).get(SharedViewModel::class.java)
         val view = inflater.inflate(R.layout.fragment_todo_a_faire, container, false)
 
+        val dbHelper = TodoDatabaseHelper(requireActivity())
+        val todos = dbHelper.getAllTodos()
+
+        val todoList = todos.filter { it.status == "pending" }.map { it.todo }.toMutableList()
+        val dateTimeList = todos.filter { it.status == "pending" }.map { it.dateTime }.toMutableList()
+
         val todoRecyclerView = view.findViewById<RecyclerView>(R.id.todoRecyclerView)
         todoRecyclerView.layoutManager = LinearLayoutManager(context)
-
-        val konfettiView = view.findViewById<KonfettiView>(R.id.viewKonfetti)
-
-        val adapter = TodoAdapter(todoList, dateTimeList, konfettiView, this)
+        val adapter = TodoAdapter(todoList, dateTimeList, null, this, requireActivity())
         todoRecyclerView.adapter = adapter
 
         val addTodoButton = view.findViewById<ImageButton>(R.id.addTodoButton)
@@ -122,39 +124,38 @@ class TodoAFaireFragment : Fragment(), TodoApprovedListener {
         return view
     }
 
-private fun scheduleAlarm(todo: String, dateTime: String, context: Context) {
-    val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-    val alarmIntent = Intent(context, AlarmReceiver::class.java).apply {
-        putExtra("TODO_NAME", todo)
-    }
-    // Utilisez le hashCode de la chaîne todo comme identifiant unique pour l'alarme
-    val pendingIntent = PendingIntent.getBroadcast(context, todo.hashCode(), alarmIntent,
-        PendingIntent.FLAG_IMMUTABLE)
+    private fun scheduleAlarm(todo: String, dateTime: String, context: Context) {
+        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val alarmIntent = Intent(context, AlarmReceiver::class.java).apply {
+            putExtra("TODO_NAME", todo)
+        }
+        val pendingIntent = PendingIntent.getBroadcast(context, todo.hashCode(), alarmIntent,
+            PendingIntent.FLAG_IMMUTABLE)
 
-    val format = when {
-        dateTime.contains("/") && dateTime.contains(":") -> SimpleDateFormat("d/M/yyyy HH:mm", Locale.getDefault())
-        dateTime.contains("/") -> SimpleDateFormat("d/M/yyyy", Locale.getDefault())
-        dateTime.contains(":") -> SimpleDateFormat("HH:mm", Locale.getDefault())
-        else -> null
-    }
+        val format = when {
+            dateTime.contains("/") && dateTime.contains(":") -> SimpleDateFormat("d/M/yyyy HH:mm", Locale.getDefault())
+            dateTime.contains("/") -> SimpleDateFormat("d/M/yyyy", Locale.getDefault())
+            dateTime.contains(":") -> SimpleDateFormat("HH:mm", Locale.getDefault())
+            else -> null
+        }
 
-    if (dateTime.isNotEmpty() && format != null) {
-        val date = format.parse(dateTime)
-        val alarmTime = date?.time?.minus(TimeUnit.HOURS.toMillis(24))
+        if (dateTime.isNotEmpty() && format != null) {
+            val date = format.parse(dateTime)
+            val alarmTime = date?.time?.minus(TimeUnit.HOURS.toMillis(24))
 
-        if (alarmTime != null) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                if (alarmManager.canScheduleExactAlarms()) {
-                    alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, alarmTime, pendingIntent)
+            if (alarmTime != null) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if (alarmManager.canScheduleExactAlarms()) {
+                        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, alarmTime, pendingIntent)
+                    } else {
+                        // handle case where exact alarms can't be scheduled
+                    }
                 } else {
-                    // handle case where exact alarms can't be scheduled
+                    alarmManager.setExact(AlarmManager.RTC_WAKEUP, alarmTime, pendingIntent)
                 }
-            } else {
-                alarmManager.setExact(AlarmManager.RTC_WAKEUP, alarmTime, pendingIntent)
             }
         }
     }
-}
 
     override fun onTodoApproved(todo: String, dateTime: String) {
         sharedViewModel.approvedTodoList.value?.let {

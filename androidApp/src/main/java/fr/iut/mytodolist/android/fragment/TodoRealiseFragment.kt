@@ -1,15 +1,16 @@
 package fr.iut.mytodolist.android.fragment
 
-import fr.iut.mytodolist.android.SharedViewModel
+import TodoDatabaseHelper
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import fr.iut.mytodolist.android.R
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import fr.iut.mytodolist.android.R
+import fr.iut.mytodolist.android.SharedViewModel
 import fr.iut.mytodolist.android.TodoAdapter
 
 class TodoRealiseFragment : Fragment() {
@@ -23,15 +24,16 @@ class TodoRealiseFragment : Fragment() {
         sharedViewModel = ViewModelProvider(requireActivity()).get(SharedViewModel::class.java)
         val view = inflater.inflate(R.layout.fragment_todo_realise, container, false)
 
-        sharedViewModel.approvedTodoList.observe(viewLifecycleOwner) { approvedTodoList ->
-            sharedViewModel.approvedDateTimeList.observe(viewLifecycleOwner) { approvedDateTimeList ->
-                val approvedTodoRecyclerView =
-                    view.findViewById<RecyclerView>(R.id.approvedTodoRecyclerView)
-                approvedTodoRecyclerView.layoutManager = LinearLayoutManager(context)
-                val adapter = TodoAdapter(approvedTodoList, approvedDateTimeList, null)
-                approvedTodoRecyclerView.adapter = adapter
-            }
-        }
+        val dbHelper = TodoDatabaseHelper(requireActivity())
+        val todos = dbHelper.getAllTodos()
+
+        val approvedTodoList = todos.filter { it.status == "approved" }.map { it.todo }.toMutableList()
+        val approvedDateTimeList = todos.filter { it.status == "approved" }.map { it.dateTime }.toMutableList()
+
+        val approvedTodoRecyclerView = view.findViewById<RecyclerView>(R.id.approvedTodoRecyclerView)
+        approvedTodoRecyclerView.layoutManager = LinearLayoutManager(context)
+        val adapter = TodoAdapter(approvedTodoList, approvedDateTimeList, null, null, requireActivity())
+        approvedTodoRecyclerView.adapter = adapter
 
         return view
     }
