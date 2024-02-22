@@ -27,12 +27,11 @@ class TodoRetardFragment : Fragment() {
         val dbHelper = TodoDatabaseHelper(requireActivity())
         val todos = dbHelper.getAllTodos()
 
-        val cancelledTodoList = todos.filter { it.status == "cancelled" }.map { it.todo }.toMutableList()
-        val cancelledDateTimeList = todos.filter { it.status == "cancelled" }.map { it.dateTime }.toMutableList()
+        val cancelledTodoList = todos.filter { it.status == "cancelled" }.toMutableList()
 
         val cancelledTodoRecyclerView = view.findViewById<RecyclerView>(R.id.cancelledTodoRecyclerView)
         cancelledTodoRecyclerView.layoutManager = LinearLayoutManager(context)
-        val adapter = TodoAdapter(cancelledTodoList, cancelledDateTimeList, null, null, requireActivity())
+        val adapter = TodoAdapter(cancelledTodoList, null, null, requireActivity())
         cancelledTodoRecyclerView.adapter = adapter
 
         return view

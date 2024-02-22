@@ -27,12 +27,11 @@ class TodoRealiseFragment : Fragment() {
         val dbHelper = TodoDatabaseHelper(requireActivity())
         val todos = dbHelper.getAllTodos()
 
-        val approvedTodoList = todos.filter { it.status == "approved" }.map { it.todo }.toMutableList()
-        val approvedDateTimeList = todos.filter { it.status == "approved" }.map { it.dateTime }.toMutableList()
+        val approvedTodoList = todos.filter { it.status == "approved" }.toMutableList()
 
         val approvedTodoRecyclerView = view.findViewById<RecyclerView>(R.id.approvedTodoRecyclerView)
         approvedTodoRecyclerView.layoutManager = LinearLayoutManager(context)
-        val adapter = TodoAdapter(approvedTodoList, approvedDateTimeList, null, null, requireActivity())
+        val adapter = TodoAdapter(approvedTodoList, null, null, requireActivity())
         approvedTodoRecyclerView.adapter = adapter
 
         return view

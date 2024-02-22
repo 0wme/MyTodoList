@@ -10,7 +10,7 @@ class TodoDatabaseHelper(context: Context) :
 
     companion object {
         private const val DATABASE_NAME = "todo.db"
-        private const val DATABASE_VERSION = 1
+        private const val DATABASE_VERSION = 2
 
         private const val TABLE_TODO = "todo"
         private const val COLUMN_ID = "id"
@@ -45,27 +45,28 @@ class TodoDatabaseHelper(context: Context) :
         return result != -1L
     }
 
-data class Todo(val todo: String, val dateTime: String, val status: String)
+    data class Todo(val id: Int, val todo: String, val dateTime: String, val status: String)
 
-@SuppressLint("Range")
-fun getAllTodos(): List<Todo> {
-    val todos = mutableListOf<Todo>()
-    val db = this.readableDatabase
-    val cursor = db.rawQuery("SELECT * FROM $TABLE_TODO", null)
+    @SuppressLint("Range")
+    fun getAllTodos(): List<Todo> {
+        val todos = mutableListOf<Todo>()
+        val db = this.readableDatabase
+        val cursor = db.rawQuery("SELECT * FROM $TABLE_TODO", null)
 
-    if (cursor.moveToFirst()) {
-        do {
-            val todo = cursor.getString(cursor.getColumnIndex(COLUMN_TODO))
-            val dateTime = cursor.getString(cursor.getColumnIndex(COLUMN_DATETIME))
-            val status = cursor.getString(cursor.getColumnIndex(COLUMN_STATUS))
-            todos.add(Todo(todo, dateTime, status))
-        } while (cursor.moveToNext())
+        if (cursor.moveToFirst()) {
+            do {
+                val id = cursor.getInt(cursor.getColumnIndex(COLUMN_ID))
+                val todo = cursor.getString(cursor.getColumnIndex(COLUMN_TODO))
+                val dateTime = cursor.getString(cursor.getColumnIndex(COLUMN_DATETIME))
+                val status = cursor.getString(cursor.getColumnIndex(COLUMN_STATUS))
+                todos.add(Todo(id, todo, dateTime, status))
+            } while (cursor.moveToNext())
+        }
+
+        cursor.close()
+        db.close()
+        return todos
     }
-
-    cursor.close()
-    db.close()
-    return todos
-}
 
     fun updateTodoStatus(id: Int, status: String): Int {
         val db = this.writableDatabase

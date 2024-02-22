@@ -17,8 +17,7 @@ import android.os.Handler
 import android.os.Looper
 
 class TodoAdapter(
-    private val todoList: MutableList<String>,
-    private val dateTimeList: MutableList<String>,
+    private val todoList: MutableList<TodoDatabaseHelper.Todo>,
     private val konfettiView: KonfettiView? = null,
     private val listener: TodoApprovedListener? = null,
     private val context: Context
@@ -36,12 +35,8 @@ class TodoAdapter(
 
     override fun onBindViewHolder(holder: TodoViewHolder, position: Int) {
         val todo = todoList[position]
-        holder.todoTextView.text = todo
-        if (position < dateTimeList.size) {
-            holder.todoDateTimeTextView.text = dateTimeList[position]
-        } else {
-            holder.todoDateTimeTextView.text = ""
-        }
+        holder.todoTextView.text = todo.todo
+        holder.todoDateTimeTextView.text = todo.dateTime
 
         holder.todoTextView.setOnClickListener {
             if (!isApproving) {
@@ -68,10 +63,9 @@ class TodoAdapter(
 
                 handler.postDelayed({
                     synchronized(this) {
-                        val dateTime = if (position < dateTimeList.size) dateTimeList[position] else ""
                         removeAt(position)
-                        listener?.onTodoApproved(todo, dateTime)
-                        dbHelper.insertTodo(todo, dateTime, "approved")
+                        listener?.onTodoApproved(todo.todo, todo.dateTime)
+                        dbHelper.updateTodoStatus(todo.id, "approved")
                         isApproving = false
                     }
                 }, 5000)
@@ -82,11 +76,9 @@ class TodoAdapter(
 
         holder.cancelButton.setOnClickListener {
             synchronized(this) {
-                val dateTime = if (position < dateTimeList.size) dateTimeList[position] else ""
-                val todo = todoList[position]
                 removeAt(position)
-                listener?.onTodoCancelled(todo, dateTime)
-                dbHelper.insertTodo(todo, dateTime, "cancelled")
+                listener?.onTodoCancelled(todo.todo, todo.dateTime)
+                dbHelper.updateTodoStatus(todo.id, "cancelled")
             }
         }
     }
@@ -96,14 +88,10 @@ class TodoAdapter(
     private fun removeAt(position: Int) {
         synchronized(this) {
             if (position < todoList.size) {
-                val todo = todoList[position]
-                val dateTime = dateTimeList[position]
                 todoList.removeAt(position)
-                dateTimeList.removeAt(position)
                 buttonVisibilityList.removeAt(position)
                 notifyItemRemoved(position)
                 notifyItemRangeChanged(position, todoList.size)
-                dbHelper.deleteTodo(todo.hashCode())
             }
         }
     }

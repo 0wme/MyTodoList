@@ -51,12 +51,11 @@ class TodoAFaireFragment : Fragment(), TodoApprovedListener {
         val dbHelper = TodoDatabaseHelper(requireActivity())
         val todos = dbHelper.getAllTodos()
 
-        val todoList = todos.filter { it.status == "pending" }.map { it.todo }.toMutableList()
-        val dateTimeList = todos.filter { it.status == "pending" }.map { it.dateTime }.toMutableList()
+        val todoList = todos.filter { it.status == "pending" }.toMutableList()
 
         val todoRecyclerView = view.findViewById<RecyclerView>(R.id.todoRecyclerView)
         todoRecyclerView.layoutManager = LinearLayoutManager(context)
-        val adapter = TodoAdapter(todoList, dateTimeList, null, this, requireActivity())
+        val adapter = TodoAdapter(todoList, null, this, requireActivity())
         todoRecyclerView.adapter = adapter
 
         val addTodoButton = view.findViewById<ImageButton>(R.id.addTodoButton)
@@ -97,21 +96,11 @@ class TodoAFaireFragment : Fragment(), TodoApprovedListener {
                         dateTime += timeButton.text
                     }
                     if (todo.isNotEmpty()) {
-                        todoList.add(todo)
-                        dateTimeList.add(dateTime)
+                        val newTodo = TodoDatabaseHelper.Todo(0, todo, dateTime, "pending")
+                        todoList.add(newTodo)
                         adapter.buttonVisibilityList.add(View.GONE)
                         adapter.notifyDataSetChanged()
-
-                        // Vérifie si l'application a la permission de planifier des alarmes exactes
-                        val alarmManager = context?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-                        if (!alarmManager.canScheduleExactAlarms()) {
-                            val intent = Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM).apply {
-                                putExtra("android.provider.extra.PACKAGE_NAME", context?.packageName)
-                            }
-                            startActivity(intent)
-                        } else {
-                            scheduleAlarm(todo, dateTime, it.context)
-                        }
+                        dbHelper.insertTodo(newTodo.todo, newTodo.dateTime, newTodo.status)
                     }
                 }
                 .setNegativeButton("Annuler") { dialog, _ ->
@@ -122,39 +111,6 @@ class TodoAFaireFragment : Fragment(), TodoApprovedListener {
         }
 
         return view
-    }
-
-    private fun scheduleAlarm(todo: String, dateTime: String, context: Context) {
-        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val alarmIntent = Intent(context, AlarmReceiver::class.java).apply {
-            putExtra("TODO_NAME", todo)
-        }
-        val pendingIntent = PendingIntent.getBroadcast(context, todo.hashCode(), alarmIntent,
-            PendingIntent.FLAG_IMMUTABLE)
-
-        val format = when {
-            dateTime.contains("/") && dateTime.contains(":") -> SimpleDateFormat("d/M/yyyy HH:mm", Locale.getDefault())
-            dateTime.contains("/") -> SimpleDateFormat("d/M/yyyy", Locale.getDefault())
-            dateTime.contains(":") -> SimpleDateFormat("HH:mm", Locale.getDefault())
-            else -> null
-        }
-
-        if (dateTime.isNotEmpty() && format != null) {
-            val date = format.parse(dateTime)
-            val alarmTime = date?.time?.minus(TimeUnit.HOURS.toMillis(24))
-
-            if (alarmTime != null) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    if (alarmManager.canScheduleExactAlarms()) {
-                        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, alarmTime, pendingIntent)
-                    } else {
-                        // handle case where exact alarms can't be scheduled
-                    }
-                } else {
-                    alarmManager.setExact(AlarmManager.RTC_WAKEUP, alarmTime, pendingIntent)
-                }
-            }
-        }
     }
 
     override fun onTodoApproved(todo: String, dateTime: String) {
