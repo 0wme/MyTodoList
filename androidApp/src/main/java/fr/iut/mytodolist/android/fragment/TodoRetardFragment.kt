@@ -1,7 +1,6 @@
 package fr.iut.mytodolist.android.fragment
 
 import TodoDatabaseHelper
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -18,25 +17,37 @@ import fr.iut.mytodolist.android.TodoAdapter
 class TodoRetardFragment : Fragment() {
 
     private lateinit var sharedViewModel: SharedViewModel
+    private lateinit var adapter: TodoAdapter
 
-    @SuppressLint("NotifyDataSetChanged")
-override fun onCreateView(
-    inflater: LayoutInflater, container: ViewGroup?,
-    savedInstanceState: Bundle?
-): View? {
-    sharedViewModel = ViewModelProvider(requireActivity()).get(SharedViewModel::class.java)
-    val view = inflater.inflate(R.layout.fragment_todo_retard, container, false)
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        sharedViewModel = ViewModelProvider(requireActivity()).get(SharedViewModel::class.java)
+        val view = inflater.inflate(R.layout.fragment_todo_retard, container, false)
 
-    val dbHelper = TodoDatabaseHelper(requireActivity())
-    val todos = dbHelper.getAllTodos()
+        val dbHelper = TodoDatabaseHelper(requireActivity())
+        val todos = dbHelper.getAllTodos()
 
-    val cancelledTodoList = todos.filter { it.status == "cancelled" }.toMutableList()
+        val cancelledTodoList = todos.filter { it.status == "cancelled" }.toMutableList()
 
-    val cancelledTodoRecyclerView = view.findViewById<RecyclerView>(R.id.cancelledTodoRecyclerView)
-    cancelledTodoRecyclerView.layoutManager = LinearLayoutManager(context)
-    val adapter = TodoAdapter(cancelledTodoList, null, null, requireActivity(), sharedViewModel)
-    cancelledTodoRecyclerView.adapter = adapter
+        val cancelledTodoRecyclerView = view.findViewById<RecyclerView>(R.id.cancelledTodoRecyclerView)
+        cancelledTodoRecyclerView.layoutManager = LinearLayoutManager(context)
+        adapter = TodoAdapter(cancelledTodoList, null, null, requireActivity(), sharedViewModel)
+        cancelledTodoRecyclerView.adapter = adapter
 
-    return view
-}
+        // Observer pour la liste des tâches retardées
+        sharedViewModel.cancelledTodoList.observe(viewLifecycleOwner, Observer {
+            updateCancelledTodos()
+        })
+
+        return view
+    }
+
+    // Méthode pour mettre à jour la liste des tâches retardées
+    private fun updateCancelledTodos() {
+        val dbHelper = TodoDatabaseHelper(requireActivity())
+        val updatedTodos = dbHelper.getAllTodos().filter { it.status == "cancelled" }.toMutableList()
+        adapter.updateData(updatedTodos)
+    }
 }

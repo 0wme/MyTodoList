@@ -1,6 +1,7 @@
 package fr.iut.mytodolist.android
 
 import TodoDatabaseHelper
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.graphics.Color
@@ -99,4 +100,12 @@ holder.cancelButton.setOnClickListener {
             }
         }
     }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun updateData(newTodoList: List<TodoDatabaseHelper.Todo>) {
+        todoList.clear()
+        todoList.addAll(newTodoList)
+        notifyDataSetChanged()
+    }
+
 }
