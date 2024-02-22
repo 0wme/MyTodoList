@@ -22,7 +22,6 @@ class HomeFragment : Fragment() {
         val viewPager = view.findViewById<ViewPager>(R.id.viewPager)
         val pagerAdapter = TodoPagerAdapter(childFragmentManager)
         viewPager.adapter = pagerAdapter
-
         viewPager.setCurrentItem(1)
 
         val tabLayout = view.findViewById<TabLayout>(R.id.tabLayout)
