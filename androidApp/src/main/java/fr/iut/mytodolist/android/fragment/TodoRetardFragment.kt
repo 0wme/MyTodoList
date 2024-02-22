@@ -27,7 +27,7 @@ class TodoRetardFragment : Fragment() {
         databaseHelper = DatabaseHelper(requireContext())
         val view = inflater.inflate(R.layout.fragment_todo_retard, container, false)
 
-        val cancelledTodoList = databaseHelper.getTodos()
+        val cancelledTodoList = databaseHelper.getCancelledTodos()
         val cancelledTodoRecyclerView = view.findViewById<RecyclerView>(R.id.cancelledTodoRecyclerView)
         cancelledTodoRecyclerView.layoutManager = LinearLayoutManager(context)
         val adapter = TodoAdapter(cancelledTodoList.map { it.first }.toMutableList(), cancelledTodoList.map { it.second }.toMutableList(), null, null, requireContext())

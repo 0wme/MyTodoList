@@ -65,4 +65,40 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         db.close()
         return success
     }
+
+    @SuppressLint("Range")
+    fun getApprovedTodos(): List<Pair<String, String>> {
+        val todoList = ArrayList<Pair<String, String>>()
+        val selectQuery = "SELECT  * FROM $TABLE_NAME"
+        val db = this.readableDatabase
+        val cursor = db.rawQuery(selectQuery, null)
+        if (cursor.moveToFirst()) {
+            do {
+                val todo = cursor.getString(cursor.getColumnIndex(KEY_TODO))
+                val dateTime = cursor.getString(cursor.getColumnIndex(KEY_DATETIME))
+                todoList.add(Pair(todo, dateTime))
+            } while (cursor.moveToNext())
+        }
+        cursor.close()
+        db.close()
+        return todoList
+    }
+
+    @SuppressLint("Range")
+    fun getCancelledTodos(): List<Pair<String, String>> {
+        val todoList = ArrayList<Pair<String, String>>()
+        val selectQuery = "SELECT  * FROM $TABLE_NAME"
+        val db = this.readableDatabase
+        val cursor = db.rawQuery(selectQuery, null)
+        if (cursor.moveToFirst()) {
+            do {
+                val todo = cursor.getString(cursor.getColumnIndex(KEY_TODO))
+                val dateTime = cursor.getString(cursor.getColumnIndex(KEY_DATETIME))
+                todoList.add(Pair(todo, dateTime))
+            } while (cursor.moveToNext())
+        }
+        cursor.close()
+        db.close()
+        return todoList
+    }
 }
