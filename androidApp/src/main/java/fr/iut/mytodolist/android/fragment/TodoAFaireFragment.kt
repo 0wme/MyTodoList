@@ -1,6 +1,5 @@
 package fr.iut.mytodolist.android.fragment
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.app.AlarmManager
 import android.app.DatePickerDialog
@@ -30,6 +29,7 @@ import fr.iut.mytodolist.android.R
 import fr.iut.mytodolist.android.SharedViewModel
 import fr.iut.mytodolist.android.TodoAdapter
 import fr.iut.mytodolist.android.TodoApprovedListener
+import fr.iut.mytodolist.android.DatabaseHelper
 import nl.dionsegijn.konfetti.KonfettiView
 import java.text.SimpleDateFormat
 import java.util.*
@@ -40,6 +40,7 @@ class TodoAFaireFragment : Fragment(), TodoApprovedListener {
     private val todoList = mutableListOf<String>()
     private val dateTimeList = mutableListOf<String>()
     private lateinit var sharedViewModel: SharedViewModel
+    private lateinit var databaseHelper: DatabaseHelper
 
     @SuppressLint("NotifyDataSetChanged", "SetTextI18n", "ScheduleExactAlarm")
     override fun onCreateView(
@@ -47,6 +48,7 @@ class TodoAFaireFragment : Fragment(), TodoApprovedListener {
         savedInstanceState: Bundle?
     ): View? {
         sharedViewModel = ViewModelProvider(requireActivity()).get(SharedViewModel::class.java)
+        databaseHelper = DatabaseHelper(requireContext())
         val view = inflater.inflate(R.layout.fragment_todo_a_faire, container, false)
 
         val todoRecyclerView = view.findViewById<RecyclerView>(R.id.todoRecyclerView)
@@ -54,7 +56,7 @@ class TodoAFaireFragment : Fragment(), TodoApprovedListener {
 
         val konfettiView = view.findViewById<KonfettiView>(R.id.viewKonfetti)
 
-        val adapter = TodoAdapter(todoList, dateTimeList, konfettiView, this)
+        val adapter = TodoAdapter(todoList, dateTimeList, konfettiView, this, requireContext())
         todoRecyclerView.adapter = adapter
 
         val addTodoButton = view.findViewById<ImageButton>(R.id.addTodoButton)
@@ -100,6 +102,9 @@ class TodoAFaireFragment : Fragment(), TodoApprovedListener {
                         adapter.buttonVisibilityList.add(View.GONE)
                         adapter.notifyDataSetChanged()
 
+                        // Add the todo to the database
+                        databaseHelper.addTodo(todo, dateTime)
+
                         // Vérifie si l'application a la permission de planifier des alarmes exactes
                         val alarmManager = context?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
                         if (!alarmManager.canScheduleExactAlarms()) {
@@ -122,39 +127,39 @@ class TodoAFaireFragment : Fragment(), TodoApprovedListener {
         return view
     }
 
-private fun scheduleAlarm(todo: String, dateTime: String, context: Context) {
-    val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-    val alarmIntent = Intent(context, AlarmReceiver::class.java).apply {
-        putExtra("TODO_NAME", todo)
-    }
-    // Utilisez le hashCode de la chaîne todo comme identifiant unique pour l'alarme
-    val pendingIntent = PendingIntent.getBroadcast(context, todo.hashCode(), alarmIntent,
-        PendingIntent.FLAG_IMMUTABLE)
+    private fun scheduleAlarm(todo: String, dateTime: String, context: Context) {
+        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val alarmIntent = Intent(context, AlarmReceiver::class.java).apply {
+            putExtra("TODO_NAME", todo)
+        }
+        // Utilisez le hashCode de la chaîne todo comme identifiant unique pour l'alarme
+        val pendingIntent = PendingIntent.getBroadcast(context, todo.hashCode(), alarmIntent,
+            PendingIntent.FLAG_IMMUTABLE)
 
-    val format = when {
-        dateTime.contains("/") && dateTime.contains(":") -> SimpleDateFormat("d/M/yyyy HH:mm", Locale.getDefault())
-        dateTime.contains("/") -> SimpleDateFormat("d/M/yyyy", Locale.getDefault())
-        dateTime.contains(":") -> SimpleDateFormat("HH:mm", Locale.getDefault())
-        else -> null
-    }
+        val format = when {
+            dateTime.contains("/") && dateTime.contains(":") -> SimpleDateFormat("d/M/yyyy HH:mm", Locale.getDefault())
+            dateTime.contains("/") -> SimpleDateFormat("d/M/yyyy", Locale.getDefault())
+            dateTime.contains(":") -> SimpleDateFormat("HH:mm", Locale.getDefault())
+            else -> null
+        }
 
-    if (dateTime.isNotEmpty() && format != null) {
-        val date = format.parse(dateTime)
-        val alarmTime = date?.time?.minus(TimeUnit.HOURS.toMillis(24))
+        if (dateTime.isNotEmpty() && format != null) {
+            val date = format.parse(dateTime)
+            val alarmTime = date?.time?.minus(TimeUnit.HOURS.toMillis(24))
 
-        if (alarmTime != null) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                if (alarmManager.canScheduleExactAlarms()) {
-                    alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, alarmTime, pendingIntent)
+            if (alarmTime != null) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if (alarmManager.canScheduleExactAlarms()) {
+                        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, alarmTime, pendingIntent)
+                    } else {
+                        // handle case where exact alarms can't be scheduled
+                    }
                 } else {
-                    // handle case where exact alarms can't be scheduled
+                    alarmManager.setExact(AlarmManager.RTC_WAKEUP, alarmTime, pendingIntent)
                 }
-            } else {
-                alarmManager.setExact(AlarmManager.RTC_WAKEUP, alarmTime, pendingIntent)
             }
         }
     }
-}
 
     override fun onTodoApproved(todo: String, dateTime: String) {
         sharedViewModel.approvedTodoList.value?.let {
@@ -165,6 +170,8 @@ private fun scheduleAlarm(todo: String, dateTime: String, context: Context) {
             it.add(dateTime)
             sharedViewModel.approvedDateTimeList.postValue(it)
         }
+        // Delete the todo from the database
+        databaseHelper.deleteTodo(todo.hashCode())
     }
 
     override fun onTodoCancelled(todo: String, dateTime: String) {
@@ -176,5 +183,7 @@ private fun scheduleAlarm(todo: String, dateTime: String, context: Context) {
             it.add(dateTime)
             sharedViewModel.cancelledDateTimeList.postValue(it)
         }
+        // Delete the todo from the database
+        databaseHelper.deleteTodo(todo.hashCode())
     }
 }

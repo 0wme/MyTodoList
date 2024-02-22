@@ -1,5 +1,6 @@
 package fr.iut.mytodolist.android
 
+import android.content.Context
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
@@ -17,9 +18,11 @@ import android.os.Looper
 class TodoAdapter(private val todoList: MutableList<String>,
                   private val dateTimeList: MutableList<String>,
                   private val konfettiView: KonfettiView? = null,
-                  private val listener: TodoApprovedListener? = null)
+                  private val listener: TodoApprovedListener? = null,
+                  private val context: Context)
     : RecyclerView.Adapter<TodoViewHolder>() {
 
+    private val databaseHelper = DatabaseHelper(context)
     val buttonVisibilityList = MutableList(todoList.size) { View.GONE }
     private var isApproving = false
     private val handler = Handler(Looper.getMainLooper())
@@ -46,31 +49,31 @@ class TodoAdapter(private val todoList: MutableList<String>,
             }
         }
 
-holder.approveButton.setOnClickListener {
-    if (!isApproving) {
-        isApproving = true
+        holder.approveButton.setOnClickListener {
+            if (!isApproving) {
+                isApproving = true
 
-        konfettiView?.build()
-            ?.addColors(Color.BLUE, Color.WHITE, Color.RED)
-            ?.setDirection(0.0, 359.0)
-            ?.setSpeed(1f, 5f)
-            ?.setFadeOutEnabled(true)
-            ?.setTimeToLive(2000L)
-            ?.addShapes(Shape.Square, Shape.Circle)
-            ?.addSizes(Size(12))
-            ?.setPosition(-1f, konfettiView.width + 1f, -1f, -1f)
-            ?.streamFor(300, 5000L)
+                konfettiView?.build()
+                    ?.addColors(Color.BLUE, Color.WHITE, Color.RED)
+                    ?.setDirection(0.0, 359.0)
+                    ?.setSpeed(1f, 5f)
+                    ?.setFadeOutEnabled(true)
+                    ?.setTimeToLive(2000L)
+                    ?.addShapes(Shape.Square, Shape.Circle)
+                    ?.addSizes(Size(12))
+                    ?.setPosition(-1f, konfettiView.width + 1f, -1f, -1f)
+                    ?.streamFor(300, 5000L)
 
-        handler.postDelayed({
-            synchronized(this) {
-                val dateTime = if (position < dateTimeList.size) dateTimeList[position] else ""
-                removeAt(position)
-                listener?.onTodoApproved(todo, dateTime)
-                isApproving = false
+                handler.postDelayed({
+                    synchronized(this) {
+                        val dateTime = if (position < dateTimeList.size) dateTimeList[position] else ""
+                        removeAt(position)
+                        listener?.onTodoApproved(todo, dateTime)
+                        isApproving = false
+                    }
+                }, 5000)
             }
-        }, 5000)
-    }
-}
+        }
 
         holder.buttonLayout.visibility = buttonVisibilityList[position]
 
@@ -89,6 +92,8 @@ holder.approveButton.setOnClickListener {
     private fun removeAt(position: Int) {
         synchronized(this) {
             if (position < todoList.size) {
+                // Delete the todo from the database
+                databaseHelper.deleteTodo(todoList[position].hashCode())
                 todoList.removeAt(position)
                 dateTimeList.removeAt(position)
                 buttonVisibilityList.removeAt(position)
