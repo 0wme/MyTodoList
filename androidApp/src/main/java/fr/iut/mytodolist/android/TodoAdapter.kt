@@ -46,7 +46,6 @@ class TodoAdapter(
                     val newVisibility = if (buttonVisibilityList[position] == View.GONE) View.VISIBLE else View.GONE
                     buttonVisibilityList[position] = newVisibility
                     holder.buttonLayout.visibility = newVisibility
-                    notifyItemChanged(position)
                 }
             }
         }
