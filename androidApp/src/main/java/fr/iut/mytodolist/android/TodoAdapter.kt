@@ -50,41 +50,41 @@ class TodoAdapter(
             }
         }
 
-        holder.approveButton.setOnClickListener {
-            if (!isApproving) {
-                isApproving = true
+holder.approveButton.setOnClickListener {
+    if (!isApproving) {
+        isApproving = true
 
-                konfettiView?.build()
-                    ?.addColors(Color.BLUE, Color.WHITE, Color.RED)
-                    ?.setDirection(0.0, 359.0)
-                    ?.setSpeed(1f, 5f)
-                    ?.setFadeOutEnabled(true)
-                    ?.setTimeToLive(2000L)
-                    ?.addShapes(Shape.Square, Shape.Circle)
-                    ?.addSizes(Size(12))
-                    ?.setPosition(-1f, konfettiView.width + 1f, -1f, -1f)
-                    ?.streamFor(300, 5000L)
+        konfettiView?.build()
+            ?.addColors(Color.BLUE, Color.WHITE, Color.RED)
+            ?.setDirection(0.0, 359.0)
+            ?.setSpeed(1f, 5f)
+            ?.setFadeOutEnabled(true)
+            ?.setTimeToLive(2000L)
+            ?.addShapes(Shape.Square, Shape.Circle)
+            ?.addSizes(Size(12))
+            ?.setPosition(-1f, konfettiView.width + 1f, -1f, -1f)
+            ?.streamFor(300, 5000L)
 
-                handler.postDelayed({
-                    synchronized(this) {
-                        removeAt(position)
-                        listener?.onTodoApproved(todo.todo, todo.dateTime)
-                        dbHelper.updateTodoStatus(todo.id, "approved")
-                        sharedViewModel.removeTodo(todo.todo)
-                        isApproving = false
-                    }
-                }, 5000)
-            }
-        }
-
-        holder.cancelButton.setOnClickListener {
+        handler.postDelayed({
             synchronized(this) {
                 removeAt(position)
-                listener?.onTodoCancelled(todo.todo, todo.dateTime)
-                dbHelper.updateTodoStatus(todo.id, "cancelled")
+                listener?.onTodoApproved(todo.todo, todo.dateTime)
+                dbHelper.updateTodoStatus(todo.id, "approved") // Use the real ID of the todo
                 sharedViewModel.removeTodo(todo.todo)
+                isApproving = false
             }
-        }
+        }, 5000)
+    }
+}
+
+holder.cancelButton.setOnClickListener {
+    synchronized(this) {
+        removeAt(position)
+        listener?.onTodoCancelled(todo.todo, todo.dateTime)
+        dbHelper.updateTodoStatus(todo.id, "cancelled") // Use the real ID of the todo
+        sharedViewModel.removeTodo(todo.todo)
+    }
+}
     }
 
     override fun getItemCount() = todoList.size

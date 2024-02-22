@@ -20,33 +20,23 @@ class TodoRetardFragment : Fragment() {
     private lateinit var sharedViewModel: SharedViewModel
 
     @SuppressLint("NotifyDataSetChanged")
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        sharedViewModel = ViewModelProvider(requireActivity()).get(SharedViewModel::class.java)
-        val view = inflater.inflate(R.layout.fragment_todo_retard, container, false)
+override fun onCreateView(
+    inflater: LayoutInflater, container: ViewGroup?,
+    savedInstanceState: Bundle?
+): View? {
+    sharedViewModel = ViewModelProvider(requireActivity()).get(SharedViewModel::class.java)
+    val view = inflater.inflate(R.layout.fragment_todo_retard, container, false)
 
-        val dbHelper = TodoDatabaseHelper(requireActivity())
-        val todos = dbHelper.getAllTodos()
+    val dbHelper = TodoDatabaseHelper(requireActivity())
+    val todos = dbHelper.getAllTodos()
 
-        val cancelledTodoList = todos.filter { it.status == "cancelled" }.toMutableList()
+    val cancelledTodoList = todos.filter { it.status == "cancelled" }.toMutableList()
 
-        val cancelledTodoRecyclerView = view.findViewById<RecyclerView>(R.id.cancelledTodoRecyclerView)
-        cancelledTodoRecyclerView.layoutManager = LinearLayoutManager(context)
-        val adapter = TodoAdapter(cancelledTodoList, null, null, requireActivity(), sharedViewModel)
-        cancelledTodoRecyclerView.adapter = adapter
+    val cancelledTodoRecyclerView = view.findViewById<RecyclerView>(R.id.cancelledTodoRecyclerView)
+    cancelledTodoRecyclerView.layoutManager = LinearLayoutManager(context)
+    val adapter = TodoAdapter(cancelledTodoList, null, null, requireActivity(), sharedViewModel)
+    cancelledTodoRecyclerView.adapter = adapter
 
-        // Observe cancelledTodoList in sharedViewModel
-        sharedViewModel.cancelledTodoList.observe(viewLifecycleOwner) { cancelledTodos ->
-            val cancelledTodoItems = cancelledTodos.map { todo ->
-                TodoDatabaseHelper.Todo(0, todo, "", "cancelled")
-            }
-            cancelledTodoList.clear()
-            cancelledTodoList.addAll(cancelledTodoItems)
-            adapter.notifyDataSetChanged()
-        }
-
-        return view
-    }
+    return view
+}
 }

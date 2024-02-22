@@ -34,7 +34,7 @@ class TodoDatabaseHelper(context: Context) :
         onCreate(db)
     }
 
-    fun insertTodo(todo: String, dateTime: String, status: String): Boolean {
+    fun insertTodo(todo: String, dateTime: String, status: String): Long {
         val db = this.writableDatabase
         val values = ContentValues()
         values.put(COLUMN_TODO, todo)
@@ -42,7 +42,7 @@ class TodoDatabaseHelper(context: Context) :
         values.put(COLUMN_STATUS, status)
         val result = db.insert(TABLE_TODO, null, values)
         db.close()
-        return result != -1L
+        return result
     }
 
     data class Todo(val id: Int, val todo: String, val dateTime: String, val status: String)
@@ -72,11 +72,15 @@ class TodoDatabaseHelper(context: Context) :
         val db = this.writableDatabase
         val values = ContentValues()
         values.put(COLUMN_STATUS, status)
-        return db.update(TABLE_TODO, values, "$COLUMN_ID = ?", arrayOf(id.toString()))
+        val result = db.update(TABLE_TODO, values, "$COLUMN_ID = ?", arrayOf(id.toString()))
+        db.close()
+        return result
     }
 
     fun deleteTodo(id: Int): Int {
         val db = this.writableDatabase
-        return db.delete(TABLE_TODO, "$COLUMN_ID = ?", arrayOf(id.toString()))
+        val result = db.delete(TABLE_TODO, "$COLUMN_ID = ?", arrayOf(id.toString()))
+        db.close()
+        return result
     }
 }

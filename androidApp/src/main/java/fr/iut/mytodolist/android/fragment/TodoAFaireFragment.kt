@@ -97,11 +97,11 @@ class TodoAFaireFragment : Fragment(), TodoApprovedListener {
                         dateTime += timeButton.text
                     }
                     if (todo.isNotEmpty()) {
-                        val newTodo = TodoDatabaseHelper.Todo(0, todo, dateTime, "pending")
+                        val newTodoId = dbHelper.insertTodo(todo, dateTime, "pending")
+                        val newTodo = TodoDatabaseHelper.Todo(newTodoId.toInt(), todo, dateTime, "pending")
                         todoList.add(newTodo)
                         adapter.buttonVisibilityList.add(View.GONE)
                         adapter.notifyDataSetChanged()
-                        dbHelper.insertTodo(newTodo.todo, newTodo.dateTime, newTodo.status)
                     }
                 }
                 .setNegativeButton("Annuler") { dialog, _ ->
