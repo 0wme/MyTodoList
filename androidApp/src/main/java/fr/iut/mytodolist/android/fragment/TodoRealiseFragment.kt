@@ -34,7 +34,7 @@ class TodoRealiseFragment : Fragment() {
 
         val approvedTodoRecyclerView = view.findViewById<RecyclerView>(R.id.approvedTodoRecyclerView)
         approvedTodoRecyclerView.layoutManager = LinearLayoutManager(context)
-        val adapter = TodoAdapter(approvedTodoList, null, null, requireActivity())
+        val adapter = TodoAdapter(approvedTodoList, null, null, requireActivity(), sharedViewModel)
         approvedTodoRecyclerView.adapter = adapter
 
         // Observe approvedTodoList in sharedViewModel

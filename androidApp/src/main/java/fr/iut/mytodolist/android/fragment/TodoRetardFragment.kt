@@ -34,7 +34,7 @@ class TodoRetardFragment : Fragment() {
 
         val cancelledTodoRecyclerView = view.findViewById<RecyclerView>(R.id.cancelledTodoRecyclerView)
         cancelledTodoRecyclerView.layoutManager = LinearLayoutManager(context)
-        val adapter = TodoAdapter(cancelledTodoList, null, null, requireActivity())
+        val adapter = TodoAdapter(cancelledTodoList, null, null, requireActivity(), sharedViewModel)
         cancelledTodoRecyclerView.adapter = adapter
 
         // Observe cancelledTodoList in sharedViewModel

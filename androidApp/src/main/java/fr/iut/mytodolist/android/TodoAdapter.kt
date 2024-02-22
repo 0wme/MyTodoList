@@ -1,6 +1,7 @@
 package fr.iut.mytodolist.android
 
 import TodoDatabaseHelper
+import android.app.Activity
 import android.content.Context
 import android.graphics.Color
 import android.view.LayoutInflater
@@ -20,7 +21,8 @@ class TodoAdapter(
     private val todoList: MutableList<TodoDatabaseHelper.Todo>,
     private val konfettiView: KonfettiView? = null,
     private val listener: TodoApprovedListener? = null,
-    private val context: Context
+    private val context: Context,
+    private val sharedViewModel: SharedViewModel
 ) : RecyclerView.Adapter<TodoViewHolder>() {
 
     val buttonVisibilityList = MutableList(todoList.size) { View.GONE }
@@ -40,9 +42,12 @@ class TodoAdapter(
 
         holder.todoTextView.setOnClickListener {
             if (!isApproving) {
-                val newVisibility = if (buttonVisibilityList[position] == View.GONE) View.VISIBLE else View.GONE
-                buttonVisibilityList[position] = newVisibility
-                notifyItemChanged(position)
+                (context as Activity).runOnUiThread {
+                    val newVisibility = if (buttonVisibilityList[position] == View.GONE) View.VISIBLE else View.GONE
+                    buttonVisibilityList[position] = newVisibility
+                    holder.buttonLayout.visibility = newVisibility
+                    notifyItemChanged(position)
+                }
             }
         }
 
@@ -66,19 +71,19 @@ class TodoAdapter(
                         removeAt(position)
                         listener?.onTodoApproved(todo.todo, todo.dateTime)
                         dbHelper.updateTodoStatus(todo.id, "approved")
+                        sharedViewModel.removeTodo(todo.todo)
                         isApproving = false
                     }
                 }, 5000)
             }
         }
 
-        holder.buttonLayout.visibility = buttonVisibilityList[position]
-
         holder.cancelButton.setOnClickListener {
             synchronized(this) {
                 removeAt(position)
                 listener?.onTodoCancelled(todo.todo, todo.dateTime)
                 dbHelper.updateTodoStatus(todo.id, "cancelled")
+                sharedViewModel.removeTodo(todo.todo)
             }
         }
     }
