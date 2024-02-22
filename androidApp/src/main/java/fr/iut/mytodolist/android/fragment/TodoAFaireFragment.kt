@@ -127,7 +127,8 @@ private fun scheduleAlarm(todo: String, dateTime: String, context: Context) {
     val alarmIntent = Intent(context, AlarmReceiver::class.java).apply {
         putExtra("TODO_NAME", todo)
     }
-    val pendingIntent = PendingIntent.getBroadcast(context, 0, alarmIntent,
+    // Utilisez le hashCode de la chaîne todo comme identifiant unique pour l'alarme
+    val pendingIntent = PendingIntent.getBroadcast(context, todo.hashCode(), alarmIntent,
         PendingIntent.FLAG_IMMUTABLE)
 
     val format = when {
@@ -142,34 +143,14 @@ private fun scheduleAlarm(todo: String, dateTime: String, context: Context) {
         val alarmTime = date?.time?.minus(TimeUnit.HOURS.toMillis(24))
 
         if (alarmTime != null) {
-            if (!alarmManager.canScheduleExactAlarms()) {
-                val builder = AlertDialog.Builder(context)
-                builder.setTitle("Permission Required")
-                builder.setMessage("This app needs the ability to schedule exact alarms. Please grant this permission in the app settings.")
-                builder.setPositiveButton("OK") { _, _ ->
-                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                    val uri = Uri.fromParts("package", context.packageName, null)
-                    intent.data = uri
-                    context.startActivity(intent)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (alarmManager.canScheduleExactAlarms()) {
+                    alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, alarmTime, pendingIntent)
+                } else {
+                    // handle case where exact alarms can't be scheduled
                 }
-                builder.show()
             } else {
                 alarmManager.setExact(AlarmManager.RTC_WAKEUP, alarmTime, pendingIntent)
-            }
-        } else {
-            if (!alarmManager.canScheduleExactAlarms()) {
-                val builder = AlertDialog.Builder(context)
-                builder.setTitle("Permission Required")
-                builder.setMessage("This app needs the ability to schedule exact alarms. Please grant this permission in the app settings.")
-                builder.setPositiveButton("OK") { _, _ ->
-                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                    val uri = Uri.fromParts("package", context.packageName, null)
-                    intent.data = uri
-                    context.startActivity(intent)
-                }
-                builder.show()
-            } else {
-                alarmManager.setExact(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), pendingIntent)
             }
         }
     }
