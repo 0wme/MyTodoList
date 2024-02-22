@@ -44,7 +44,6 @@ class TodoRealiseFragment : Fragment() {
         return view
     }
 
-    // Méthode pour mettre à jour la liste des tâches approuvées
     private fun updateApprovedTodos() {
         val dbHelper = TodoDatabaseHelper(requireActivity())
         val updatedTodos = dbHelper.getAllTodos().filter { it.status == "approved" }.toMutableList()

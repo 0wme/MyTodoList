@@ -1,19 +1,10 @@
 package fr.iut.mytodolist.android.fragment
 
 import TodoDatabaseHelper
-import android.Manifest
 import android.annotation.SuppressLint
-import android.app.AlarmManager
 import android.app.DatePickerDialog
-import android.app.PendingIntent
 import android.app.TimePickerDialog
-import android.content.Context
-import android.content.Intent
-import android.content.pm.PackageManager
-import android.net.Uri
-import android.os.Build
 import android.os.Bundle
-import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,20 +12,16 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import fr.iut.mytodolist.android.AlarmReceiver
 import fr.iut.mytodolist.android.R
 import fr.iut.mytodolist.android.SharedViewModel
 import fr.iut.mytodolist.android.TodoAdapter
 import fr.iut.mytodolist.android.TodoApprovedListener
 import nl.dionsegijn.konfetti.KonfettiView
-import java.text.SimpleDateFormat
 import java.util.*
-import java.util.concurrent.TimeUnit
 
 class TodoAFaireFragment : Fragment(), TodoApprovedListener {
 

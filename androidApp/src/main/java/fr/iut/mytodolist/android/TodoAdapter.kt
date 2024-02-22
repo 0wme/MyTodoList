@@ -8,9 +8,6 @@ import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
-import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import nl.dionsegijn.konfetti.KonfettiView
 import nl.dionsegijn.konfetti.models.Shape
@@ -70,7 +67,7 @@ holder.approveButton.setOnClickListener {
             synchronized(this) {
                 removeAt(position)
                 listener?.onTodoApproved(todo.todo, todo.dateTime)
-                dbHelper.updateTodoStatus(todo.id, "approved") // Use the real ID of the todo
+                dbHelper.updateTodoStatus(todo.id, "approved")
                 sharedViewModel.removeTodo(todo.todo)
                 isApproving = false
             }
@@ -82,7 +79,7 @@ holder.cancelButton.setOnClickListener {
     synchronized(this) {
         removeAt(position)
         listener?.onTodoCancelled(todo.todo, todo.dateTime)
-        dbHelper.updateTodoStatus(todo.id, "cancelled") // Use the real ID of the todo
+        dbHelper.updateTodoStatus(todo.id, "cancelled")
         sharedViewModel.removeTodo(todo.todo)
     }
 }

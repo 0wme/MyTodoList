@@ -44,7 +44,6 @@ class TodoRetardFragment : Fragment() {
         return view
     }
 
-    // Méthode pour mettre à jour la liste des tâches retardées
     private fun updateCancelledTodos() {
         val dbHelper = TodoDatabaseHelper(requireActivity())
         val updatedTodos = dbHelper.getAllTodos().filter { it.status == "cancelled" }.toMutableList()
