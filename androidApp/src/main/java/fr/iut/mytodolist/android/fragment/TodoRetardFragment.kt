@@ -1,11 +1,11 @@
 package fr.iut.mytodolist.android.fragment
 
+import TodoDatabaseHelper
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -24,15 +24,15 @@ class TodoRetardFragment : Fragment() {
         sharedViewModel = ViewModelProvider(requireActivity()).get(SharedViewModel::class.java)
         val view = inflater.inflate(R.layout.fragment_todo_retard, container, false)
 
+        val dbHelper = TodoDatabaseHelper(requireActivity())
+        val todos = dbHelper.getAllTodos()
+
+        val cancelledTodoList = todos.filter { it.status == "cancelled" }.toMutableList()
+
         val cancelledTodoRecyclerView = view.findViewById<RecyclerView>(R.id.cancelledTodoRecyclerView)
         cancelledTodoRecyclerView.layoutManager = LinearLayoutManager(context)
-
-        sharedViewModel.cancelledTodoList.observe(viewLifecycleOwner, Observer { cancelledTodos ->
-            sharedViewModel.cancelledDateTimeList.observe(viewLifecycleOwner, Observer { cancelledDateTimes ->
-                val adapter = TodoAdapter(cancelledTodos, cancelledDateTimes)
-                cancelledTodoRecyclerView.adapter = adapter
-            })
-        })
+        val adapter = TodoAdapter(cancelledTodoList, null, null, requireActivity())
+        cancelledTodoRecyclerView.adapter = adapter
 
         return view
     }
