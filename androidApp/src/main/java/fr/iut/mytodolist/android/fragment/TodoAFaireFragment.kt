@@ -2,8 +2,14 @@ package fr.iut.mytodolist.android.fragment
 
 import TodoDatabaseHelper
 import android.annotation.SuppressLint
+import android.app.AlarmManager
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -21,7 +27,11 @@ import fr.iut.mytodolist.android.SharedViewModel
 import fr.iut.mytodolist.android.TodoAdapter
 import fr.iut.mytodolist.android.TodoApprovedListener
 import nl.dionsegijn.konfetti.KonfettiView
+import java.text.SimpleDateFormat
 import java.util.*
+import java.util.concurrent.TimeUnit
+import android.provider.Settings
+import fr.iut.mytodolist.android.AlarmReceiver
 
 class TodoAFaireFragment : Fragment(), TodoApprovedListener {
 
@@ -89,6 +99,22 @@ class TodoAFaireFragment : Fragment(), TodoApprovedListener {
                         todoList.add(newTodo)
                         adapter.buttonVisibilityList.add(View.GONE)
                         adapter.notifyDataSetChanged()
+
+                        // Check for permission
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                            // Vérifie si l'application a la permission de planifier des alarmes exactes
+                            val alarmManager = context?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+                            if (!alarmManager.canScheduleExactAlarms()) {
+                                val intent = Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM).apply {
+                                    putExtra("android.provider.extra.PACKAGE_NAME", context?.packageName)
+                                }
+                                startActivity(intent)
+                            } else {
+                                scheduleAlarm(todo, dateTime, it.context)
+                            }
+                        } else {
+                            scheduleAlarm(todo, dateTime, it.context)
+                        }
                     }
                 }
                 .setNegativeButton("Annuler") { dialog, _ ->
@@ -99,6 +125,48 @@ class TodoAFaireFragment : Fragment(), TodoApprovedListener {
         }
 
         return view
+    }
+
+    private fun scheduleAlarm(todo: String, dateTime: String, context: Context) {
+        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val alarmIntent = Intent(context, AlarmReceiver::class.java).apply {
+            putExtra("TODO_NAME", todo)
+        }
+        val pendingIntent = PendingIntent.getBroadcast(context, todo.hashCode(), alarmIntent,
+            PendingIntent.FLAG_IMMUTABLE)
+
+        val format = when {
+            dateTime.contains("/") && dateTime.contains(":") -> SimpleDateFormat("d/M/yyyy HH:mm", Locale.getDefault())
+            dateTime.contains("/") -> SimpleDateFormat("d/M/yyyy", Locale.getDefault())
+            dateTime.contains(":") -> SimpleDateFormat("HH:mm", Locale.getDefault())
+            else -> null
+        }
+
+        if (dateTime.isNotEmpty() && format != null) {
+            val date = format.parse(dateTime)
+            val alarmTime = date?.time?.minus(TimeUnit.HOURS.toMillis(24))
+
+            if (alarmTime != null) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if (alarmManager.canScheduleExactAlarms()) {
+                        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, alarmTime, pendingIntent)
+                    } else {
+                        val builder = AlertDialog.Builder(context)
+                        builder.setTitle("Permission Required")
+                        builder.setMessage("This app needs the ability to schedule exact alarms. Please grant this permission in the app settings.")
+                        builder.setPositiveButton("OK") { _, _ ->
+                            val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                            val uri = Uri.fromParts("package", context.packageName, null)
+                            intent.data = uri
+                            context.startActivity(intent)
+                        }
+                        builder.show()
+                    }
+                } else {
+                    alarmManager.setExact(AlarmManager.RTC_WAKEUP, alarmTime, pendingIntent)
+                }
+            }
+        }
     }
 
     override fun onTodoApproved(todo: String, dateTime: String) {

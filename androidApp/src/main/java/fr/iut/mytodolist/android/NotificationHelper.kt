@@ -16,15 +16,17 @@ class NotificationHelper(private val context: Context) {
     }
 
     private fun createNotificationChannel() {
-        val name = "Todo Notifications"
-        val descriptionText = "Notifications for todo items"
-        val importance = NotificationManager.IMPORTANCE_DEFAULT
-        val channel = NotificationChannel(CHANNEL_ID, name, importance).apply {
-            description = descriptionText
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val name = "Todo Notifications"
+            val descriptionText = "Notifications for todo items"
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val channel = NotificationChannel(CHANNEL_ID, name, importance).apply {
+                description = descriptionText
+            }
+            val notificationManager: NotificationManager =
+                context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
         }
-        val notificationManager: NotificationManager =
-            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.createNotificationChannel(channel)
     }
 
     fun createNotification(todoName: String): NotificationCompat.Builder {
