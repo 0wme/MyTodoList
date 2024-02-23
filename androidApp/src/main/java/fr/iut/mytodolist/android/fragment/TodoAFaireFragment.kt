@@ -100,18 +100,13 @@ class TodoAFaireFragment : Fragment(), TodoApprovedListener {
                         adapter.buttonVisibilityList.add(View.GONE)
                         adapter.notifyDataSetChanged()
 
-                        // Check for permission
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                            // Vérifie si l'application a la permission de planifier des alarmes exactes
-                            val alarmManager = context?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-                            if (!alarmManager.canScheduleExactAlarms()) {
-                                val intent = Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM).apply {
-                                    putExtra("android.provider.extra.PACKAGE_NAME", context?.packageName)
-                                }
-                                startActivity(intent)
-                            } else {
-                                scheduleAlarm(todo, dateTime, it.context)
+                        // Vérifie si l'application a la permission de planifier des alarmes exactes
+                        val alarmManager = context?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+                        if (!alarmManager.canScheduleExactAlarms()) {
+                            val intent = Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM).apply {
+                                putExtra("android.provider.extra.PACKAGE_NAME", context?.packageName)
                             }
+                            startActivity(intent)
                         } else {
                             scheduleAlarm(todo, dateTime, it.context)
                         }
