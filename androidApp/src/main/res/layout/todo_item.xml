@@ -59,6 +59,17 @@
                 android:clickable="true"
                 android:focusable="true" />
 
+            <ImageButton
+                android:id="@+id/options_button"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/options_todo"
+                android:background="@android:color/transparent"
+                android:scaleType="fitCenter"
+                android:adjustViewBounds="true"
+                android:clickable="true"
+                android:focusable="true" />
+
             <nl.dionsegijn.konfetti.KonfettiView
                 android:id="@+id/viewKonfetti"
                 android:layout_width="match_parent"
