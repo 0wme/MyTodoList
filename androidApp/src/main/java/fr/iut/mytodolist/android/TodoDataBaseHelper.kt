@@ -82,4 +82,18 @@ class TodoDatabaseHelper(context: Context) :
         db.close()
         return result
     }
+
+    fun updateTodo(todo: Todo): Int {
+    val db = this.writableDatabase
+    val values = ContentValues()
+    values.put(COLUMN_TODO, todo.todo)
+    values.put(COLUMN_DATETIME, todo.dateTime)
+    values.put(COLUMN_STATUS, todo.status)
+    val result = db.update(TABLE_TODO, values, "$COLUMN_ID = ?", arrayOf(todo.id.toString()))
+    db.close()
+    return result
+}
+
+
+
 }
