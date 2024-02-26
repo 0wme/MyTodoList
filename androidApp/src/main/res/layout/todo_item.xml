@@ -70,8 +70,8 @@
 
     <ImageButton
         android:id="@+id/options_button"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:src="@drawable/options_todo"
         android:background="@android:color/transparent"
         android:scaleType="fitCenter"
