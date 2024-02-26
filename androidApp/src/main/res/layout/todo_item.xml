@@ -9,10 +9,10 @@
     android:background="@drawable/rounded_background">
 
     <LinearLayout
+        android:id="@+id/todoLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:id="@+id/todoLayout">
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/todoTextView"
@@ -29,11 +29,11 @@
             android:textColor="@color/white" />
 
         <LinearLayout
+            android:id="@+id/buttonLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:visibility="gone"
-            android:id="@+id/buttonLayout"
             android:gravity="bottom|center_horizontal"
             android:layout_marginTop="20dp">
 
@@ -59,17 +59,6 @@
                 android:clickable="true"
                 android:focusable="true" />
 
-            <ImageButton
-                android:id="@+id/options_button"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:src="@drawable/options_todo"
-                android:background="@android:color/transparent"
-                android:scaleType="fitCenter"
-                android:adjustViewBounds="true"
-                android:clickable="true"
-                android:focusable="true" />
-
             <nl.dionsegijn.konfetti.KonfettiView
                 android:id="@+id/viewKonfetti"
                 android:layout_width="match_parent"
@@ -78,5 +67,19 @@
         </LinearLayout>
 
     </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/options_button"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/options_todo"
+        android:background="@android:color/transparent"
+        android:scaleType="fitCenter"
+        android:adjustViewBounds="true"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@id/todoLayout"
+        android:layout_alignBottom="@id/todoLayout" />
 
 </RelativeLayout>
