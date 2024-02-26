@@ -8,6 +8,16 @@
     android:layout_marginEnd="16dp"
     android:background="@drawable/rounded_background">
 
+    <ImageButton
+        android:id="@+id/options_button"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_margin="4dp"
+        android:layout_alignParentEnd="true"
+        android:src="@drawable/options_todo"
+        android:background="@android:color/transparent"
+        android:scaleType="centerInside" />
+
     <LinearLayout
         android:id="@+id/todoLayout"
         android:layout_width="match_parent"
@@ -27,6 +37,7 @@
             android:layout_height="wrap_content"
             android:textSize="12sp"
             android:textColor="@color/white" />
+
 
         <LinearLayout
             android:id="@+id/buttonLayout"
@@ -68,18 +79,6 @@
 
     </LinearLayout>
 
-    <ImageButton
-        android:id="@+id/options_button"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:src="@drawable/options_todo"
-        android:background="@android:color/transparent"
-        android:scaleType="fitCenter"
-        android:adjustViewBounds="true"
-        android:clickable="true"
-        android:focusable="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignTop="@id/todoLayout"
-        android:layout_alignBottom="@id/todoLayout" />
+
 
 </RelativeLayout>
