@@ -29,7 +29,7 @@ class NotificationFragment : Fragment() {
         override fun onReceive(context: Context, intent: Intent) {
             val todoName = intent.getStringExtra("TODO_NAME")
             val timeLeft = intent.getStringExtra("TIME_LEFT")
-            val notification = "La todo : $todoName est bientot en retard il vous reste : $timeLeft avant la fin !"
+            val notification = "$todoName est bientot en retard il vous reste : $timeLeft !"
             addNotification(Pair(0, notification)) // 0 is a placeholder for id, it will be replaced when fetching from database
         }
     }
