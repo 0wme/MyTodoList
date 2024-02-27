@@ -14,8 +14,10 @@ import androidx.fragment.app.Fragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import fr.iut.mytodolist.android.NotificationAdapter
+import com.bumptech.glide.Glide
+import fr.iut.mytodolist.android.notifications.NotificationAdapter
 import fr.iut.mytodolist.android.R
+import android.widget.ImageView
 
 class NotificationFragment : Fragment() {
 
@@ -50,6 +52,9 @@ class NotificationFragment : Fragment() {
         notificationList.clear()
         notificationList.addAll(db.getAllNotifications())
         notificationAdapter.notifyDataSetChanged()
+
+        val logoImageView: ImageView = view.findViewById(R.id.logoImageView)
+        Glide.with(this).load(R.drawable.logo_notification).into(logoImageView)
 
         return view
     }

@@ -1,12 +1,14 @@
-package fr.iut.mytodolist.android
+package fr.iut.mytodolist.android.notifications
 
 import TodoDatabaseHelper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import fr.iut.mytodolist.android.R
 
 class NotificationAdapter(private val notificationList: MutableList<Pair<Int, String>>, private val db: TodoDatabaseHelper) :
     RecyclerView.Adapter<NotificationAdapter.NotificationViewHolder>() {

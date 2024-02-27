@@ -1,11 +1,11 @@
-package fr.iut.mytodolist.android
+package fr.iut.mytodolist.android.notifications
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
 import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
+import fr.iut.mytodolist.android.R
 
 class NotificationHelper(private val context: Context) {
 
