@@ -113,21 +113,6 @@ class TodoAdapter(
                         .setNegativeButton("Annuler", null)
                         .show()
                     }
-                    R.id.modify -> {
-                    val editText = EditText(context)
-                    AlertDialog.Builder(context)
-                        .setTitle("Modifier l'élément")
-                        .setView(editText)
-                        .setPositiveButton("OK") { _, _ ->
-                            val newContent = editText.text.toString()
-                            val updatedTodo = TodoDatabaseHelper.Todo(todo.id, newContent, todo.dateTime, todo.status)
-                            dbHelper.updateTodo(updatedTodo)
-                            todoList[position] = updatedTodo
-                            notifyDataSetChanged()
-                        }
-                        .setNegativeButton("Annuler", null)
-                        .show()
-                    }
                     R.id.share -> {
                         val sendIntent: Intent = Intent().apply {
                             action = Intent.ACTION_SEND

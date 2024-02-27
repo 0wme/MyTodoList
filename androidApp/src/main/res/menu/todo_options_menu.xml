@@ -4,9 +4,6 @@
         android:id="@+id/rename"
         android:title="Renommer" />
     <item
-        android:id="@+id/modify"
-        android:title="Modifier" />
-    <item
         android:id="@+id/share"
         android:title="Partager" />
     <item
