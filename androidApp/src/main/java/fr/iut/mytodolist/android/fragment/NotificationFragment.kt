@@ -66,10 +66,8 @@ class NotificationFragment : Fragment() {
     @SuppressLint("NotifyDataSetChanged")
     fun addNotification(notification: String) {
         activity?.runOnUiThread {
-            notificationList.add(notification)
+            notificationList.add(0, notification)
             notificationAdapter.notifyDataSetChanged()
         }
-
-        db.insertNotification(notification)
     }
 }

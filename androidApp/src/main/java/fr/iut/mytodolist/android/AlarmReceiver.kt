@@ -1,5 +1,6 @@
 package fr.iut.mytodolist.android
 
+import TodoDatabaseHelper
 import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -20,6 +21,11 @@ class AlarmReceiver : BroadcastReceiver() {
             notify(0, notification.build())
         }
         Log.d("AlarmReceiver", "Notification sent for $todoName")
+
+        // Insert the notification into the database
+        val db = TodoDatabaseHelper(context)
+        val notificationText = "La todo : $todoName est bientot en retard il vous reste : 24 hours avant la fin !"
+        db.insertNotification(notificationText)
 
         // Send a local broadcast
         val localIntent = Intent("TODO_NOTIFICATION").apply {
