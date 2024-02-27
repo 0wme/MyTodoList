@@ -4,12 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
 import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 import fr.iut.mytodolist.android.R
-import fr.iut.mytodolist.android.TodoPagerAdapter
+import fr.iut.mytodolist.android.todo.TodoPagerAdapter
 
 class HomeFragment : Fragment() {
 
