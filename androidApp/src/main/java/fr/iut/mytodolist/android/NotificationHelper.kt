@@ -33,7 +33,7 @@ class NotificationHelper(private val context: Context) {
         return NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_notification)
             .setContentTitle("Todo Reminder")
-            .setContentText("$todoName is due in 24 hours!")
+            .setContentText("$todoName se finit dans 24 heures!")
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
     }
 }
