@@ -125,8 +125,17 @@ class TodoDatabaseHelper(context: Context) :
             } while (cursor.moveToNext())
         }
 
+
         cursor.close()
         db.close()
         return notifications
+
+    }
+
+    fun deleteNotification(id: Int): Int {
+        val db = this.writableDatabase
+        val result = db.delete(TABLE_NOTIFICATION, "$COLUMN_ID = ?", arrayOf(id.toString()))
+        db.close()
+        return result
     }
 }
