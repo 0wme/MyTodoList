@@ -32,7 +32,7 @@ class NotificationFragment : Fragment() {
             val todoName = intent.getStringExtra("TODO_NAME")
             val timeLeft = intent.getStringExtra("TIME_LEFT")
             val notification = "$todoName est bientot en retard il vous reste : $timeLeft !"
-            addNotification(Pair(0, notification)) // 0 is a placeholder for id, it will be replaced when fetching from database
+            addNotification(Pair(0, notification))
         }
     }
 
