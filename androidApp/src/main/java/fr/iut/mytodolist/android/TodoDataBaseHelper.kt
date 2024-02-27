@@ -113,23 +113,22 @@ class TodoDatabaseHelper(context: Context) :
     }
 
     @SuppressLint("Range")
-    fun getAllNotifications(): List<String> {
-        val notifications = mutableListOf<String>()
+    fun getAllNotifications(): List<Pair<Int, String>> {
+        val notifications = mutableListOf<Pair<Int, String>>()
         val db = this.readableDatabase
         val cursor = db.rawQuery("SELECT * FROM $TABLE_NOTIFICATION", null)
 
         if (cursor.moveToFirst()) {
             do {
+                val id = cursor.getInt(cursor.getColumnIndex(COLUMN_ID))
                 val text = cursor.getString(cursor.getColumnIndex(COLUMN_NOTIFICATION_TEXT))
-                notifications.add(text)
+                notifications.add(Pair(id, text))
             } while (cursor.moveToNext())
         }
-
 
         cursor.close()
         db.close()
         return notifications
-
     }
 
     fun deleteNotification(id: Int): Int {

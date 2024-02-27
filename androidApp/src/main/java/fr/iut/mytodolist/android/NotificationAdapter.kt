@@ -8,7 +8,7 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class NotificationAdapter(private val notificationList: MutableList<String>, private val db: TodoDatabaseHelper) :
+class NotificationAdapter(private val notificationList: MutableList<Pair<Int, String>>, private val db: TodoDatabaseHelper) :
     RecyclerView.Adapter<NotificationAdapter.NotificationViewHolder>() {
 
     class NotificationViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -23,11 +23,11 @@ class NotificationAdapter(private val notificationList: MutableList<String>, pri
 
     override fun onBindViewHolder(holder: NotificationViewHolder, position: Int) {
         val notification = notificationList[position]
-        holder.notificationTextView.text = notification
+        holder.notificationTextView.text = notification.second
 
         holder.cancelButton.setOnClickListener {
             // Supprime la notification de la base de données
-            db.deleteNotification(position + 1) // +1 car l'indexation dans la base de données commence à 1
+            db.deleteNotification(notification.first)
             // Supprime la notification de la liste et met à jour l'adapter
             notificationList.removeAt(position)
             notifyDataSetChanged()

@@ -21,7 +21,7 @@ class NotificationFragment : Fragment() {
 
     private lateinit var notificationRecyclerView: RecyclerView
     private lateinit var notificationAdapter: NotificationAdapter
-    private val notificationList = mutableListOf<String>()
+    private val notificationList = mutableListOf<Pair<Int, String>>()
 
     private lateinit var db: TodoDatabaseHelper
 
@@ -30,7 +30,7 @@ class NotificationFragment : Fragment() {
             val todoName = intent.getStringExtra("TODO_NAME")
             val timeLeft = intent.getStringExtra("TIME_LEFT")
             val notification = "La todo : $todoName est bientot en retard il vous reste : $timeLeft avant la fin !"
-            addNotification(notification)
+            addNotification(Pair(0, notification)) // 0 is a placeholder for id, it will be replaced when fetching from database
         }
     }
 
@@ -44,9 +44,10 @@ class NotificationFragment : Fragment() {
 
         notificationRecyclerView = view.findViewById(R.id.notificationRecyclerView)
         notificationRecyclerView.layoutManager = LinearLayoutManager(context)
-        notificationAdapter = NotificationAdapter(notificationList, db) // Pass db to NotificationAdapter
+        notificationAdapter = NotificationAdapter(notificationList, db)
         notificationRecyclerView.adapter = notificationAdapter
 
+        notificationList.clear()
         notificationList.addAll(db.getAllNotifications())
         notificationAdapter.notifyDataSetChanged()
 
@@ -64,7 +65,7 @@ class NotificationFragment : Fragment() {
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun addNotification(notification: String) {
+    fun addNotification(notification: Pair<Int, String>) {
         activity?.runOnUiThread {
             notificationList.add(0, notification)
             notificationAdapter.notifyDataSetChanged()
