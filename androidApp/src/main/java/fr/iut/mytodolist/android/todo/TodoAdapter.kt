@@ -47,7 +47,7 @@ class TodoAdapter(
         holder.todoDateTimeTextView.text = todo.dateTime
 
         holder.todoTextView.setOnClickListener {
-            if (!isApproving) {
+            if (!isApproving && todo.status == "pending") {
                 (context as Activity).runOnUiThread {
                     val newVisibility = if (buttonVisibilityList[position] == View.GONE) View.VISIBLE else View.GONE
                     buttonVisibilityList[position] = newVisibility
