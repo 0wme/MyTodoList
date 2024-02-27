@@ -44,7 +44,7 @@ class NotificationFragment : Fragment() {
 
         notificationRecyclerView = view.findViewById(R.id.notificationRecyclerView)
         notificationRecyclerView.layoutManager = LinearLayoutManager(context)
-        notificationAdapter = NotificationAdapter(notificationList)
+        notificationAdapter = NotificationAdapter(notificationList, db) // Pass db to NotificationAdapter
         notificationRecyclerView.adapter = notificationAdapter
 
         notificationList.addAll(db.getAllNotifications())
