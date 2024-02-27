@@ -1,4 +1,4 @@
-package fr.iut.mytodolist.android
+package fr.iut.mytodolist.android.todo
 
 import TodoDatabaseHelper
 import android.annotation.SuppressLint
@@ -19,6 +19,8 @@ import android.os.Looper
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.PopupMenu
+import fr.iut.mytodolist.android.R
+import fr.iut.mytodolist.android.SharedViewModel
 
 class TodoAdapter(
     private val todoList: MutableList<TodoDatabaseHelper.Todo>,

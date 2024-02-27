@@ -1,4 +1,4 @@
-package fr.iut.mytodolist.android
+package fr.iut.mytodolist.android.todo
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager

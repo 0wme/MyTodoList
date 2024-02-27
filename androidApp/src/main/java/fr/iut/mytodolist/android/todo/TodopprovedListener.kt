@@ -1,4 +1,4 @@
-package fr.iut.mytodolist.android
+package fr.iut.mytodolist.android.todo
 
 interface TodoApprovedListener {
     fun onTodoApproved(todo: String, dateTime: String)

@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import fr.iut.mytodolist.android.R
 import fr.iut.mytodolist.android.SharedViewModel
-import fr.iut.mytodolist.android.TodoAdapter
+import fr.iut.mytodolist.android.todo.TodoAdapter
 
 class TodoRetardFragment : Fragment() {
 

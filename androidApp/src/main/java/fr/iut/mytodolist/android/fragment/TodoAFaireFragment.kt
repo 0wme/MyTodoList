@@ -24,14 +24,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import fr.iut.mytodolist.android.R
 import fr.iut.mytodolist.android.SharedViewModel
-import fr.iut.mytodolist.android.TodoAdapter
-import fr.iut.mytodolist.android.TodoApprovedListener
+import fr.iut.mytodolist.android.todo.TodoAdapter
+import fr.iut.mytodolist.android.todo.TodoApprovedListener
 import nl.dionsegijn.konfetti.KonfettiView
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 import android.provider.Settings
-import fr.iut.mytodolist.android.AlarmReceiver
+import fr.iut.mytodolist.android.notifications.AlarmReceiver
 
 class TodoAFaireFragment : Fragment(), TodoApprovedListener {
 
