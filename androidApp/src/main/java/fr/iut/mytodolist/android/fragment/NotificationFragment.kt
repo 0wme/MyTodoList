@@ -1,5 +1,6 @@
 package fr.iut.mytodolist.android.fragment
 
+import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -11,16 +12,23 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import fr.iut.mytodolist.android.NotificationAdapter
 import fr.iut.mytodolist.android.R
 
 class NotificationFragment : Fragment() {
 
-    private lateinit var textView: TextView
+    private lateinit var notificationRecyclerView: RecyclerView
+    private lateinit var notificationAdapter: NotificationAdapter
+    private val notificationList = mutableListOf<String>()
+
     private val receiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             val todoName = intent.getStringExtra("TODO_NAME")
             val timeLeft = intent.getStringExtra("TIME_LEFT")
-            textView.text = "La todo : $todoName est bientot en retard il vous reste : $timeLeft avant la fin !"
+            val notification = "La todo : $todoName est bientot en retard il vous reste : $timeLeft avant la fin !"
+            addNotification(notification)
         }
     }
 
@@ -29,7 +37,12 @@ class NotificationFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_notification, container, false)
-        textView = view.findViewById(R.id.text)
+
+        notificationRecyclerView = view.findViewById(R.id.notificationRecyclerView)
+        notificationRecyclerView.layoutManager = LinearLayoutManager(context)
+        notificationAdapter = NotificationAdapter(notificationList)
+        notificationRecyclerView.adapter = notificationAdapter
+
         return view
     }
 
@@ -41,5 +54,13 @@ class NotificationFragment : Fragment() {
     override fun onPause() {
         super.onPause()
         LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(receiver)
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun addNotification(notification: String) {
+        activity?.runOnUiThread {
+            notificationList.add(notification)
+            notificationAdapter.notifyDataSetChanged()
+        }
     }
 }
