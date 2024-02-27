@@ -9,13 +9,16 @@ class TodoDatabaseHelper(context: Context) :
 
     companion object {
         private const val DATABASE_NAME = "todo.db"
-        private const val DATABASE_VERSION = 2
+        private const val DATABASE_VERSION = 3
 
         private const val TABLE_TODO = "todo"
         private const val COLUMN_ID = "id"
         private const val COLUMN_TODO = "todo"
         private const val COLUMN_DATETIME = "datetime"
         private const val COLUMN_STATUS = "status"
+
+        private const val TABLE_NOTIFICATION = "notification"
+        private const val COLUMN_NOTIFICATION_TEXT = "text"
     }
 
     override fun onCreate(db: SQLiteDatabase) {
@@ -25,11 +28,17 @@ class TodoDatabaseHelper(context: Context) :
                 "$COLUMN_DATETIME TEXT, " +
                 "$COLUMN_STATUS TEXT)"
 
+        val createTableNotification = "CREATE TABLE $TABLE_NOTIFICATION (" +
+                "$COLUMN_ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "$COLUMN_NOTIFICATION_TEXT TEXT)"
+
         db.execSQL(createTableTodo)
+        db.execSQL(createTableNotification)
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
         db.execSQL("DROP TABLE IF EXISTS $TABLE_TODO")
+        db.execSQL("DROP TABLE IF EXISTS $TABLE_NOTIFICATION")
         onCreate(db)
     }
 
@@ -84,16 +93,40 @@ class TodoDatabaseHelper(context: Context) :
     }
 
     fun updateTodo(todo: Todo): Int {
-    val db = this.writableDatabase
-    val values = ContentValues()
-    values.put(COLUMN_TODO, todo.todo)
-    values.put(COLUMN_DATETIME, todo.dateTime)
-    values.put(COLUMN_STATUS, todo.status)
-    val result = db.update(TABLE_TODO, values, "$COLUMN_ID = ?", arrayOf(todo.id.toString()))
-    db.close()
-    return result
-}
+        val db = this.writableDatabase
+        val values = ContentValues()
+        values.put(COLUMN_TODO, todo.todo)
+        values.put(COLUMN_DATETIME, todo.dateTime)
+        values.put(COLUMN_STATUS, todo.status)
+        val result = db.update(TABLE_TODO, values, "$COLUMN_ID = ?", arrayOf(todo.id.toString()))
+        db.close()
+        return result
+    }
 
+    fun insertNotification(text: String): Long {
+        val db = this.writableDatabase
+        val values = ContentValues()
+        values.put(COLUMN_NOTIFICATION_TEXT, text)
+        val result = db.insert(TABLE_NOTIFICATION, null, values)
+        db.close()
+        return result
+    }
 
+    @SuppressLint("Range")
+    fun getAllNotifications(): List<String> {
+        val notifications = mutableListOf<String>()
+        val db = this.readableDatabase
+        val cursor = db.rawQuery("SELECT * FROM $TABLE_NOTIFICATION", null)
 
+        if (cursor.moveToFirst()) {
+            do {
+                val text = cursor.getString(cursor.getColumnIndex(COLUMN_NOTIFICATION_TEXT))
+                notifications.add(text)
+            } while (cursor.moveToNext())
+        }
+
+        cursor.close()
+        db.close()
+        return notifications
+    }
 }
