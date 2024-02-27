@@ -1,4 +1,4 @@
-package fr.iut.mytodolist.android
+package fr.iut.mytodolist.android.notifications
 
 import TodoDatabaseHelper
 import android.annotation.SuppressLint
