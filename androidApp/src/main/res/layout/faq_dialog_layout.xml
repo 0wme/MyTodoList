@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/faq_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="FAQ"
+        android:textColor="@color/yellow"
+        android:textSize="24sp"
+        android:gravity="center_horizontal" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/question1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Qui a crée DailyDo ?"
+                android:textSize="18sp"
+                android:paddingTop="8dp" />
+
+            <TextView
+                android:id="@+id/answer1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="C'est Tom Vieira, un étudiant en 2eme année en BUT Informatique à Limoges qui a crée cette app pendant un projet en Mobile."
+                android:textSize="16sp"
+                android:paddingTop="4dp" />
+
+            <TextView
+                android:id="@+id/question2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Comment a-t-il fait DailyDo ?"
+                android:textSize="18sp"
+                android:paddingTop="8dp" />/>
+
+            <TextView
+                android:id="@+id/answer2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Tom a fait l'application en Kotlin et peut être Swift pour IOS." />
+
+            <TextView
+                android:id="@+id/question3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Comment on active/désactive les notifications ?"
+                android:textSize="18sp"
+                android:paddingTop="8dp" />/>
+
+            <TextView
+                android:id="@+id/answer3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Pensez à aller dans les Paramètres de DailyDo et d'appuyer sur le bouton Open Settings pour vous emmener directement dans les Paramètres de l'application depuis votre Téléphone !" />
+
+            <TextView
+                android:id="@+id/question4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="DailyDo est-elle compliqué à prendre en main ?"
+                android:textSize="18sp"
+                android:paddingTop="8dp" />/>
+
+            <TextView
+                android:id="@+id/answer4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Cela dépend de si vous vous y connaissez, mais Tom a fait en sorte que ce soit le plus facile et le plair clair possible pour tout utilisateurs, débutant ou expérimentés !" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <Button
+        android:id="@+id/contact_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Contact"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="16dp" />
+
+</LinearLayout>
