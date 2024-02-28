@@ -66,10 +66,13 @@ class SettingsFragment : Fragment() {
 
             val faqDialog = AlertDialog.Builder(requireContext(), R.style.AlertDialogCustom)
             faqDialog.setView(faqView)
-            faqDialog.setPositiveButton("Contact") { _, _ ->
+
+            val contactButton = faqView.findViewById<Button>(R.id.contact_button)
+            contactButton.setOnClickListener {
                 val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/0wme"))
                 startActivity(browserIntent)
             }
+
             faqDialog.setNegativeButton("Close") { dialog, _ ->
                 dialog.dismiss()
             }
