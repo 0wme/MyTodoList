@@ -56,7 +56,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/white"
-                android:text="Tom a fait l'application en Kotlin et peut être Swift pour IOS." />
+                android:text="Tom a fait l'application en Kotlin et peut être Swift pour IOS."
+                android:textSize="16sp"
+                android:paddingTop="4dp" />/>
 
             <TextView
                 android:id="@+id/question3"
@@ -72,7 +74,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/white"
-                android:text="Pensez à aller dans les Paramètres de DailyDo et d'appuyer sur le bouton Open Settings pour vous emmener directement dans les Paramètres de l'application depuis votre Téléphone !" />
+                android:text="Pensez à aller dans les Paramètres de DailyDo et d'appuyer sur le bouton Open Settings pour vous emmener directement dans les Paramètres de l'application depuis votre Téléphone !"
+                android:textSize="16sp"
+                android:paddingTop="4dp" />/>
 
             <TextView
                 android:id="@+id/question4"
@@ -88,7 +92,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/white"
-                android:text="Cela dépend de si vous vous y connaissez, mais Tom a fait en sorte que ce soit le plus facile et le plair clair possible pour tout utilisateurs, débutant ou expérimentés !" />
+                android:text="Cela dépend de si vous vous y connaissez, mais Tom a fait en sorte que ce soit le plus facile et le plair clair possible pour tout utilisateurs, débutant ou expérimentés !"
+                android:textSize="16sp"
+                android:paddingTop="4dp" />/>
 
         </LinearLayout>
 
