@@ -62,18 +62,10 @@ class SettingsFragment : Fragment() {
 
         val faqButton = view.findViewById<Button>(R.id.faq_button)
         faqButton.setOnClickListener {
-            val faqDialog = AlertDialog.Builder(requireContext())
-            faqDialog.setTitle("FAQ")
-            faqDialog.setMessage(
-                "Qui a crée DailyDo ?\n\n" +
-                "C'est Tom Vieira, un étudiant en 2eme année en BUT Informatique à Limoges qui a crée cette app pendant un projet en Mobile.\n\n" +
-                "Comment a-t-il fait DailyDo ?\n\n" +
-                "Tom a fait l'application en Kotlin et peut être Swift pour IOS.\n\n" +
-                "Comment on active/désactive les notifications ?\n\n" +
-                "Pensez à aller dans les Paramètres de DailyDo et d'appuyer sur le bouton \"Open Settings\" pour vous emmener directement dans les Paramètres de l'application depuis votre Téléphone !\n\n" +
-                "DailyDo est-elle compliqué à prendre en main ?\n\n" +
-                "Cela dépend de si vous vous y connaissez, mais Tom a fait en sorte que ce soit le plus facile et le plair clair possible pour tout utilisateurs, débutant ou expérimentés !"
-            )
+            val faqView = LayoutInflater.from(context).inflate(R.layout.faq_dialog_layout, null)
+
+            val faqDialog = AlertDialog.Builder(requireContext(), R.style.AlertDialogCustom)
+            faqDialog.setView(faqView)
             faqDialog.setPositiveButton("Contact") { _, _ ->
                 val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/0wme"))
                 startActivity(browserIntent)
