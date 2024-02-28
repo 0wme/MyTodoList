@@ -1,5 +1,6 @@
 package fr.iut.mytodolist.android.fragment
 
+import TodoDatabaseHelper
 import android.app.AlertDialog
 import android.content.Intent
 import android.content.res.Configuration
@@ -13,6 +14,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.Spinner
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import fr.iut.mytodolist.android.R
 import java.util.Locale
@@ -82,6 +84,29 @@ class SettingsFragment : Fragment() {
             faqDialog.create().show()
         }
 
+
+        val resetButton = view.findViewById<Button>(R.id.reset_button)
+        resetButton.setOnClickListener {
+            val resetDialog = AlertDialog.Builder(requireContext())
+            resetDialog.setTitle("Reset Database")
+            resetDialog.setMessage("Are you sure you want to reset the database? This will delete all data.")
+            resetDialog.setPositiveButton("Yes") { _, _ ->
+                val dbHelper = TodoDatabaseHelper(requireContext())
+                dbHelper.onUpgrade(dbHelper.writableDatabase, 1, 1)
+                Toast.makeText(requireContext(), "Database reset successfully.", Toast.LENGTH_SHORT).show()
+            }
+            resetDialog.setNegativeButton("No") { dialog, _ ->
+                dialog.dismiss()
+            }
+            resetDialog.create().show()
+        }
+
+
                 return view
             }
-        }
+
+
+
+
+
+}
