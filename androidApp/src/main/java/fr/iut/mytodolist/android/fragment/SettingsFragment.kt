@@ -86,7 +86,7 @@ class SettingsFragment : Fragment() {
 
         val resetButton = view.findViewById<Button>(R.id.reset_button)
         resetButton.setOnClickListener {
-            val resetDialog = AlertDialog.Builder(requireContext())
+            val resetDialog = AlertDialog.Builder(requireContext(),R.style.AlertDialogCustom)
             resetDialog.setTitle("Reset Database")
             resetDialog.setMessage("Are you sure you want to reset the database? This will delete all data.")
             resetDialog.setPositiveButton("Yes") { _, _ ->
