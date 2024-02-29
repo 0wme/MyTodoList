@@ -13,7 +13,7 @@ struct HomeView: View {
                 }) {
                     Text("Retard")
                         .padding()
-                        .background(self.selectedTab == 0 ? Color.blue : Color.clear)
+                        .background(self.selectedTab == 0 ? Color.orange : Color.clear)
                         .cornerRadius(10)
                         .foregroundColor(.white)
                 }
@@ -23,7 +23,7 @@ struct HomeView: View {
                 }) {
                     Text("À Faire")
                         .padding()
-                        .background(self.selectedTab == 1 ? Color.blue : Color.clear)
+                        .background(self.selectedTab == 1 ? Color.orange : Color.clear)
                         .cornerRadius(10)
                         .foregroundColor(.white)
                 }
@@ -33,7 +33,7 @@ struct HomeView: View {
                 }) {
                     Text("Réalisé")
                         .padding()
-                        .background(self.selectedTab == 2 ? Color.blue : Color.clear)
+                        .background(self.selectedTab == 2 ? Color.orange : Color.clear)
                         .cornerRadius(10)
                         .foregroundColor(.white)
                 }
