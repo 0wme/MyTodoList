@@ -1,8 +1,14 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:gravity="center">
+
+<ImageView
+    android:id="@+id/logoImageView"
+    android:layout_width="150dp"
+    android:layout_height="150dp"
+    android:layout_marginBottom="50dp" />
 
     <Spinner
         android:id="@+id/language_spinner"
@@ -11,20 +17,41 @@
 
     <Button
         android:id="@+id/open_settings_button"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Open Settings" />
+        android:text="Open Settings"
+        android:layout_margin="20dp"
+        style="@style/MyButtonStyle" />
 
     <Button
-    android:id="@+id/faq_button"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="FAQ" />
+        android:id="@+id/faq_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="FAQ"
+        android:layout_margin="20dp"
+        style="@style/MyButtonStyle" />
 
     <Button
-    android:id="@+id/reset_button"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="Reset Database" />
+        android:id="@+id/reset_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Reset Database"
+        android:layout_margin="20dp"
+        style="@style/MyButtonStyle" />
+
+    <TextView
+        android:id="@+id/credit_author"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:text="Credit: @0wme"
+        android:layout_margin="20dp"
+        android:gravity="center"
+        android:textSize="20sp" />
+
+
+
+
 
 </LinearLayout>
