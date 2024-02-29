@@ -1,9 +1,7 @@
-//
-//  SettingsView.swift
-//  iosApp
-//
-//  Created by Tom Vieira Da Silva on 29/02/2024.
-//  Copyright © 2024 orgName. All rights reserved.
-//
+import SwiftUI
 
-import Foundation
+struct SettingsView: View {
+    var body: some View {
+        Text("Settings View")
+    }
+}

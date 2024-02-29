@@ -12,6 +12,9 @@
 		0FCF89B3FB53B5B065065968 /* Pods_iosApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 220D0DE8E9A136FBD1ACFBAA /* Pods_iosApp.framework */; };
 		2152FB042600AC8F00CF470E /* iOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2152FB032600AC8F00CF470E /* iOSApp.swift */; };
 		7555FF83242A565900829871 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7555FF82242A565900829871 /* ContentView.swift */; };
+		D082EE142B90E9F80076B83D /* NotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D082EE132B90E9F80076B83D /* NotificationView.swift */; };
+		D082EE162B90EA120076B83D /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D082EE152B90EA120076B83D /* HomeView.swift */; };
+		D082EE182B90EA260076B83D /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D082EE172B90EA260076B83D /* SettingsView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +27,9 @@
 		7555FF82242A565900829871 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		7555FF8C242A565B00829871 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A6C05CC81AF7E8AA9227C0F0 /* Pods-iosApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iosApp.debug.xcconfig"; path = "Target Support Files/Pods-iosApp/Pods-iosApp.debug.xcconfig"; sourceTree = "<group>"; };
+		D082EE132B90E9F80076B83D /* NotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationView.swift; sourceTree = "<group>"; };
+		D082EE152B90EA120076B83D /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		D082EE172B90EA260076B83D /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -52,7 +58,6 @@
 				A6C05CC81AF7E8AA9227C0F0 /* Pods-iosApp.debug.xcconfig */,
 				5D6B4CAA989D390E842AB9E7 /* Pods-iosApp.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -79,6 +84,9 @@
 			children = (
 				058557BA273AAA24004C7B11 /* Assets.xcassets */,
 				7555FF82242A565900829871 /* ContentView.swift */,
+				D082EE172B90EA260076B83D /* SettingsView.swift */,
+				D082EE132B90E9F80076B83D /* NotificationView.swift */,
+				D082EE152B90EA120076B83D /* HomeView.swift */,
 				7555FF8C242A565B00829871 /* Info.plist */,
 				2152FB032600AC8F00CF470E /* iOSApp.swift */,
 				058557D7273AAEEB004C7B11 /* Preview Content */,
@@ -192,6 +200,9 @@
 			files = (
 				2152FB042600AC8F00CF470E /* iOSApp.swift in Sources */,
 				7555FF83242A565900829871 /* ContentView.swift in Sources */,
+				D082EE182B90EA260076B83D /* SettingsView.swift in Sources */,
+				D082EE162B90EA120076B83D /* HomeView.swift in Sources */,
+				D082EE142B90E9F80076B83D /* NotificationView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
