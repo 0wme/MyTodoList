@@ -13,9 +13,11 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.Spinner
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.bumptech.glide.Glide
 import fr.iut.mytodolist.android.R
 import java.util.Locale
 
@@ -26,6 +28,8 @@ class SettingsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_settings, container, false)
+        val logoImageView: ImageView = view.findViewById(R.id.logoImageView)
+        Glide.with(this).load(R.drawable.logo_settings).into(logoImageView)
 
         val spinner = view.findViewById<Spinner>(R.id.language_spinner)
         val languages = arrayOf("English", "Français") // Ajoutez ici toutes les langues que vous voulez supporter
