@@ -69,9 +69,10 @@ class TodoAdapter(
                     ?.addShapes(Shape.Square, Shape.Circle)
                     ?.addSizes(Size(12))
                     ?.setPosition(-1f, konfettiView.width + 1f, -1f, -1f)
-                    ?.streamFor(300, 5000L)
+                    ?.streamFor(301, 5000L)
 
-                handler.postDelayed({
+
+                    handler.postDelayed({
                     synchronized(this) {
                         removeAt(position)
                         listener?.onTodoApproved(todo.todo, todo.dateTime)
