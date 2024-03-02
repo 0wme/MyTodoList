@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct HomeView: View {
-    @State private var selectedTab = 0
+    @State private var selectedTab = 1
 
     var body: some View {
         VStack {
@@ -61,3 +61,4 @@ struct HomeView_Previews: PreviewProvider {
         HomeView()
     }
 }
+
