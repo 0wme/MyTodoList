@@ -35,7 +35,7 @@ struct AFaireView: View {
                                     .foregroundColor(.gray)
                             }
                         }
-                        .padding(.vertical, 50)
+                        .padding(.vertical, 10)
                     }
                 }
                 .navigationTitle("À Faire")
