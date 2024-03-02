@@ -2,7 +2,7 @@ import SwiftUI
 
 struct AFaireView: View {
     @State private var showingAddTodoSheet = false
-    @State private var todos: [Todo] = []
+    @EnvironmentObject var todoManager: TodoManager
 
     // Formateurs de date et d'heure
     private let dateFormatter: DateFormatter = {
@@ -20,10 +20,11 @@ struct AFaireView: View {
     var body: some View {
         NavigationView {
             VStack {
-                List {
-                    ForEach(todos, id: \.id) { todo in
+                List(todoManager.todosAFaire) { todo in
+                    HStack {
                         VStack(alignment: .leading) {
                             Text(todo.title)
+                                .foregroundColor(.primary)
                             if let date = todo.date {
                                 Text("Date de fin : \(dateFormatter.string(from: date))")
                                     .font(.subheadline)
@@ -35,32 +36,64 @@ struct AFaireView: View {
                                     .foregroundColor(.gray)
                             }
                         }
-                        .padding(.vertical, 10)
+                        Spacer()
+                        // Bouton Cancel
+                        Button(action: {
+                            todoManager.cancel(todo: todo)
+                        }) {
+                            Image(systemName: "xmark.circle.fill")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 32, height: 32)
+                                .foregroundColor(.red)
+                        }
+                        .buttonStyle(BorderlessButtonStyle())
+                        // Bouton Approve
+                        Button(action: {
+                            todoManager.approve(todo: todo)
+                        }) {
+                            Image(systemName: "checkmark.circle.fill")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 32, height: 32)
+                                .foregroundColor(.green)
+                        }
+                        .buttonStyle(BorderlessButtonStyle())
                     }
+                    .padding()
                 }
                 .navigationTitle("À Faire")
-
-                Spacer()
-
                 
-                HStack {
-                    Spacer()
-                    FloatingActionButton(action: {
-                        showingAddTodoSheet = true
-                    })
-                    Spacer()
-                }
-                .padding(.bottom, 20)
+                FloatingActionButton(action: {
+                    showingAddTodoSheet = true
+                })
+                .padding()
             }
         }
         .sheet(isPresented: $showingAddTodoSheet) {
             AddTodoView { title, date, time in
-                let newTodo = Todo(id: UUID(), title: title, date: date, time: time)
-                todos.append(newTodo)
+                let newTodo = Todo(title: title, date: date, time: time)
+                todoManager.addTodo(newTodo)
                 showingAddTodoSheet = false
             }
         }
     }
+}
+
+
+
+    // Formateurs de date et d'heure
+    private let dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd/MM/yy"
+        return formatter
+    }()
+    
+    private let timeFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:mm"
+        return formatter
+    }()
 
 
 struct FloatingActionButton: View {
@@ -68,21 +101,17 @@ struct FloatingActionButton: View {
 
     var body: some View {
         Button(action: action) {
-            Image(systemName: "plus")
-                .font(.largeTitle)
-                .frame(width: 70, height: 70)
-                .foregroundColor(Color.white)
-                .background(Color.orange)
+            Image(systemName: "plus.circle.fill")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 60, height: 60)
+                .foregroundColor(Color.blue)
+                .background(Color.white)
                 .clipShape(Circle())
                 .shadow(radius: 10)
         }
     }
 }
 
-    struct Todo: Identifiable {
-        var id = UUID()
-        var title: String
-        var date: Date?
-        var time: Date?
-    }
-}
+
+
