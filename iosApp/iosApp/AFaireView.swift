@@ -24,15 +24,19 @@ struct AFaireView: View {
                     ForEach(todos, id: \.id) { todo in
                         VStack(alignment: .leading) {
                             Text(todo.title)
-                            Text("Date de fin : \(dateFormatter.string(from: todo.date))")
-                                .font(.subheadline)
-                                .foregroundColor(.gray)
-                            Text("Heure de fin : \(timeFormatter.string(from: todo.time))")
-                                .font(.subheadline)
-                                .foregroundColor(.gray)
+                            if let date = todo.date {
+                                Text("Date de fin : \(dateFormatter.string(from: date))")
+                                    .font(.subheadline)
+                                    .foregroundColor(.gray)
+                            }
+                            if let time = todo.time {
+                                Text("Heure de fin : \(timeFormatter.string(from: time))")
+                                    .font(.subheadline)
+                                    .foregroundColor(.gray)
+                            }
                         }
                     }
-                }
+
                 .navigationTitle("À Faire")
 
                 // Bouton flottant centré en bas
@@ -72,9 +76,10 @@ struct FloatingActionButton: View {
     }
 }
 
-struct Todo: Identifiable {
-    var id = UUID()
-    var title: String
-    var date: Date
-    var time: Date
+    struct Todo: Identifiable {
+        var id = UUID()
+        var title: String
+        var date: Date?
+        var time: Date?
+    }
 }
