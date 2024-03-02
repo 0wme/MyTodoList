@@ -19,6 +19,7 @@ struct AddTodoView: View {
                 dismiss()
             }, trailing: Button("Ajouter") {
                 onComplete(title, date, time)
+                dismiss()
             })
         }
     }

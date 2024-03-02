@@ -4,25 +4,46 @@ struct AFaireView: View {
     @State private var showingAddTodoSheet = false
     @State private var todos: [Todo] = []
 
+    // Formateurs de date et d'heure
+    private let dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd/MM/yy"
+        return formatter
+    }()
+    
+    private let timeFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:mm"
+        return formatter
+    }()
+
     var body: some View {
         NavigationView {
-            ZStack(alignment: .bottomTrailing) {
+            ZStack(alignment: .bottom) {
                 List {
                     ForEach(todos, id: \.id) { todo in
                         VStack(alignment: .leading) {
                             Text(todo.title)
-                            // Utilisez votre propre format de date ici
-                            Text("\(todo.date), \(todo.time)").font(.subheadline).foregroundColor(.gray)
+                            Text("Date de fin : \(dateFormatter.string(from: todo.date))")
+                                .font(.subheadline)
+                                .foregroundColor(.gray)
+                            Text("Heure de fin : \(timeFormatter.string(from: todo.time))")
+                                .font(.subheadline)
+                                .foregroundColor(.gray)
                         }
                     }
                 }
                 .navigationTitle("À Faire")
 
-                // Bouton flottant +
-                FloatingActionButton(action: {
-                    showingAddTodoSheet = true
-                })
-                .padding()
+                // Bouton flottant centré en bas
+                HStack {
+                    Spacer()
+                    FloatingActionButton(action: {
+                        showingAddTodoSheet = true
+                    })
+                    .padding(.bottom, 20) // Ajustez selon la marge souhaitée du bas
+                    Spacer()
+                }
             }
         }
         .sheet(isPresented: $showingAddTodoSheet) {
@@ -44,7 +65,7 @@ struct FloatingActionButton: View {
                 .font(.largeTitle)
                 .frame(width: 70, height: 70)
                 .foregroundColor(Color.white)
-                .background(Color.blue)
+                .background(Color.orange)
                 .clipShape(Circle())
                 .shadow(radius: 10)
         }
@@ -57,4 +78,3 @@ struct Todo: Identifiable {
     var date: Date
     var time: Date
 }
-
