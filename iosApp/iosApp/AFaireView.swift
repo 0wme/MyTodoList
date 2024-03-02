@@ -105,7 +105,7 @@ struct FloatingActionButton: View {
                 .resizable()
                 .scaledToFit()
                 .frame(width: 60, height: 60)
-                .foregroundColor(Color.blue)
+                .foregroundColor(Color.orange)
                 .background(Color.white)
                 .clipShape(Circle())
                 .shadow(radius: 10)
