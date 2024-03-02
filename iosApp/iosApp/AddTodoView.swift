@@ -13,6 +13,11 @@ struct AddTodoView: View {
         NavigationView {
             Form {
                 TextField("Quel todo on veut ajouter ?", text: $title)
+                    .onChange(of: title) { newValue in
+                        if newValue.count > 15 {
+                            title = String(newValue.prefix(15))
+                        }
+                    }
                 Toggle(isOn: $addDate) {
                     Text("Ajouter une date")
                 }
@@ -30,10 +35,9 @@ struct AddTodoView: View {
             .navigationBarItems(leading: Button("Annuler") {
                 dismiss()
             }, trailing: Button("Ajouter") {
-                onComplete(title, addDate ? date : nil, addTime ? time : nil)
+                onComplete(title.trimmingCharacters(in: .whitespaces), addDate ? date : nil, addTime ? time : nil)
                 dismiss()
-            })
+            }.disabled(title.trimmingCharacters(in: .whitespaces).isEmpty))
         }
     }
 }
-
