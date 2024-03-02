@@ -19,7 +19,7 @@ struct AFaireView: View {
 
     var body: some View {
         NavigationView {
-            ZStack(alignment: .bottom) {
+            VStack {
                 List {
                     ForEach(todos, id: \.id) { todo in
                         VStack(alignment: .leading) {
@@ -36,18 +36,20 @@ struct AFaireView: View {
                             }
                         }
                     }
-
+                }
                 .navigationTitle("À Faire")
 
-                // Bouton flottant centré en bas
+                Spacer()
+
+                
                 HStack {
                     Spacer()
                     FloatingActionButton(action: {
                         showingAddTodoSheet = true
                     })
-                    .padding(.bottom, 20) // Ajustez selon la marge souhaitée du bas
                     Spacer()
                 }
+                .padding(.bottom, 20)
             }
         }
         .sheet(isPresented: $showingAddTodoSheet) {
@@ -58,7 +60,7 @@ struct AFaireView: View {
             }
         }
     }
-}
+
 
 struct FloatingActionButton: View {
     var action: () -> Void
