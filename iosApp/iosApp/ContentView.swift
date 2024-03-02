@@ -1,35 +1,29 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var selectedTab = 1 // Supposons que 1 est le tag pour HomeView
+
     var body: some View {
-        TabView {
+        TabView(selection: $selectedTab) {
             NotificationView()
                 .tabItem {
-                    VStack {
-                        Image(systemName: "bell")
-                        Text("Notification")
-                    }
+                    Image(systemName: "bell")
+                    Text("Notification")
                 }
+                .tag(0) // Tag pour NotificationView
             HomeView()
                 .tabItem {
-                    VStack {
-                        Image(systemName: "house")
-                        Text("Home")
-                    }
+                    Image(systemName: "house")
+                    Text("Home")
                 }
+                .tag(1) // Tag pour HomeView, c'est notre vue par défaut
             SettingsView()
                 .tabItem {
-                    VStack {
-                        Image(systemName: "gear")
-                        Text("Settings")
-                    }
+                    Image(systemName: "gear")
+                    Text("Settings")
                 }
+                .tag(2) // Tag pour SettingsView
         }
     }
 }
 
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
-    }
-}
