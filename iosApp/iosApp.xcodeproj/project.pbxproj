@@ -16,6 +16,7 @@
 		D020164C2B93BF69007464F8 /* AFaireView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D020164B2B93BF69007464F8 /* AFaireView.swift */; };
 		D020164E2B93C01F007464F8 /* RealiseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D020164D2B93C01F007464F8 /* RealiseView.swift */; };
 		D02016502B93C193007464F8 /* AddTodoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D020164F2B93C193007464F8 /* AddTodoView.swift */; };
+		D02016542B93D65C007464F8 /* TodoManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D02016532B93D65C007464F8 /* TodoManager.swift */; };
 		D082EE142B90E9F80076B83D /* NotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D082EE132B90E9F80076B83D /* NotificationView.swift */; };
 		D082EE162B90EA120076B83D /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D082EE152B90EA120076B83D /* HomeView.swift */; };
 		D082EE182B90EA260076B83D /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D082EE172B90EA260076B83D /* SettingsView.swift */; };
@@ -35,6 +36,7 @@
 		D020164B2B93BF69007464F8 /* AFaireView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AFaireView.swift; sourceTree = "<group>"; };
 		D020164D2B93C01F007464F8 /* RealiseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealiseView.swift; sourceTree = "<group>"; };
 		D020164F2B93C193007464F8 /* AddTodoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTodoView.swift; sourceTree = "<group>"; };
+		D02016532B93D65C007464F8 /* TodoManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoManager.swift; sourceTree = "<group>"; };
 		D082EE132B90E9F80076B83D /* NotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationView.swift; sourceTree = "<group>"; };
 		D082EE152B90EA120076B83D /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		D082EE172B90EA260076B83D /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
@@ -94,6 +96,7 @@
 				7555FF82242A565900829871 /* ContentView.swift */,
 				D082EE172B90EA260076B83D /* SettingsView.swift */,
 				D02016492B93BEB2007464F8 /* RetardView.swift */,
+				D02016532B93D65C007464F8 /* TodoManager.swift */,
 				D020164B2B93BF69007464F8 /* AFaireView.swift */,
 				D020164D2B93C01F007464F8 /* RealiseView.swift */,
 				D020164F2B93C193007464F8 /* AddTodoView.swift */,
@@ -215,6 +218,7 @@
 				D02016502B93C193007464F8 /* AddTodoView.swift in Sources */,
 				2152FB042600AC8F00CF470E /* iOSApp.swift in Sources */,
 				7555FF83242A565900829871 /* ContentView.swift in Sources */,
+				D02016542B93D65C007464F8 /* TodoManager.swift in Sources */,
 				D020164E2B93C01F007464F8 /* RealiseView.swift in Sources */,
 				D082EE182B90EA260076B83D /* SettingsView.swift in Sources */,
 				D082EE162B90EA120076B83D /* HomeView.swift in Sources */,
