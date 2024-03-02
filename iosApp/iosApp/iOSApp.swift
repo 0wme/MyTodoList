@@ -2,9 +2,12 @@ import SwiftUI
 
 @main
 struct iOSApp: App {
-	var body: some Scene {
-		WindowGroup {
-			ContentView()
-		}
-	}
+    var todoManager = TodoManager()
+
+    var body: some Scene {
+        WindowGroup {
+            ContentView()
+                .environmentObject(todoManager)
+        }
+    }
 }
