@@ -44,21 +44,12 @@ struct HomeView: View {
 
             // Content views
             TabView(selection: $selectedTab) {
-                Text("Contenu pour Retard")
+                RetardView()
                     .tag(0)
-                    .tabItem {
-                        Text("Retard")
-                    }
-                Text("Contenu pour À Faire")
+                AFaireView()
                     .tag(1)
-                    .tabItem {
-                        Text("À Faire")
-                    }
-                Text("Contenu pour Réalisé")
+                RealiseView()
                     .tag(2)
-                    .tabItem {
-                        Text("Réalisé")
-                    }
             }
             .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
         }
