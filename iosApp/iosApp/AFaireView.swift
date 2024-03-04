@@ -2,9 +2,9 @@ import SwiftUI
 
 struct AFaireView: View {
     @State private var showingAddTodoSheet = false
-    @State private var showingRenameAlert = false
-    @State private var newTodoTitle = ""
-    @State private var todoToRename: Todo?
+    @State private var showingRenameView = false
+    @State private var newName: String = ""
+    @State private var selectedTodo: Todo?
     @EnvironmentObject var todoManager: TodoManager
     
     private let dateFormatter: DateFormatter = {
@@ -26,53 +26,40 @@ struct AFaireView: View {
                     ForEach(todoManager.todosAFaire) { todo in
                         HStack {
                             VStack(alignment: .leading) {
-                                Text(todo.title)
-                                    .foregroundColor(.primary)
+                                Text(todo.title).foregroundColor(.primary)
                                 if let date = todo.date {
                                     Text("Date de fin : \(dateFormatter.string(from: date))")
-                                        .font(.subheadline)
-                                        .foregroundColor(.gray)
+                                        .font(.subheadline).foregroundColor(.gray)
                                 }
                                 if let time = todo.time {
                                     Text("Heure de fin : \(timeFormatter.string(from: time))")
-                                        .font(.subheadline)
-                                        .foregroundColor(.gray)
+                                        .font(.subheadline).foregroundColor(.gray)
                                 }
                             }
                             Spacer()
-                            // Bouton Cancel
                             Button(action: {
                                 todoManager.cancel(todo: todo)
                             }) {
-                                Image(systemName: "xmark.circle.fill")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 32, height: 32)
-                                    .foregroundColor(.red)
+                                Image(systemName: "xmark.circle.fill").foregroundColor(.red)
                             }
-                            .buttonStyle(BorderlessButtonStyle())
-                            // Bouton Approve
-                            Button(action: { todoManager.approve(todo: todo) }) {
-                                Image(systemName: "checkmark.circle.fill")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 32, height: 32)
-                                    .foregroundColor(.green)
+                            Button(action: {
+                                todoManager.approve(todo: todo)
+                            }) {
+                                Image(systemName: "checkmark.circle.fill").foregroundColor(.green)
                             }
                         }
                         .padding()
                         .contextMenu {
                             Button("Renommer") {
-                                self.todoToRename = todo
-                                self.showingRenameAlert = true
+                                self.selectedTodo = todo
+                                self.showingRenameView = true
                             }
                             Button("Partager") {
-                                shareTodo(todo)
+                                // Logique de partage
                             }
                             Button("Supprimer", role: .destructive) {
-                                if let index = todoManager.todosAFaire.firstIndex(where: { $0.id == todo.id }) {
-                                    todoManager.todosAFaire.remove(at: index)
-                                }
+                                guard let index = todoManager.todosAFaire.firstIndex(where: { $0.id == todo.id }) else { return }
+                                todoManager.todosAFaire.remove(at: index)
                             }
                         }
                     }
@@ -82,8 +69,7 @@ struct AFaireView: View {
                 
                 FloatingActionButton(action: {
                     showingAddTodoSheet = true
-                })
-                .padding()
+                }).padding()
             }
         }
         .sheet(isPresented: $showingAddTodoSheet) {
@@ -93,36 +79,36 @@ struct AFaireView: View {
                 showingAddTodoSheet = false
             }
         }
-        .alert(isPresented: $showingRenameAlert) {
-            Alert(
-                title: Text("Renommer le todo"),
-                message: Text("Nouveau nom pour le todo."),
-                dismissButton: .default(Text("OK")) {
-                    if let todoToRename = todoToRename, !newTodoTitle.isEmpty {
-                        renameTodo(todoToRename)
-                    }
+        .sheet(isPresented: $showingRenameView) {
+            RenameTodoView(newName: $newName, showingView: $showingRenameView, renameAction: { updatedName in
+                if let todo = selectedTodo {
+                    renameTodo(todo, with: updatedName)  // Ici, updatedName est le nouveau nom du todo
+                    selectedTodo = nil // Réinitialiser selectedTodo après le renommage
                 }
-            )
+            })
         }
-    }
 
+
+    }
+    
     private func deleteTodo(at offsets: IndexSet) {
         offsets.forEach { index in
             todoManager.todosAFaire.remove(at: index)
         }
     }
     
-    private func renameTodo(_ todo: Todo) {
-        guard let index = todoManager.todosAFaire.firstIndex(where: { $0.id == todo.id }) else { return }
-        todoManager.todosAFaire[index].title = newTodoTitle
-        newTodoTitle = ""
+    private func renameTodo(_ todo: Todo, with newName: String) {
+        guard let index = todoManager.todosAFaire.firstIndex(where: { $0.id == todo.id }), !newName.isEmpty else { return }
+        todoManager.todosAFaire[index].title = newName
     }
+}
+
     
     private func shareTodo(_ todo: Todo) {
         print("Sharing todo: \(todo.title)")
         // The actual sharing functionality requires integration with UIKit's UIActivityViewController or similar.
     }
-}
+
         struct FloatingActionButton: View {
             var action: () -> Void
             
