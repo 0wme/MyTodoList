@@ -67,6 +67,7 @@ struct AFaireView: View {
                                 self.showingRenameView = true
                             }
                             Button("Partager") {
+                                // TODO
                                 // Logique de partage
                             }
                             Button("Supprimer", role: .destructive) {
@@ -118,6 +119,7 @@ struct AFaireView: View {
     
     private func shareTodo(_ todo: Todo) {
         print("Sharing todo: \(todo.title)")
+        // Voir Swift doc ET/OU tuto Youtube
         // The actual sharing functionality requires integration with UIKit's UIActivityViewController or similar.
     }
 
