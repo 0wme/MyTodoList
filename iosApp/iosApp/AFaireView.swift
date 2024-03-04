@@ -26,26 +26,38 @@ struct AFaireView: View {
                     ForEach(todoManager.todosAFaire) { todo in
                         HStack {
                             VStack(alignment: .leading) {
-                                Text(todo.title).foregroundColor(.primary)
+                                Text(todo.title)
+                                    .foregroundColor(.primary)
                                 if let date = todo.date {
                                     Text("Date de fin : \(dateFormatter.string(from: date))")
-                                        .font(.subheadline).foregroundColor(.gray)
+                                        .font(.subheadline)
+                                        .foregroundColor(.gray)
                                 }
                                 if let time = todo.time {
                                     Text("Heure de fin : \(timeFormatter.string(from: time))")
-                                        .font(.subheadline).foregroundColor(.gray)
+                                        .font(.subheadline)
+                                        .foregroundColor(.gray)
                                 }
                             }
                             Spacer()
+                            // Bouton Cancel
                             Button(action: {
                                 todoManager.cancel(todo: todo)
                             }) {
-                                Image(systemName: "xmark.circle.fill").foregroundColor(.red)
+                                Image(systemName: "xmark.circle.fill")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 32, height: 32)
+                                    .foregroundColor(.red)
                             }
-                            Button(action: {
-                                todoManager.approve(todo: todo)
-                            }) {
-                                Image(systemName: "checkmark.circle.fill").foregroundColor(.green)
+                            .buttonStyle(BorderlessButtonStyle())
+                            // Bouton Approve
+                            Button(action: { todoManager.approve(todo: todo) }) {
+                                Image(systemName: "checkmark.circle.fill")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 32, height: 32)
+                                    .foregroundColor(.green)
                             }
                         }
                         .padding()
