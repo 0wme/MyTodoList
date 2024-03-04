@@ -108,7 +108,6 @@ struct AFaireView: View {
 
     private func deleteTodo(at offsets: IndexSet) {
         offsets.forEach { index in
-            let todo = todoManager.todosAFaire[index]
             todoManager.todosAFaire.remove(at: index)
         }
     }
@@ -116,7 +115,6 @@ struct AFaireView: View {
     private func renameTodo(_ todo: Todo) {
         guard let index = todoManager.todosAFaire.firstIndex(where: { $0.id == todo.id }) else { return }
         todoManager.todosAFaire[index].title = newTodoTitle
-        // Reset the title after renaming to avoid unintended reuse
         newTodoTitle = ""
     }
     
