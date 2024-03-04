@@ -24,6 +24,13 @@ class TodoManager: ObservableObject {
         }
     }
     
+    func removeTodoFromAFaire(_ todo: Todo) {
+        if let index = todosAFaire.firstIndex(where: { $0.id == todo.id }) {
+            todosAFaire.remove(at: index)
+        }
+    }
+
+    
     func removeTodoFromRealise(_ todo: Todo) {
         if let index = todosRealise.firstIndex(where: { $0.id == todo.id }) {
             todosRealise.remove(at: index)
