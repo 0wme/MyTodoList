@@ -7,14 +7,19 @@ struct NotificationView: View {
         VStack {
             Text("Notifications").font(.largeTitle)
             
-            List(todoManager.receivedNotifications) { notification in
-                VStack(alignment: .leading) {
-                    Text(notification.title).font(.headline)
-                    Text(notification.body).font(.subheadline)
+            ScrollView {
+                LazyVStack(spacing: 10) {
+                    ForEach(todoManager.receivedNotifications) { notification in
+                        VStack(alignment: .leading) {
+                            Text(notification.title).font(.headline)
+                            Text(notification.body).font(.subheadline)
+                        }
+                        .padding()
+                        .background(Color.gray.opacity(0.2))
+                        .cornerRadius(8)
+                    }
                 }
-                .padding()
-                .background(Color.gray.opacity(0.2))
-                .cornerRadius(8)
+                .padding(.horizontal)
             }
         }
     }
