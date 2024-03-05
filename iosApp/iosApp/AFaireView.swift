@@ -23,7 +23,7 @@ struct AFaireView: View {
         NavigationView {
             VStack {
                 ScrollView {
-                    LazyVStack(spacing: 10) {
+                    LazyVStack(spacing: 20) {
                         ForEach(todoManager.todosAFaire) { todo in
                             HStack {
                                 VStack(alignment: .leading) {
@@ -38,7 +38,6 @@ struct AFaireView: View {
                                     }
                                 }
                                 Spacer()
-                                // Bouton Cancel
                                 Button(action: {
                                     todoManager.cancel(todo: todo)
                                 }) {
@@ -49,7 +48,6 @@ struct AFaireView: View {
                                         .foregroundColor(.red)
                                 }
                                 .buttonStyle(BorderlessButtonStyle())
-                                // Bouton Approve
                                 Button(action: { todoManager.approve(todo: todo) }) {
                                     Image(systemName: "checkmark.circle.fill")
                                         .resizable()
@@ -57,11 +55,23 @@ struct AFaireView: View {
                                         .frame(width: 40, height: 40)
                                         .foregroundColor(.green)
                                 }
-                            
                             }
                             .padding()
                             .background(Color.gray.opacity(0.2))
                             .cornerRadius(8)
+                            .contextMenu { // Ajout du contextMenu ici
+                                Button("Renommer") {
+                                    self.selectedTodo = todo
+                                    self.showingRenameView = true
+                                }
+                                Button("Partager") {
+                                    // Logique de partage à implémenter
+                                }
+                                Button("Supprimer", role: .destructive) {
+                                    guard let index = todoManager.todosAFaire.firstIndex(where: { $0.id == todo.id }) else { return }
+                                    todoManager.todosAFaire.remove(at: index)
+                                }
+                            }
                         }
                     }
                     .padding(.horizontal)
@@ -69,7 +79,8 @@ struct AFaireView: View {
                 
                 FloatingActionButton(action: {
                     showingAddTodoSheet = true
-                }).padding()
+                })
+                .padding()
             }
             .sheet(isPresented: $showingAddTodoSheet) {
                 AddTodoView { title, date, time in
@@ -79,12 +90,12 @@ struct AFaireView: View {
                 }
             }
             .sheet(isPresented: $showingRenameView) {
-                if let todo = selectedTodo {
-                    RenameTodoView(newName: $newName, showingView: $showingRenameView, renameAction: { updatedName in
-                        renameTodo(todo, with: updatedName)
-                        selectedTodo = nil
-                    })
-                }
+                RenameTodoView(newName: $newName, showingView: $showingRenameView, renameAction: { updatedName in
+                    if let todo = selectedTodo {
+                        renameTodo(todo, with: updatedName)  // Ici, updatedName est le nouveau nom du todo
+                        selectedTodo = nil // Réinitialiser selectedTodo après le renommage
+                    }
+                })
             }
         }
     }
