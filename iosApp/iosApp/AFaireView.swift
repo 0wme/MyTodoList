@@ -45,7 +45,7 @@ struct AFaireView: View {
                                     Image(systemName: "xmark.circle.fill")
                                         .resizable()
                                         .scaledToFit()
-                                        .frame(width: 32, height: 32)
+                                        .frame(width: 40, height: 40)
                                         .foregroundColor(.red)
                                 }
                                 .buttonStyle(BorderlessButtonStyle())
@@ -54,7 +54,7 @@ struct AFaireView: View {
                                     Image(systemName: "checkmark.circle.fill")
                                         .resizable()
                                         .scaledToFit()
-                                        .frame(width: 32, height: 32)
+                                        .frame(width: 40, height: 40)
                                         .foregroundColor(.green)
                                 }
                             
