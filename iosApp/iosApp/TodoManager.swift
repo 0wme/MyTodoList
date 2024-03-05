@@ -20,7 +20,7 @@ class TodoManager: ObservableObject {
     // Ajouter une nouvelle todo
     func addTodo(_ todo: Todo) {
         todosAFaire.append(todo)
-        scheduleNotification(for: todo) // Planifier une notification si nécessaire
+        scheduleNotification(for: todo) 
     }
 
     // Approuver une todo
@@ -77,7 +77,7 @@ class TodoManager: ObservableObject {
         content.body = "Il reste moins de 24h pour accomplir '\(todo.title)'."
         content.sound = UNNotificationSound.default
 
-        let timeInterval = max(deadline.timeIntervalSinceNow - 3600, 1) // Planifier pour 1 heure avant l'échéance, ou immédiatement si dans moins d'une heure.
+        let timeInterval = max(deadline.timeIntervalSinceNow - 3600, 1)
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: timeInterval, repeats: false)
 
         let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)

@@ -22,86 +22,71 @@ struct AFaireView: View {
     var body: some View {
         NavigationView {
             VStack {
-                List {
-                    ForEach(todoManager.todosAFaire) { todo in
-                        HStack {
-                            VStack(alignment: .leading) {
-                                Text(todo.title)
-                                    .foregroundColor(.primary)
-                                if let date = todo.date {
-                                    Text("Date de fin : \(dateFormatter.string(from: date))")
-                                        .font(.subheadline)
-                                        .foregroundColor(.gray)
+                ScrollView {
+                    LazyVStack(spacing: 10) {
+                        ForEach(todoManager.todosAFaire) { todo in
+                            HStack {
+                                VStack(alignment: .leading) {
+                                    Text(todo.title).foregroundColor(.primary)
+                                    if let date = todo.date {
+                                        Text("Date de fin : \(dateFormatter.string(from: date))")
+                                            .font(.subheadline).foregroundColor(.gray)
+                                    }
+                                    if let time = todo.time {
+                                        Text("Heure de fin : \(timeFormatter.string(from: time))")
+                                            .font(.subheadline).foregroundColor(.gray)
+                                    }
                                 }
-                                if let time = todo.time {
-                                    Text("Heure de fin : \(timeFormatter.string(from: time))")
-                                        .font(.subheadline)
-                                        .foregroundColor(.gray)
+                                Spacer()
+                                // Bouton Cancel
+                                Button(action: {
+                                    todoManager.cancel(todo: todo)
+                                }) {
+                                    Image(systemName: "xmark.circle.fill")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 32, height: 32)
+                                        .foregroundColor(.red)
                                 }
+                                .buttonStyle(BorderlessButtonStyle())
+                                // Bouton Approve
+                                Button(action: { todoManager.approve(todo: todo) }) {
+                                    Image(systemName: "checkmark.circle.fill")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 32, height: 32)
+                                        .foregroundColor(.green)
+                                }
+                            
                             }
-                            Spacer()
-                            // Bouton Cancel
-                            Button(action: {
-                                todoManager.cancel(todo: todo)
-                            }) {
-                                Image(systemName: "xmark.circle.fill")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 32, height: 32)
-                                    .foregroundColor(.red)
-                            }
-                            .buttonStyle(BorderlessButtonStyle())
-                            // Bouton Approve
-                            Button(action: { todoManager.approve(todo: todo) }) {
-                                Image(systemName: "checkmark.circle.fill")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 32, height: 32)
-                                    .foregroundColor(.green)
-                            }
-                        }
-                        .padding()
-                        .contextMenu {
-                            Button("Renommer") {
-                                self.selectedTodo = todo
-                                self.showingRenameView = true
-                            }
-                            Button("Partager") {
-                                // TODO
-                                // Logique de partage
-                            }
-                            Button("Supprimer", role: .destructive) {
-                                guard let index = todoManager.todosAFaire.firstIndex(where: { $0.id == todo.id }) else { return }
-                                todoManager.todosAFaire.remove(at: index)
-                            }
+                            .padding()
+                            .background(Color.gray.opacity(0.2))
+                            .cornerRadius(8)
                         }
                     }
-                    .onDelete(perform: deleteTodo)
+                    .padding(.horizontal)
                 }
-                .navigationTitle("À Faire")
                 
                 FloatingActionButton(action: {
                     showingAddTodoSheet = true
                 }).padding()
             }
-        }
-        .sheet(isPresented: $showingAddTodoSheet) {
-            AddTodoView { title, date, time in
-                let newTodo = Todo(title: title, date: date, time: time)
-                todoManager.addTodo(newTodo)
-                showingAddTodoSheet = false
+            .sheet(isPresented: $showingAddTodoSheet) {
+                AddTodoView { title, date, time in
+                    let newTodo = Todo(title: title, date: date, time: time)
+                    todoManager.addTodo(newTodo)
+                    showingAddTodoSheet = false
+                }
+            }
+            .sheet(isPresented: $showingRenameView) {
+                if let todo = selectedTodo {
+                    RenameTodoView(newName: $newName, showingView: $showingRenameView, renameAction: { updatedName in
+                        renameTodo(todo, with: updatedName)
+                        selectedTodo = nil
+                    })
+                }
             }
         }
-        .sheet(isPresented: $showingRenameView) {
-            RenameTodoView(newName: $newName, showingView: $showingRenameView, renameAction: { updatedName in
-                if let todo = selectedTodo {
-                    renameTodo(todo, with: updatedName)  // Ici, updatedName est le nouveau nom du todo
-                    selectedTodo = nil // Réinitialiser selectedTodo après le renommage
-                }
-            })
-        }
-
-
     }
     
     private func deleteTodo(at offsets: IndexSet) {
