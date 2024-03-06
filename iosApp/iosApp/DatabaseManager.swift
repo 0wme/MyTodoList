@@ -47,22 +47,40 @@ class DatabaseManager {
     // CRUD operations for Todos
     
     func addTodo(title: String, date: Date?, time: Date?, state: String) throws {
-        let insert = todosTable.insert(self.title <- title, self.date <- date, self.time <- time, self.state <- state)
-        try db?.run(insert)
+        // Générer un nouvel UUID sous forme de String pour chaque nouveau todo.
+        let newId = UUID().uuidString
+        let insert = todosTable.insert(
+            self.id <- newId,
+            self.title <- title,
+            self.date <- date,
+            self.time <- time,
+            self.state <- state
+        )
+        do {
+            try db?.run(insert)
+            print("Todo ajouté avec succès : \(newId)")
+        } catch {
+            print("Erreur lors de l'ajout du todo : \(error)")
+            throw error
+        }
     }
+
+
     
     func getAllTodos() throws -> [Todo] {
         guard let todos = try db?.prepare(todosTable) else { return [] }
-        return todos.map {
-            Todo(
-                id: UUID(uuidString: $0[id]) ?? UUID(),
-                title: $0[title],
-                date: $0[date],
-                time: $0[time],
-                state: $0[state] 
-            )
+        return try todos.map { row in
+            // Assurez-vous que la conversion de la date et de l'heure est correcte.
+            let todoId = UUID(uuidString: row[id]) ?? UUID()
+            let todoTitle = row[title]
+            let todoDate = row[date] // Vous devrez peut-être convertir ces dates depuis et vers des Strings.
+            let todoTime = row[time] // Conversion similaire pour l'heure.
+            let todoState = row[state]
+            
+            return Todo(id: todoId, title: todoTitle, date: todoDate, time: todoTime, state: todoState)
         }
     }
+
 
     
     func updateTodo(id: UUID, newTitle: String) throws {
