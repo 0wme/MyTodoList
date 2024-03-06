@@ -1,0 +1,107 @@
+import Foundation
+import SQLite
+
+class DatabaseManager {
+    static let shared = DatabaseManager()
+    private var db: Connection?
+    
+    private let todosTable = Table("todos")
+    private let id = Expression<String>("id")
+    private let title = Expression<String>("title")
+    private let date = Expression<Date?>("date")
+    private let time = Expression<Date?>("time")
+    private let state = Expression<String>("state") // Par exemple, "Retard", "À Faire", "Réalisé"
+    
+    private let notificationsTable = Table("notifications")
+    private let notificationId = Expression<String>("notificationId")
+    private let notificationTitle = Expression<String>("notificationTitle")
+    private let notificationBody = Expression<String>("notificationBody")
+    
+    init() {
+        // Chemin pour la base de données dans le dossier Documents de l'application.
+        do {
+            let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
+            db = try Connection("\(path)/db.sqlite3")
+            try createTables()
+        } catch {
+            print("Unable to open database: \(error)")
+        }
+    }
+    
+    private func createTables() throws {
+        try db?.run(todosTable.create(ifNotExists: true) { t in
+            t.column(id, primaryKey: true)
+            t.column(title)
+            t.column(date)
+            t.column(time)
+            t.column(state)
+        })
+        
+        try db?.run(notificationsTable.create(ifNotExists: true) { t in
+            t.column(notificationId, primaryKey: true)
+            t.column(notificationTitle)
+            t.column(notificationBody)
+        })
+    }
+    
+    // CRUD operations for Todos
+    
+    func addTodo(title: String, date: Date?, time: Date?, state: String) throws {
+        let insert = todosTable.insert(self.title <- title, self.date <- date, self.time <- time, self.state <- state)
+        try db?.run(insert)
+    }
+    
+    func getAllTodos() throws -> [Todo] {
+        guard let todos = try db?.prepare(todosTable) else { return [] }
+        return todos.map {
+            Todo(
+                id: UUID(uuidString: $0[id]) ?? UUID(),
+                title: $0[title],
+                date: $0[date],
+                time: $0[time],
+                state: $0[state] 
+            )
+        }
+    }
+
+    
+    func updateTodo(id: UUID, newTitle: String) throws {
+        let todoIdString = id.uuidString // Convertir UUID en String
+        let todo = todosTable.filter(self.id == todoIdString)
+        try db?.run(todo.update(self.title <- newTitle))
+    }
+
+    func deleteTodo(id: UUID) throws {
+        let todoIdString = id.uuidString // Convertir UUID en String
+        let todo = todosTable.filter(self.id == todoIdString)
+        try db?.run(todo.delete())
+    }
+
+    
+    // CRUD operations for Notifications
+    
+    func addNotification(title: String, body: String) throws {
+        let insert = notificationsTable.insert(self.notificationTitle <- title, self.notificationBody <- body)
+        try db?.run(insert)
+    }
+    
+    func getAllNotifications() throws -> [ReceivedNotification] {
+        guard let notifications = try db?.prepare(notificationsTable) else { return [] }
+        return notifications.map {
+            ReceivedNotification(
+                id: UUID(uuidString: $0[notificationId]) ?? UUID(), // Convertir de String à UUID
+                title: $0[notificationTitle],
+                body: $0[notificationBody]
+            )
+        }
+    }
+    
+    func updateTodoState(id: UUID, newState: String) throws {
+        let todoIdString = id.uuidString
+        let todo = todosTable.filter(self.id == todoIdString)
+        try db?.run(todo.update(self.state <- newState))
+    }
+}
+
+
+
