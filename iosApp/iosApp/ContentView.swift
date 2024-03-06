@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var selectedTab = 1 // Supposons que 1 est le tag pour HomeView
+    @State private var selectedTab = 1
 
     var body: some View {
         TabView(selection: $selectedTab) {
@@ -24,6 +24,6 @@ struct ContentView: View {
                 }
                 .tag(2) // Tag pour SettingsView
         }
+        .accentColor(.orange)
     }
 }
-
