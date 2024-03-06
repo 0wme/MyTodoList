@@ -22,5 +22,9 @@ struct NotificationView: View {
                 .padding(.horizontal)
             }
         }
+        .onAppear {
+            todoManager.loadNotificationsFromDB()
+        }
     }
 }
+
