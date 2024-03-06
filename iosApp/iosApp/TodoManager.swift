@@ -116,7 +116,26 @@ class TodoManager: ObservableObject {
         DispatchQueue.main.async {
             self.receivedNotifications.append(newNotification)
         }
+        do {
+            try DatabaseManager.shared.addNotification(title: title, body: body)
+        } catch {
+            print("Error saving notification to DB: \(error)")
+        }
     }
+
+    
+    func loadNotificationsFromDB() {
+        do {
+            let allNotifications = try DatabaseManager.shared.getAllNotifications()
+            DispatchQueue.main.async {
+                self.receivedNotifications = allNotifications
+            }
+        } catch {
+            print("Error loading notifications from DB: \(error)")
+        }
+    }
+
+
 
     // Planifier une notification pour une todo
     private func scheduleNotification(for todo: Todo) {
