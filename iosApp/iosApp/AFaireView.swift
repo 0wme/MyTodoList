@@ -1,5 +1,4 @@
 import SwiftUI
-import UIKit
 
 struct AFaireView: View {
     @State private var showingAddTodoSheet = false
@@ -42,7 +41,7 @@ struct AFaireView: View {
                                 }
                                 Spacer()
                                 Button(action: {
-                                    todoManager.cancel(todo: todo)
+                                    self.todoManager.cancel(todo: todo)
                                 }) {
                                     Image(systemName: "xmark.circle.fill")
                                         .resizable()
@@ -51,7 +50,7 @@ struct AFaireView: View {
                                         .foregroundColor(.red)
                                 }
                                 .buttonStyle(BorderlessButtonStyle())
-                                Button(action: { todoManager.approve(todo: todo) }) {
+                                Button(action: { self.todoManager.approve(todo: todo) }) {
                                     Image(systemName: "checkmark.circle.fill")
                                         .resizable()
                                         .scaledToFit()
@@ -72,8 +71,7 @@ struct AFaireView: View {
                                     showingShareSheet = true
                                 }
                                 Button("Supprimer", role: .destructive) {
-                                    guard let index = todoManager.todosAFaire.firstIndex(where: { $0.id == todo.id }) else { return }
-                                    todoManager.todosAFaire.remove(at: index)
+                                    self.todoManager.removeTodoFromAFaire(todo)
                                 }
                             }
                         }
@@ -88,16 +86,19 @@ struct AFaireView: View {
             }
             .sheet(isPresented: $showingAddTodoSheet) {
                 AddTodoView { title, date, time in
-                    let newTodo = Todo(title: title, date: date, time: time)
-                    todoManager.addTodo(newTodo)
-                    showingAddTodoSheet = false
+                    let newTodo = Todo(title: title, date: date, time: time, state: "À Faire")
+                    self.todoManager.addTodo(newTodo)
+                    self.showingAddTodoSheet = false
                 }
             }
             .sheet(isPresented: $showingRenameView) {
                 RenameTodoView(newName: $newName, showingView: $showingRenameView, renameAction: { updatedName in
-                    if let todo = selectedTodo {
-                        renameTodo(todo, with: updatedName)
-                        selectedTodo = nil
+                    if let todo = self.selectedTodo {
+                        var updatedTodo = todo
+                        updatedTodo.title = updatedName
+                        self.todoManager.removeTodoFromAFaire(todo)
+                        self.todoManager.addTodo(updatedTodo)
+                        self.selectedTodo = nil
                     }
                 })
             }
@@ -105,11 +106,6 @@ struct AFaireView: View {
                 ShareSheet(activityItems: itemsToShare)
             }
         }
-    }
-    
-    private func renameTodo(_ todo: Todo, with newName: String) {
-        guard let index = todoManager.todosAFaire.firstIndex(where: { $0.id == todo.id }), !newName.isEmpty else { return }
-        todoManager.todosAFaire[index].title = newName
     }
 }
 
