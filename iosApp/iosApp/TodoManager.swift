@@ -16,6 +16,7 @@ class TodoManager: ObservableObject {
 
     func loadTodosFromDB() {
         do {
+            print("Chargement des todos depuis la DB...")
             let allTodos = try DatabaseManager.shared.getAllTodos()
             DispatchQueue.main.async {
                 self.todosAFaire = allTodos.filter { $0.state == "À Faire" }
@@ -26,6 +27,7 @@ class TodoManager: ObservableObject {
             print("Error loading todos from DB: \(error)")
         }
     }
+
 
     func addTodo(_ todo: Todo) {
         DispatchQueue.main.async {
