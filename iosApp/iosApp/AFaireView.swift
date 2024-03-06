@@ -1,8 +1,11 @@
 import SwiftUI
+import UIKit
 
 struct AFaireView: View {
     @State private var showingAddTodoSheet = false
     @State private var showingRenameView = false
+    @State private var showingShareSheet = false
+    @State private var itemsToShare: [Any] = []
     @State private var newName: String = ""
     @State private var selectedTodo: Todo?
     @EnvironmentObject var todoManager: TodoManager
@@ -59,13 +62,14 @@ struct AFaireView: View {
                             .padding()
                             .background(Color.gray.opacity(0.2))
                             .cornerRadius(8)
-                            .contextMenu { // Ajout du contextMenu ici
+                            .contextMenu {
                                 Button("Renommer") {
                                     self.selectedTodo = todo
                                     self.showingRenameView = true
                                 }
                                 Button("Partager") {
-                                    // Logique de partage à implémenter
+                                    itemsToShare = ["Sharing todo: \(todo.title)"]
+                                    showingShareSheet = true
                                 }
                                 Button("Supprimer", role: .destructive) {
                                     guard let index = todoManager.todosAFaire.firstIndex(where: { $0.id == todo.id }) else { return }
@@ -92,17 +96,14 @@ struct AFaireView: View {
             .sheet(isPresented: $showingRenameView) {
                 RenameTodoView(newName: $newName, showingView: $showingRenameView, renameAction: { updatedName in
                     if let todo = selectedTodo {
-                        renameTodo(todo, with: updatedName)  // Ici, updatedName est le nouveau nom du todo
-                        selectedTodo = nil // Réinitialiser selectedTodo après le renommage
+                        renameTodo(todo, with: updatedName)
+                        selectedTodo = nil
                     }
                 })
             }
-        }
-    }
-    
-    private func deleteTodo(at offsets: IndexSet) {
-        offsets.forEach { index in
-            todoManager.todosAFaire.remove(at: index)
+            .sheet(isPresented: $showingShareSheet) {
+                ShareSheet(activityItems: itemsToShare)
+            }
         }
     }
     
@@ -112,27 +113,19 @@ struct AFaireView: View {
     }
 }
 
+struct FloatingActionButton: View {
+    var action: () -> Void
     
-    private func shareTodo(_ todo: Todo) {
-        print("Sharing todo: \(todo.title)")
-        // Voir Swift doc ET/OU tuto Youtube
-        // The actual sharing functionality requires integration with UIKit's UIActivityViewController or similar.
-    }
-
-        struct FloatingActionButton: View {
-            var action: () -> Void
-            
-            var body: some View {
-                Button(action: action) {
-                    Image(systemName: "plus.circle.fill")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 70, height: 70)
-                        .foregroundColor(Color.orange)
-                        .background(Color.white)
-                        .clipShape(Circle())
-                        .shadow(radius: 10)
-                }
-            }
-            
+    var body: some View {
+        Button(action: action) {
+            Image(systemName: "plus.circle.fill")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 70, height: 70)
+                .foregroundColor(Color.orange)
+                .background(Color.white)
+                .clipShape(Circle())
+                .shadow(radius: 10)
         }
+    }
+}
