@@ -2,13 +2,6 @@ import Foundation
 import Combine
 import UserNotifications
 
-// Structure pour représenter les notifications reçues
-struct ReceivedNotification: Identifiable {
-    let id: UUID
-    let title: String
-    let body: String
-}
-
 class TodoManager: ObservableObject {
     static let shared = TodoManager() // Singleton instance
     
@@ -17,46 +10,101 @@ class TodoManager: ObservableObject {
     @Published var todosRetard: [Todo] = []
     @Published var receivedNotifications: [ReceivedNotification] = []
 
-    // Ajouter une nouvelle todo
-    func addTodo(_ todo: Todo) {
-        todosAFaire.append(todo)
-        scheduleNotification(for: todo) 
+    init() {
+        loadTodosFromDB()
     }
 
-    // Approuver une todo
+    func loadTodosFromDB() {
+        do {
+            let allTodos = try DatabaseManager.shared.getAllTodos()
+            DispatchQueue.main.async {
+                self.todosAFaire = allTodos.filter { $0.state == "À Faire" }
+                self.todosRealise = allTodos.filter { $0.state == "Réalisé" }
+                self.todosRetard = allTodos.filter { $0.state == "Retard" }
+            }
+        } catch {
+            print("Error loading todos from DB: \(error)")
+        }
+    }
+
+    func addTodo(_ todo: Todo) {
+        DispatchQueue.main.async {
+            self.todosAFaire.append(todo)
+        }
+        scheduleNotification(for: todo)
+        do {
+            try DatabaseManager.shared.addTodo(title: todo.title, date: todo.date, time: todo.time, state: "À Faire")
+        } catch {
+            print("Error saving todo to DB: \(error)")
+        }
+    }
+
     func approve(todo: Todo) {
         if let index = todosAFaire.firstIndex(where: { $0.id == todo.id }) {
-            let approvedTodo = todosAFaire.remove(at: index)
-            todosRealise.append(approvedTodo)
+            DispatchQueue.main.async {
+                let approvedTodo = self.todosAFaire.remove(at: index)
+                self.todosRealise.append(approvedTodo)
+            }
+            do {
+                try DatabaseManager.shared.updateTodoState(id: todo.id, newState: "Réalisé")
+            } catch {
+                print("Error updating todo state in DB: \(error)")
+            }
         }
     }
 
-    // Annuler une todo
     func cancel(todo: Todo) {
         if let index = todosAFaire.firstIndex(where: { $0.id == todo.id }) {
-            let cancelledTodo = todosAFaire.remove(at: index)
-            todosRetard.append(cancelledTodo)
+            DispatchQueue.main.async {
+                let cancelledTodo = self.todosAFaire.remove(at: index)
+                self.todosRetard.append(cancelledTodo)
+            }
+            do {
+                try DatabaseManager.shared.updateTodoState(id: todo.id, newState: "Retard")
+            } catch {
+                print("Error updating todo state in DB: \(error)")
+            }
         }
     }
 
-    // Supprimer une todo de la liste 'À Faire'
     func removeTodoFromAFaire(_ todo: Todo) {
         if let index = todosAFaire.firstIndex(where: { $0.id == todo.id }) {
-            todosAFaire.remove(at: index)
+            DispatchQueue.main.async {
+                self.todosAFaire.remove(at: index)
+            }
+            do {
+                try DatabaseManager.shared.deleteTodo(id: todo.id)
+            } catch {
+                print("Error deleting todo from DB: \(error)")
+            }
         }
     }
 
     // Supprimer une todo de la liste 'Réalisé'
     func removeTodoFromRealise(_ todo: Todo) {
         if let index = todosRealise.firstIndex(where: { $0.id == todo.id }) {
-            todosRealise.remove(at: index)
-        }
+            DispatchQueue.main.async {
+                self.todosRealise.remove(at: index)
+            }
+            do {
+                try DatabaseManager.shared.deleteTodo(id: todo.id)
+            } catch {
+                print("Error deleting todo from DB: \(error)")
+            }
+        }        
     }
 
     // Supprimer une todo de la liste 'Retard'
     func removeTodoFromRetard(_ todo: Todo) {
         if let index = todosRetard.firstIndex(where: { $0.id == todo.id }) {
-            todosRetard.remove(at: index)
+            DispatchQueue.main.async {
+                self.todosRetard.remove(at: index)
+            }
+            do {
+                try DatabaseManager.shared.deleteTodo(id: todo.id)
+            } catch {
+                print("Error deleting todo from DB: \(error)")
+            }
         }
     }
     
@@ -94,11 +142,20 @@ struct Todo: Identifiable {
     var title: String
     var date: Date?
     var time: Date?
+    var state: String
     
-    init(id: UUID = UUID(), title: String, date: Date? = nil, time: Date? = nil) {
+    init(id: UUID = UUID(), title: String, date: Date? = nil, time: Date? = nil, state: String) {
         self.id = id
         self.title = title
         self.date = date
         self.time = time
+        self.state = state 
     }
+}
+
+
+struct ReceivedNotification: Identifiable {
+    let id: UUID
+    let title: String
+    let body: String
 }
