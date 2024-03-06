@@ -121,7 +121,7 @@ struct FloatingActionButton: View {
             Image(systemName: "plus.circle.fill")
                 .resizable()
                 .scaledToFit()
-                .frame(width: 70, height: 70)
+                .frame(width: 65, height: 65)
                 .foregroundColor(Color.orange)
                 .background(Color.white)
                 .clipShape(Circle())

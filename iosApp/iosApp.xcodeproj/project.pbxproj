@@ -21,6 +21,7 @@
 		D082EE142B90E9F80076B83D /* NotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D082EE132B90E9F80076B83D /* NotificationView.swift */; };
 		D082EE162B90EA120076B83D /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D082EE152B90EA120076B83D /* HomeView.swift */; };
 		D082EE182B90EA260076B83D /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D082EE172B90EA260076B83D /* SettingsView.swift */; };
+		D09A89D32B9908A80023C988 /* ShareSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = D09A89D22B9908A80023C988 /* ShareSheet.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,6 +43,7 @@
 		D082EE132B90E9F80076B83D /* NotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationView.swift; sourceTree = "<group>"; };
 		D082EE152B90EA120076B83D /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		D082EE172B90EA260076B83D /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		D09A89D22B9908A80023C988 /* ShareSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareSheet.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,6 +103,7 @@
 				D02016492B93BEB2007464F8 /* RetardView.swift */,
 				D02016532B93D65C007464F8 /* TodoManager.swift */,
 				D020164B2B93BF69007464F8 /* AFaireView.swift */,
+				D09A89D22B9908A80023C988 /* ShareSheet.swift */,
 				D020164D2B93C01F007464F8 /* RealiseView.swift */,
 				D020164F2B93C193007464F8 /* AddTodoView.swift */,
 				D082EE132B90E9F80076B83D /* NotificationView.swift */,
@@ -223,6 +226,7 @@
 				7555FF83242A565900829871 /* ContentView.swift in Sources */,
 				D02016542B93D65C007464F8 /* TodoManager.swift in Sources */,
 				D0733BA12B967B750067B897 /* RenameTodoView.swift in Sources */,
+				D09A89D32B9908A80023C988 /* ShareSheet.swift in Sources */,
 				D020164E2B93C01F007464F8 /* RealiseView.swift in Sources */,
 				D082EE182B90EA260076B83D /* SettingsView.swift in Sources */,
 				D082EE162B90EA120076B83D /* HomeView.swift in Sources */,
