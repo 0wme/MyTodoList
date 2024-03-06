@@ -1,9 +1,14 @@
-//
-//  ShareSheet.swift
-//  iosApp
-//
-//  Created by Tom Vieira Da Silva on 06/03/2024.
-//  Copyright © 2024 orgName. All rights reserved.
-//
+import SwiftUI
+import UIKit
 
-import Foundation
+struct ShareSheet: UIViewControllerRepresentable {
+    var activityItems: [Any]
+    var applicationActivities: [UIActivity]? = nil
+    
+    func makeUIViewController(context: Context) -> UIActivityViewController {
+        let controller = UIActivityViewController(activityItems: activityItems, applicationActivities: applicationActivities)
+        return controller
+    }
+    
+    func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
+}
