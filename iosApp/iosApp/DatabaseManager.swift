@@ -99,13 +99,25 @@ class DatabaseManager {
     // CRUD operations for Notifications
     
     func addNotification(title: String, body: String) throws {
-        let insert = notificationsTable.insert(self.notificationTitle <- title, self.notificationBody <- body)
-        try db?.run(insert)
+        let newId = UUID().uuidString // Générer un nouvel UUID pour la notification
+        let insert = notificationsTable.insert(
+            self.notificationId <- newId,
+            self.notificationTitle <- title,
+            self.notificationBody <- body
+        )
+        do {
+            try db?.run(insert)
+            print("Notification saved successfully")
+        } catch {
+            print("Error saving notification: \(error)")
+            throw error
+        }
     }
+
     
     func getAllNotifications() throws -> [ReceivedNotification] {
         guard let notifications = try db?.prepare(notificationsTable) else { return [] }
-        return notifications.map {
+        return try notifications.map {
             ReceivedNotification(
                 id: UUID(uuidString: $0[notificationId]) ?? UUID(), // Convertir de String à UUID
                 title: $0[notificationTitle],
@@ -113,6 +125,7 @@ class DatabaseManager {
             )
         }
     }
+
     
     func updateTodoState(id: UUID, newState: String) throws {
         let todoIdString = id.uuidString
