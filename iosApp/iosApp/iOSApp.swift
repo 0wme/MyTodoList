@@ -29,7 +29,6 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
         let title = notification.request.content.title
         let body = notification.request.content.body
 
-        // Utiliser `TodoManager.shared` pour ajouter la notification reçue
         TodoManager.shared.addReceivedNotification(title: title, body: body)
 
         completionHandler([.banner, .sound])
