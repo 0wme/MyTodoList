@@ -10,7 +10,6 @@ struct RealiseView: View {
                     Text(todo.title)
                         .foregroundColor(.primary)
                     Spacer()
-                    // Ajoutez ici des boutons ou des actions si vous souhaitez modifier le statut du todo ou le supprimer
                 }
                 .padding()
                 .cornerRadius(10)

@@ -1,7 +1,9 @@
 import SwiftUI
 
+
 struct SettingsView: View {
     @State private var showingResetAlert = false
+    @EnvironmentObject var todoManager: TodoManager
     
     var body: some View {
         VStack {
@@ -65,6 +67,8 @@ struct SettingsView: View {
     func resetDatabase() {
         do {
             try DatabaseManager.shared.resetDatabase()
+            todoManager.loadTodosFromDB()
+            todoManager.loadNotificationsFromDB()
             print("Base de données réinitialisée avec succès.")
         } catch {
             print("Erreur lors de la réinitialisation de la base de données : \(error)")
