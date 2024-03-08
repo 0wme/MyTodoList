@@ -24,13 +24,24 @@ struct SettingsView: View {
                     .cornerRadius(10)
             }
             .padding()
+            
+            Button("FAQ") {
+                // Logique pour afficher la FAQ
+            }
+            .foregroundColor(.white)
+            .frame(maxWidth: .infinity)
+            .padding()
+            .background(Color.green)
+            .cornerRadius(10)
+            .padding()
+            
+        }
+        }
+        
+        
+        struct SettingsView_Previews: PreviewProvider {
+            static var previews: some View {
+                SettingsView()
+            }
         }
     }
-    
-    
-    struct SettingsView_Previews: PreviewProvider {
-        static var previews: some View {
-            SettingsView()
-        }
-    }
-}
