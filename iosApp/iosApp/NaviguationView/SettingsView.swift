@@ -28,24 +28,34 @@ struct SettingsView: View {
                 }
                 .padding(.horizontal)
                 
-                Button("FAQ") {
+                Button(action: {
                     // Logique pour afficher la FAQ
+                }) {
+                    HStack {
+                        Spacer()
+                        Text("FAQ")
+                            .foregroundColor(.white)
+                        Spacer()
+                    }
+                    .padding()
+                    .background(Color.green)
+                    .cornerRadius(10)
                 }
-                .foregroundColor(.white)
-                .frame(maxWidth: .infinity)
-                .padding()
-                .background(Color.green)
-                .cornerRadius(10)
                 .padding(.horizontal)
-                
-                Button("Réinitialisation") {
+
+                Button(action: {
                     showingResetAlert = true
+                }) {
+                    HStack {
+                        Spacer()
+                        Text("Réinitialisation")
+                            .foregroundColor(.white)
+                        Spacer()
+                    }
+                    .padding()
+                    .background(Color.red)
+                    .cornerRadius(10)
                 }
-                .foregroundColor(.white)
-                .frame(maxWidth: .infinity)
-                .padding()
-                .background(Color.red)
-                .cornerRadius(10)
                 .padding(.horizontal)
                 .alert(isPresented: $showingResetAlert) {
                     Alert(
@@ -57,6 +67,7 @@ struct SettingsView: View {
                         secondaryButton: .cancel()
                     )
                 }
+
             }
             
             Spacer()
