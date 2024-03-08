@@ -128,7 +128,9 @@ class DatabaseManager {
         let todoIdString = id.uuidString
         let todo = todosTable.filter(self.id == todoIdString)
         try db?.run(todo.update(self.state <- newState))
+        print("État du todo mis à jour avec succès.")
     }
+
     
     func resetDatabase() throws {
         try db?.run(todosTable.delete())
