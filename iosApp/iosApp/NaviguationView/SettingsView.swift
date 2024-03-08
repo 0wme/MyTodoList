@@ -10,8 +10,21 @@ struct SettingsView: View {
                 .frame(maxWidth: .infinity, alignment: .center)
                 .padding()
             
+            Button(action: {
+                // Ouvrir les paramètres de l'application
+                if let url = URL(string: UIApplication.openSettingsURLString), UIApplication.shared.canOpenURL(url) {
+                    UIApplication.shared.open(url)
+                }
+            }) {
+                Text("Ouvrir les paramètres")
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.blue)
+                    .cornerRadius(10)
+            }
+            .padding()
         }
-        
     }
     
     
