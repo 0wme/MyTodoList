@@ -4,28 +4,31 @@ struct RealiseView: View {
     @EnvironmentObject var todoManager: TodoManager
 
     var body: some View {
-        List {
-            ForEach(todoManager.todosRealise) { todo in
-                HStack {
-                    Text(todo.title)
-                        .foregroundColor(.primary)
-                    Spacer()
+        ScrollView {
+            LazyVStack(spacing: 10) {
+                ForEach(todoManager.todosRealise) { todo in
+                    VStack(alignment: .leading) {
+                        Text(todo.title).font(.headline)
+                    }
+                    .padding()
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(Color.gray.opacity(0.2))
+                    .cornerRadius(8)
+                    .contextMenu {
+                        Button("Supprimer", role: .destructive) {
+                            removeTodoFromRealise(todo)
+                        }
+                    }
                 }
-                .padding()
-                .cornerRadius(10)
-                .shadow(radius: 2)
             }
-            .onDelete(perform: removeTodoFromRealise)
+            .padding(.horizontal)
         }
         .navigationTitle("Réalisé")
     }
 
-    private func removeTodoFromRealise(at offsets: IndexSet) {
+    private func removeTodoFromRealise(_ todo: Todo) {
         withAnimation {
-            offsets.forEach { index in
-                let todo = todoManager.todosRealise[index]
-                todoManager.removeTodoFromRealise(todo)
-            }
+            todoManager.removeTodoFromRealise(todo)
         }
     }
 }
