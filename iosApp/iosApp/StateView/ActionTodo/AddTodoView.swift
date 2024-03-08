@@ -32,12 +32,23 @@ struct AddTodoView: View {
                 }
             }
             .navigationTitle("Ajouter un todo")
-            .navigationBarItems(leading: Button("Annuler") {
-                dismiss()
-            }, trailing: Button("Ajouter") {
-                onComplete(title.trimmingCharacters(in: .whitespaces), addDate ? date : nil, addTime ? time : nil)
-                dismiss()
-            }.disabled(title.trimmingCharacters(in: .whitespaces).isEmpty))
+            .navigationBarItems(
+                leading: Button(action: {
+                    dismiss()
+                }) {
+                    Text("Annuler")
+                        .foregroundColor(.orange)
+                },
+                trailing: Button(action: {
+                    onComplete(title.trimmingCharacters(in: .whitespaces), addDate ? date : nil, addTime ? time : nil)
+                    dismiss()
+                }) {
+                    Text("Ajouter")
+                        .foregroundColor(title.trimmingCharacters(in: .whitespaces).isEmpty ? .gray : .orange)
+                }
+                .disabled(title.trimmingCharacters(in: .whitespaces).isEmpty)
+            )
+
         }
     }
 }
