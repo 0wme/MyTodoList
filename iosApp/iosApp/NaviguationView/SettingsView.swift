@@ -35,13 +35,45 @@ struct SettingsView: View {
             .cornerRadius(10)
             .padding()
             
-        }
-        }
-        
-        
-        struct SettingsView_Previews: PreviewProvider {
-            static var previews: some View {
-                SettingsView()
+            Button("Réinitialisation") {
+                // Afficher l'alerte de confirmation
+                showingResetAlert = true
+            }
+            .foregroundColor(.white)
+            .frame(maxWidth: .infinity)
+            .padding()
+            .background(Color.red)
+            .cornerRadius(10)
+            .padding()
+            .alert(isPresented: $showingResetAlert) {
+                Alert(
+                    title: Text("Confirmer la réinitialisation"),
+                    message: Text("Cette action supprimera toutes les données de l'application. Voulez-vous continuer ?"),
+                    primaryButton: .destructive(Text("Réinitialiser")) {
+                        // Plus tard appeler la fonction pour réinitialiser la base de données
+                        resetDatabase()
+                    },
+                    secondaryButton: .cancel()
+                )
             }
         }
+        .padding()
     }
+    
+    func resetDatabase() {
+        do {
+            try DatabaseManager.shared.resetDatabase()
+            // Mettre à jour l'UI si nécessaire, par exemple, en vidant les listes affichées
+        } catch {
+            print("Erreur lors de la réinitialisation de la base de données : \(error)")
+        }
+    }
+}
+
+
+
+struct SettingsView_Previews: PreviewProvider {
+    static var previews: some View {
+        SettingsView()
+    }
+}
