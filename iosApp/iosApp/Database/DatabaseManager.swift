@@ -10,7 +10,7 @@ class DatabaseManager {
     private let title = Expression<String>("title")
     private let date = Expression<Date?>("date")
     private let time = Expression<Date?>("time")
-    private let state = Expression<String>("state") // Par exemple, "Retard", "À Faire", "Réalisé"
+    private let state = Expression<String>("state")
     
     private let notificationsTable = Table("notifications")
     private let notificationId = Expression<String>("notificationId")
@@ -44,7 +44,6 @@ class DatabaseManager {
         })
     }
     
-    // CRUD operations for Todos
     
     func addTodo(title: String, date: Date?, time: Date?, state: String) throws {
         // Générer un nouvel UUID sous forme de String pour chaque nouveau todo.
@@ -70,11 +69,10 @@ class DatabaseManager {
     func getAllTodos() throws -> [Todo] {
         guard let todos = try db?.prepare(todosTable) else { return [] }
         return try todos.map { row in
-            // Assurez-vous que la conversion de la date et de l'heure est correcte.
             let todoId = UUID(uuidString: row[id]) ?? UUID()
             let todoTitle = row[title]
-            let todoDate = row[date] // Vous devrez peut-être convertir ces dates depuis et vers des Strings.
-            let todoTime = row[time] // Conversion similaire pour l'heure.
+            let todoDate = row[date]
+            let todoTime = row[time]
             let todoState = row[state]
             
             return Todo(id: todoId, title: todoTitle, date: todoDate, time: todoTime, state: todoState)
@@ -84,22 +82,21 @@ class DatabaseManager {
 
     
     func updateTodo(id: UUID, newTitle: String) throws {
-        let todoIdString = id.uuidString // Convertir UUID en String
+        let todoIdString = id.uuidString
         let todo = todosTable.filter(self.id == todoIdString)
         try db?.run(todo.update(self.title <- newTitle))
     }
 
     func deleteTodo(id: UUID) throws {
-        let todoIdString = id.uuidString // Convertir UUID en String
+        let todoIdString = id.uuidString
         let todo = todosTable.filter(self.id == todoIdString)
         try db?.run(todo.delete())
     }
 
     
-    // CRUD operations for Notifications
     
     func addNotification(title: String, body: String) throws {
-        let newId = UUID().uuidString // Générer un nouvel UUID pour la notification
+        let newId = UUID().uuidString
         let insert = notificationsTable.insert(
             self.notificationId <- newId,
             self.notificationTitle <- title,
@@ -119,7 +116,7 @@ class DatabaseManager {
         guard let notifications = try db?.prepare(notificationsTable) else { return [] }
         return try notifications.map {
             ReceivedNotification(
-                id: UUID(uuidString: $0[notificationId]) ?? UUID(), // Convertir de String à UUID
+                id: UUID(uuidString: $0[notificationId]) ?? UUID(),
                 title: $0[notificationTitle],
                 body: $0[notificationBody]
             )
@@ -131,6 +128,11 @@ class DatabaseManager {
         let todoIdString = id.uuidString
         let todo = todosTable.filter(self.id == todoIdString)
         try db?.run(todo.update(self.state <- newState))
+    }
+    
+    func resetDatabase() throws {
+        try db?.run(todosTable.delete())
+        try db?.run(notificationsTable.delete())
     }
 }
 
