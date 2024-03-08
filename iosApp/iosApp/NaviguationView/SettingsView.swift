@@ -5,57 +5,61 @@ struct SettingsView: View {
     
     var body: some View {
         VStack {
-            Text("Paramètres").font(.largeTitle)
+            Text("Paramètres")
+                .font(.largeTitle)
+                .padding(.top)
             
-            ScrollView {
-                VStack(spacing: 20) {
-                    Button(action: {
-                        if let url = URL(string: UIApplication.openSettingsURLString), UIApplication.shared.canOpenURL(url) {
-                            UIApplication.shared.open(url)
-                        }
-                    }) {
-                        Text("Ouvrir les paramètres")
-                            .foregroundColor(.white)
-                            .frame(maxWidth: .infinity)
-                            .padding()
-                            .background(Color.blue)
-                            .cornerRadius(10)
+            Spacer()
+            
+            VStack(spacing: 20) {
+                Button(action: {
+                    if let url = URL(string: UIApplication.openSettingsURLString), UIApplication.shared.canOpenURL(url) {
+                        UIApplication.shared.open(url)
                     }
-                    .padding(.horizontal)
-                    
-                    Button("FAQ") {
-                        // Logique pour afficher la FAQ
-                    }
-                    .foregroundColor(.white)
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color.green)
-                    .cornerRadius(10)
-                    .padding(.horizontal)
-                    
-                    Button("Réinitialisation") {
-                        showingResetAlert = true
-                    }
-                    .foregroundColor(.white)
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color.red)
-                    .cornerRadius(10)
-                    .padding(.horizontal)
-                    .alert(isPresented: $showingResetAlert) {
-                        Alert(
-                            title: Text("Confirmer la réinitialisation"),
-                            message: Text("Cette action supprimera toutes les données de l'application. Voulez-vous continuer ?"),
-                            primaryButton: .destructive(Text("Réinitialiser")) {
-                                resetDatabase()
-                            },
-                            secondaryButton: .cancel()
-                        )
-                    }
+                }) {
+                    Text("Ouvrir les paramètres")
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.blue)
+                        .cornerRadius(10)
+                }
+                .padding(.horizontal)
+                
+                Button("FAQ") {
+                    // Logique pour afficher la FAQ
+                }
+                .foregroundColor(.white)
+                .frame(maxWidth: .infinity)
+                .padding()
+                .background(Color.green)
+                .cornerRadius(10)
+                .padding(.horizontal)
+                
+                Button("Réinitialisation") {
+                    showingResetAlert = true
+                }
+                .foregroundColor(.white)
+                .frame(maxWidth: .infinity)
+                .padding()
+                .background(Color.red)
+                .cornerRadius(10)
+                .padding(.horizontal)
+                .alert(isPresented: $showingResetAlert) {
+                    Alert(
+                        title: Text("Confirmer la réinitialisation"),
+                        message: Text("Cette action supprimera toutes les données de l'application. Voulez-vous continuer ?"),
+                        primaryButton: .destructive(Text("Réinitialiser")) {
+                            resetDatabase()
+                        },
+                        secondaryButton: .cancel()
+                    )
                 }
             }
+            
+            Spacer()
+            
         }
-        .padding(.top)
     }
     
     func resetDatabase() {
