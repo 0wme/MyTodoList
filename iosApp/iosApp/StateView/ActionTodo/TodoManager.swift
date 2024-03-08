@@ -16,7 +16,6 @@ class TodoManager: ObservableObject {
 
     func loadTodosFromDB() {
         do {
-            print("Chargement des todos depuis la DB...")
             let allTodos = try DatabaseManager.shared.getAllTodos()
             DispatchQueue.main.async {
                 self.todosAFaire = allTodos.filter { $0.state == "À Faire" }
@@ -24,9 +23,10 @@ class TodoManager: ObservableObject {
                 self.todosRetard = allTodos.filter { $0.state == "Retard" }
             }
         } catch {
-            print("Error loading todos from DB: \(error)")
+            print("Erreur lors du chargement des todos depuis la base de données : \(error)")
         }
     }
+
 
 
     func addTodo(_ todo: Todo) {
@@ -43,31 +43,26 @@ class TodoManager: ObservableObject {
 
     func approve(todo: Todo) {
         if let index = todosAFaire.firstIndex(where: { $0.id == todo.id }) {
-            DispatchQueue.main.async {
-                let approvedTodo = self.todosAFaire.remove(at: index)
-                self.todosRealise.append(approvedTodo)
-            }
             do {
                 try DatabaseManager.shared.updateTodoState(id: todo.id, newState: "Réalisé")
+                loadTodosFromDB() // Recharge les todos après mise à jour
             } catch {
-                print("Error updating todo state in DB: \(error)")
+                print("Erreur lors de la mise à jour de l'état du todo : \(error)")
             }
         }
     }
 
     func cancel(todo: Todo) {
         if let index = todosAFaire.firstIndex(where: { $0.id == todo.id }) {
-            DispatchQueue.main.async {
-                let cancelledTodo = self.todosAFaire.remove(at: index)
-                self.todosRetard.append(cancelledTodo)
-            }
             do {
                 try DatabaseManager.shared.updateTodoState(id: todo.id, newState: "Retard")
+                loadTodosFromDB() // Recharge les todos après mise à jour
             } catch {
-                print("Error updating todo state in DB: \(error)")
+                print("Erreur lors de la mise à jour de l'état du todo : \(error)")
             }
         }
     }
+
 
     func removeTodoFromAFaire(_ todo: Todo) {
         if let index = todosAFaire.firstIndex(where: { $0.id == todo.id }) {
