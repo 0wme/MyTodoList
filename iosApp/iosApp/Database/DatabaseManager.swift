@@ -133,6 +133,7 @@ class DatabaseManager {
     func resetDatabase() throws {
         try db?.run(todosTable.delete())
         try db?.run(notificationsTable.delete())
+        print("Toutes les données ont été supprimées.")
     }
 }
 
