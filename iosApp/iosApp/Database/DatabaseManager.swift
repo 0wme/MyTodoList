@@ -122,6 +122,11 @@ class DatabaseManager {
             )
         }
     }
+    
+    func deleteAllNotifications() throws {
+        try db?.run(notificationsTable.delete())
+    }
+
 
     
     func updateTodoState(id: UUID, newState: String) throws {
