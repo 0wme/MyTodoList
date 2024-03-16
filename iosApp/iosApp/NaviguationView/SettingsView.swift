@@ -68,7 +68,6 @@ struct SettingsView: View {
                         title: Text("Confirmer la réinitialisation"),
                         message: Text("Cette action supprimera toutes les données de l'application. Voulez-vous continuer ?"),
                         primaryButton: .destructive(Text("Réinitialiser")) {
-                            resetDatabase()
                         },
                         secondaryButton: .cancel()
                     )
@@ -80,20 +79,10 @@ struct SettingsView: View {
         }
     }
     
-    func resetDatabase() {
-        do {
-            try DatabaseManager.shared.resetDatabase()
-            todoManager.loadTodosFromDB()
-            todoManager.loadNotificationsFromDB()
-            print("Base de données réinitialisée avec succès.")
-        } catch {
-            print("Erreur lors de la réinitialisation de la base de données : \(error)")
+    
+    struct SettingsView_Previews: PreviewProvider {
+        static var previews: some View {
+            SettingsView().environmentObject(TodoManager())
         }
-    }
-}
-
-struct SettingsView_Previews: PreviewProvider {
-    static var previews: some View {
-        SettingsView().environmentObject(TodoManager())
     }
 }
