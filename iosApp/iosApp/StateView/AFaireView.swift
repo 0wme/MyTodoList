@@ -86,7 +86,7 @@ struct AFaireView: View {
             }
             .sheet(isPresented: $showingAddTodoSheet) {
                 AddTodoView { title, date, time in
-                    let newTodo = Todo(title: title, date: date, time: time, state: "À Faire")
+                    let newTodo = Todo(title: title, date: date, time: time)
                     self.todoManager.addTodo(newTodo)
                     self.showingAddTodoSheet = false
                 }
