@@ -23,7 +23,6 @@
 		D082EE182B90EA260076B83D /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D082EE172B90EA260076B83D /* SettingsView.swift */; };
 		D09A89D32B9908A80023C988 /* ShareSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = D09A89D22B9908A80023C988 /* ShareSheet.swift */; };
 		D09A89D62B990C1B0023C988 /* SQLite in Frameworks */ = {isa = PBXBuildFile; productRef = D09A89D52B990C1B0023C988 /* SQLite */; };
-		D09A89D82B990E5B0023C988 /* DatabaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D09A89D72B990E5B0023C988 /* DatabaseManager.swift */; };
 		D09BB3A92B9B580200A998CE /* FAQView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D09BB3A82B9B580200A998CE /* FAQView.swift */; };
 /* End PBXBuildFile section */
 
@@ -47,7 +46,6 @@
 		D082EE152B90EA120076B83D /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		D082EE172B90EA260076B83D /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		D09A89D22B9908A80023C988 /* ShareSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareSheet.swift; sourceTree = "<group>"; };
-		D09A89D72B990E5B0023C988 /* DatabaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseManager.swift; sourceTree = "<group>"; };
 		D09BB3A82B9B580200A998CE /* FAQView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FAQView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -102,7 +100,6 @@
 		7555FF7D242A565900829871 /* iosApp */ = {
 			isa = PBXGroup;
 			children = (
-				D09A89DF2B9922E00023C988 /* Database */,
 				D09A89DE2B9922A70023C988 /* StateView */,
 				D09A89DD2B99224E0023C988 /* NaviguationView */,
 				058557BA273AAA24004C7B11 /* Assets.xcassets */,
@@ -142,14 +139,6 @@
 				D020164D2B93C01F007464F8 /* RealiseView.swift */,
 			);
 			path = StateView;
-			sourceTree = "<group>";
-		};
-		D09A89DF2B9922E00023C988 /* Database */ = {
-			isa = PBXGroup;
-			children = (
-				D09A89D72B990E5B0023C988 /* DatabaseManager.swift */,
-			);
-			path = Database;
 			sourceTree = "<group>";
 		};
 		D09A89E02B9922FD0023C988 /* ActionTodo */ = {
@@ -275,7 +264,6 @@
 			files = (
 				D020164A2B93BEB2007464F8 /* RetardView.swift in Sources */,
 				D020164C2B93BF69007464F8 /* AFaireView.swift in Sources */,
-				D09A89D82B990E5B0023C988 /* DatabaseManager.swift in Sources */,
 				D02016502B93C193007464F8 /* AddTodoView.swift in Sources */,
 				2152FB042600AC8F00CF470E /* iOSApp.swift in Sources */,
 				7555FF83242A565900829871 /* ContentView.swift in Sources */,
