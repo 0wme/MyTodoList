@@ -53,7 +53,7 @@ class SettingsFragment : Fragment() {
                 startActivity(browserIntent)
             }
 
-            faqDialog.setNegativeButton("Close") { dialog, _ ->
+            faqDialog.setNegativeButton("Fermer") { dialog, _ ->
                 dialog.dismiss()
             }
             faqDialog.create().show()
@@ -63,14 +63,14 @@ class SettingsFragment : Fragment() {
         val resetButton = view.findViewById<Button>(R.id.reset_button)
         resetButton.setOnClickListener {
             val resetDialog = AlertDialog.Builder(requireContext(),R.style.AlertDialogCustom)
-            resetDialog.setTitle("Reset Database")
-            resetDialog.setMessage("Are you sure you want to reset the database? This will delete all data.")
-            resetDialog.setPositiveButton("Yes") { _, _ ->
+            resetDialog.setTitle("Réinitialiser la base de données ?")
+            resetDialog.setMessage("Êtes-vous sûr de vouloir réinitialiser la base de données ? Cela supprimera toutes les données.")
+            resetDialog.setPositiveButton("Oui") { _, _ ->
                 val dbHelper = TodoDatabaseHelper(requireContext())
                 dbHelper.onUpgrade(dbHelper.writableDatabase, 1, 1)
-                Toast.makeText(requireContext(), "Database reset successfully.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Réinitialisation de la base de données réussie.", Toast.LENGTH_SHORT).show()
             }
-            resetDialog.setNegativeButton("No") { dialog, _ ->
+            resetDialog.setNegativeButton("Non") { dialog, _ ->
                 dialog.dismiss()
             }
             resetDialog.create().show()

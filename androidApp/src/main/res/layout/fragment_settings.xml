@@ -13,7 +13,7 @@
         android:id="@+id/open_settings_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Open Settings"
+        android:text="Ouvrir les paramètres"
         android:layout_margin="20dp"
         style="@style/MyButtonStyle" />
 
@@ -29,7 +29,7 @@
         android:id="@+id/reset_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Reset Database"
+        android:text="Réinitialiser"
         android:layout_margin="20dp"
         style="@style/MyButtonStyle" />
 
