@@ -86,7 +86,7 @@ struct AFaireView: View {
             }
             .sheet(isPresented: $showingAddTodoSheet) {
                 AddTodoView { title, date, time in
-                    let newTodo = Todo(title: title, date: date, time: time)
+                    let newTodo = Todo(title: title, date: date, time: time, state: "À Faire")
                     self.todoManager.addTodo(newTodo)
                     self.showingAddTodoSheet = false
                 }
@@ -125,3 +125,4 @@ struct FloatingActionButton: View {
         }
     }
 }
+
