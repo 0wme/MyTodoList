@@ -5,7 +5,6 @@ struct HomeView: View {
 
     var body: some View {
         VStack {
-            // Custom navigation tabs
             HStack {
                 Spacer()
                 Button(action: {
