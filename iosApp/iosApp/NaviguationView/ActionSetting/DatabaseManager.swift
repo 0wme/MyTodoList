@@ -18,7 +18,6 @@ class DatabaseManager {
     private let notificationBody = Expression<String>("notificationBody")
     
     init() {
-        // Chemin pour la base de données dans le dossier Documents de l'application.
         do {
             let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
             db = try Connection("\(path)/db.sqlite3")
@@ -46,7 +45,6 @@ class DatabaseManager {
     
     
     func addTodo(title: String, date: Date?, time: Date?, state: String) throws {
-        // Générer un nouvel UUID sous forme de String pour chaque nouveau todo.
         let newId = UUID().uuidString
         let insert = todosTable.insert(
             self.id <- newId,
