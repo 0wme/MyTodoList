@@ -1,8 +1,8 @@
 import SwiftUI
 
-
 struct SettingsView: View {
     @State private var showingResetAlert = false
+    @State private var showingFAQ = false
     @EnvironmentObject var todoManager: TodoManager
     
     var body: some View {
@@ -19,17 +19,20 @@ struct SettingsView: View {
                         UIApplication.shared.open(url)
                     }
                 }) {
-                    Text("Ouvrir les paramètres")
-                        .foregroundColor(.white)
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color.blue)
-                        .cornerRadius(10)
+                    HStack {
+                        Spacer()
+                        Text("Ouvrir les paramètres")
+                            .foregroundColor(.white)
+                        Spacer()
+                    }
+                    .padding()
+                    .background(Color.blue)
+                    .cornerRadius(10)
                 }
                 .padding(.horizontal)
                 
                 Button(action: {
-                    // Logique pour afficher la FAQ
+                    showingFAQ = true
                 }) {
                     HStack {
                         Spacer()
@@ -42,7 +45,10 @@ struct SettingsView: View {
                     .cornerRadius(10)
                 }
                 .padding(.horizontal)
-
+                .sheet(isPresented: $showingFAQ) {
+                    FAQView()
+                }
+                
                 Button(action: {
                     showingResetAlert = true
                 }) {
@@ -86,9 +92,10 @@ struct SettingsView: View {
         }
     }
 }
-
-struct SettingsView_Previews: PreviewProvider {
-    static var previews: some View {
-        SettingsView()
+    
+    struct SettingsView_Previews: PreviewProvider {
+        static var previews: some View {
+            SettingsView().environmentObject(TodoManager())
+        }
     }
-}
+
