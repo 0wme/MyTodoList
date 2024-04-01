@@ -1,8 +1,8 @@
 import SwiftUI
 
+
 struct SettingsView: View {
     @State private var showingResetAlert = false
-    @State private var showingFAQ = false
     @EnvironmentObject var todoManager: TodoManager
     
     var body: some View {
@@ -19,20 +19,17 @@ struct SettingsView: View {
                         UIApplication.shared.open(url)
                     }
                 }) {
-                    HStack {
-                        Spacer()
-                        Text("Ouvrir les paramètres")
-                            .foregroundColor(.white)
-                        Spacer()
-                    }
-                    .padding()
-                    .background(Color.blue)
-                    .cornerRadius(10)
+                    Text("Ouvrir les paramètres")
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.blue)
+                        .cornerRadius(10)
                 }
                 .padding(.horizontal)
                 
                 Button(action: {
-                    showingFAQ = true
+                    // Logique pour afficher la FAQ
                 }) {
                     HStack {
                         Spacer()
@@ -45,10 +42,7 @@ struct SettingsView: View {
                     .cornerRadius(10)
                 }
                 .padding(.horizontal)
-                .sheet(isPresented: $showingFAQ) {
-                    FAQView()
-                }
-                
+
                 Button(action: {
                     showingResetAlert = true
                 }) {
@@ -68,10 +62,12 @@ struct SettingsView: View {
                         title: Text("Confirmer la réinitialisation"),
                         message: Text("Cette action supprimera toutes les données de l'application. Voulez-vous continuer ?"),
                         primaryButton: .destructive(Text("Réinitialiser")) {
+                            resetDatabase()
                         },
                         secondaryButton: .cancel()
                     )
                 }
+
             }
             
             Spacer()
@@ -79,10 +75,20 @@ struct SettingsView: View {
         }
     }
     
-    
-    struct SettingsView_Previews: PreviewProvider {
-        static var previews: some View {
-            SettingsView().environmentObject(TodoManager())
+    func resetDatabase() {
+        do {
+            try DatabaseManager.shared.resetDatabase()
+            todoManager.loadTodosFromDB()
+            todoManager.loadNotificationsFromDB()
+            print("Base de données réinitialisée avec succès.")
+        } catch {
+            print("Erreur lors de la réinitialisation de la base de données : \(error)")
         }
+    }
+}
+
+struct SettingsView_Previews: PreviewProvider {
+    static var previews: some View {
+        SettingsView()
     }
 }
