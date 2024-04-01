@@ -24,6 +24,7 @@
 		D09A89D32B9908A80023C988 /* ShareSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = D09A89D22B9908A80023C988 /* ShareSheet.swift */; };
 		D09A89D62B990C1B0023C988 /* SQLite in Frameworks */ = {isa = PBXBuildFile; productRef = D09A89D52B990C1B0023C988 /* SQLite */; };
 		D09BB3A92B9B580200A998CE /* FAQView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D09BB3A82B9B580200A998CE /* FAQView.swift */; };
+		D0B7F3802BBB1F0C00F565E3 /* DatabaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B7F37F2BBB1F0C00F565E3 /* DatabaseManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -47,6 +48,7 @@
 		D082EE172B90EA260076B83D /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		D09A89D22B9908A80023C988 /* ShareSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareSheet.swift; sourceTree = "<group>"; };
 		D09BB3A82B9B580200A998CE /* FAQView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FAQView.swift; sourceTree = "<group>"; };
+		D0B7F37F2BBB1F0C00F565E3 /* DatabaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -155,6 +157,7 @@
 		D09BB3A72B9B57DF00A998CE /* ActionSetting */ = {
 			isa = PBXGroup;
 			children = (
+				D0B7F37F2BBB1F0C00F565E3 /* DatabaseManager.swift */,
 				D09BB3A82B9B580200A998CE /* FAQView.swift */,
 			);
 			path = ActionSetting;
@@ -268,6 +271,7 @@
 				2152FB042600AC8F00CF470E /* iOSApp.swift in Sources */,
 				7555FF83242A565900829871 /* ContentView.swift in Sources */,
 				D02016542B93D65C007464F8 /* TodoManager.swift in Sources */,
+				D0B7F3802BBB1F0C00F565E3 /* DatabaseManager.swift in Sources */,
 				D0733BA12B967B750067B897 /* RenameTodoView.swift in Sources */,
 				D09A89D32B9908A80023C988 /* ShareSheet.swift in Sources */,
 				D020164E2B93C01F007464F8 /* RealiseView.swift in Sources */,
